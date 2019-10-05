@@ -1,12 +1,0 @@
-Adobe After Effects v14.0 Windows 64 为项目“pic.aep”渲染日志
-
-渲染在“23:52:04”的“2019/1/9”上开始
-
-  “2019/1/9”“23:52:04”: 开始合成“status”。
-
-  输出到: F:\Program Files\War3\Maker\W3xMaker\hyperSpaceTD\status (0;00;00;00).png    “2019/1/9”“23:52:04”: 完成的合成“status”。
-
-
-  已用总时间: 0 秒
-日志在“23:52:04”的“2019/1/9”上关闭
-
