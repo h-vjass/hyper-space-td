@@ -1,6 +1,6 @@
 
 //载入 h-vjass
-#include "../../h-vjass/h-vjass.j"
+#include "../h-vjass/h-vjass.j"
 #include "global.j"
 #include "set.j"
 
@@ -144,35 +144,17 @@ library Main initializer init needs hJass
 		//生成长老
 		call hSet.failEnv()
 		set u = hunit.createUnitXYFacing(player_ally,'n002',4663,1407, 180)
-		set dia[1] = "时空之轮破碎了！惨烈！准备好撤退～！"
-		set dia[2] = "情况已经没法挽救了，别管其他的事了，迅速离开！"
-		set dia[3] = "看这边的这塔，我会给你开一条离开的路。"
-		set dia[4] = "来！～"
+		set dia[1] = "时空之轮破碎了！惨烈！"
+		set dia[2] = "情况已经没法挽救了，任务失败！～"
 		set dia[5] = null
 		call hSync_moive2force(playerForce,u,dia)
-		call ExplodeUnitBJ( u_kabei )
 		call hunit.del(u,10.00)
 		call ResetToGameCamera( 1.00 )
 		call dia.destroy()
 		set u_zhanglao = hunit.createUnitXYFacing(player_passive,'n002',6306,-1920, 150)
 		//
-		call hitem.toXY('I001',1,5480,3466,60.00) //时空之轮碎片
-		call hmsg.echo("离开混沌领域的传送门已经打开！"+"|cffffff80 速度撤离！")
-		call hunit.createUnit(player_passive, 'n004', Loc_Leave)
-		call PingMinimapLocForForceEx( playerForce,Loc_Leave,5, bj_MINIMAPPINGSTYLE_FLASHY, 100, 0, 0 )
-		//矩形飞
-		set tg = CreateTrigger()
-		call TriggerRegisterEnterRectSimple( tg, rectLeave )
-		call TriggerAddAction(tg, function fail)
-		// 任务F9提醒
+		// 失败提醒
 		call hmark.display(null,"war3mapImported\\defeat.blp",1.0,6.0,100.0,100.0)
-		set txt = ""
-		set txt = txt + "往右侧小路逃离时空境域"
-		set txt = txt + "|n任意单位逃离即可"
-		set txt = txt + "|n利用闪烁来逃走吧，加油吧～"
-		call QuestMessageBJ( playerForce, bj_QUESTMESSAGE_DISCOVERED, "迅速逃离！" )
-		set q_quit_space = CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "逃离时空境域",txt, "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp" )
-		call FlashQuestDialogButton()
 		set u = null
 		set tg = null
 		set loc = null
@@ -309,18 +291,6 @@ library Main initializer init needs hJass
 		//
 		set u_timering = hunit.createUnit(player_ally, 'n00Z', Loc_Ring)
 		call hevent.onDead(u_timering,function timeRingBreak)
-		set u_timering1 = hunit.createUnitXY(player_ally, 'n05N', 0,  1024)
-		call hattrEffect.setCorrosionVal(u_timering1,5,0)
-		call hattrEffect.setCorrosionDuring(u_timering1,3,0)
-		call hevent.onDead(u_timering1,function timeRingBreakSub)
-		set u_timering2 = hunit.createUnitXY(player_ally, 'n05O', 768, 768)
-		call hattrEffect.setColdVal(u_timering2,100,0)
-		call hattrEffect.setColdDuring(u_timering2,3,0)
-		call hevent.onDead(u_timering2,function timeRingBreakSub)
-		set u_timering3 = hunit.createUnitXY(player_ally, 'n05P', 1024, 0)
-		call hattrEffect.setFreezeVal(u_timering3,30,0)
-		call hattrEffect.setFreezeDuring(u_timering3,3,0)
-		call hevent.onDead(u_timering3,function timeRingBreakSub)
 		// 任务F9提醒
 		set txt = ""
 		set txt = txt + "进入时空境域，防御敌人"
@@ -384,8 +354,6 @@ library Main initializer init needs hJass
 		local MovieDialogue dia = MovieDialogue.create()
 		local string giftTxt = null
 		local string txt = null
-		local integer openMovie = 0
-		local boolean isGetGift = false
 		//死亡轮
 		set u_dead_timering[1] = 'n04Y'
 		set u_dead_timering[2] = 'n058'
@@ -393,30 +361,27 @@ library Main initializer init needs hJass
 		set u_dead_timering[4] = 'n057'
 		set u_dead_timering[5] = 'n04X'
 		//
-		set spaceDegX[1] = -16
-		set spaceDegY[1] = 3971
-		set spaceDegX[2] = 781
-		set spaceDegY[2] = 4263
-		set spaceDegX[3] = 1944
-		set spaceDegY[3] = 4216
-		set spaceDegX[4] = 3157
-		set spaceDegY[4] = 4205
-		set spaceDegX[5] = 4100
-		set spaceDegY[5] = 4100
-		set spaceDegX[6] = 4230
-		set spaceDegY[6] = 3217
-		set spaceDegX[7] = 4190
-		set spaceDegY[7] = 2211
-		set spaceDegX[8] = 4117
-		set spaceDegY[8] = 567
+		set spaceDegX[1] = 128
+		set spaceDegY[1] = 3200
+		set spaceDegX[2] = 1280
+		set spaceDegY[2] = 3968
+		set spaceDegX[3] = 3200
+		set spaceDegY[3] = 3968
+		set spaceDegX[4] = 3968
+		set spaceDegY[4] = 2816
+		set spaceDegX[5] = 3968
+		set spaceDegY[5] = 896
+		set spaceDegX[6] = 2816
+		set spaceDegY[6] = 128
+		set spaceDegX[7] = 896
+		set spaceDegY[7] = 128
+		set spaceDegX[8] = 128
+		set spaceDegY[8] = 1280
 		//循环设定玩家参数
 		set i = player_max_qty
 		loop
 			exitwhen i<=0
 				set H_MAP_LV[i] = DzAPI_Map_GetMapLevel(players[i])
-				if(H_MAP_LV[i]<=1)then
-					set openMovie = openMovie - 1
-				endif
 				if(DzAPI_Map_HasMallItem(players[i], "FGA") == true)then
 					set player_isvip[i] = true
 					set giftTxt = "永久"
@@ -434,9 +399,6 @@ library Main initializer init needs hJass
 					set player_prolv[i] = DzAPI_Map_GetStoredInteger(players[i], "wavelevel")
 					if(player_prolv[i]<=0)then
 						set player_prolv[i] = 0
-						set openMovie = openMovie - 3
-					else
-						set openMovie = openMovie + 2
 					endif
 				endif
 				call hplayer.setLumberRatio(players[i],100*player_current_qty,0)
@@ -444,11 +406,11 @@ library Main initializer init needs hJass
 				if(player_isvip[i] == true)then
 					call hplayer.setGold(players[i],3000)
 					call hplayer.setLumber(players[i],0)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,48/player_current_qty)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,48/player_current_qty)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,15)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,15)
 					call hhero.setPlayerAllowQty(players[i],3)
-					set g_summon_upgrade_judge = 250
-					call hplayer.setGoldRatio(players[i],78.0+30*player_current_qty,0)
+					set g_summon_upgrade_judge = 225
+					call hplayer.setGoldRatio(players[i],93.0+15*player_current_qty,0)
 					call hmsg.echoTo(players[i], " # 您是支持|cffffffcc抢先体验包("+giftTxt+")用户|r，拥有更多的资源、全部测试许可，以及所有后续版本内容!感谢您的支持 ^_^", 0)
 					// 获得所有的升级科技和体验包
 					call SetPlayerTechResearchedSwap( 'R001', 1, players[i] ) // 体验
@@ -458,22 +420,13 @@ library Main initializer init needs hJass
 							call SetPlayerTechResearchedSwap(H_MAP_LV_GIFT[j], 1, players[i] )
 						set j=j+1
 					endloop
-					// 只获得一次的特殊商店及物品
-					if(isGetGift==false)then
-						set isGetGift = true
-						call hitem.initShop(hunit.createUnitXY(player_ally, 'n04V', 5630,5630))
-						call hitem.toXY('I01M',1, -1151,2231,-1)
-						call hitem.toXY('I01R',1, -1767,6710,-1)
-						call hitem.toXY('I00C',1, -2418,5980,-1)
-						call hitem.toXY('I00C',1, -1518,5347,-1)
-					endif
 				else
 					call hplayer.setGold(players[i],2000)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,36/player_current_qty)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,36/player_current_qty)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,9)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,9)
 					call hhero.setPlayerAllowQty(players[i],1)
-					set g_summon_upgrade_judge = 200
-					call hplayer.setGoldRatio(players[i],70.0+30*player_current_qty,0)
+					set g_summon_upgrade_judge = 150
+					call hplayer.setGoldRatio(players[i],85.0+15*player_current_qty,0)
 					call hmsg.echoTo(players[i], " # 您是|cffccffff免费游玩|r的玩家，所以部分游戏内容需要等待后续更新开放。如果您想抢先体验，可购买抢先体验包支持作者 ^_^", 0)
 					// 获得对应的升级科技
 					set j = 2
@@ -485,8 +438,7 @@ library Main initializer init needs hJass
 				endif
 				if(H_MAP_LV[i] <= 1)then
 					call hplayer.addGold(players[i],1000)
-					set g_first_ready_time = g_first_ready_time + 10
-					call hmsg.echoTo(players[i], " # 由于您是|cffccffcc新手玩家|r，所以获赠额外的1000黄金，同时队伍增加10秒初始准备时间，熟悉游戏 ^_^", 0)
+					call hmsg.echoTo(players[i], " # 由于您是|cffccffcc新手玩家|r，所以获赠额外的1000黄金，熟悉游戏 ^_^", 0)
 				endif
 			set i = i-1
 		endloop
@@ -543,24 +495,7 @@ library Main initializer init needs hJass
 		call hSet.setInit()
 
 		//BGM走起
-		call hmedia.bgm(gg_snd_village)
-		if(hconsole.isOpenDebug() == false and openMovie <= 0)then
-			//镜头
-			call PolledWait( 4 )
-			call CameraSetupApplyForceDuration( gg_cam_cam_1start, true, 0 )
-			call CameraSetupApplyForceDuration( gg_cam_cam_1end, true, 10.00 )
-			//生成初始长老
-			set u = hunit.createUnitXYFacing(player_ally,'n002',GetLocationX(Loc_ZhangLao),GetLocationY(Loc_ZhangLao), 25)
-			set dia[1] = "离上一次，已经过去很久了，你来了～冒险者！"
-			set dia[2] = "情况有点危急，长话短说了，这里是轮空境域，混沌快要把时空之轮吞没了|n唯一的希望就是冒险者与英雄祭坛共鸣，召唤出英雄前往守护！"
-			set dia[3] = "对抗百军混沌，努力守住！咳～咳～注意混沌的变换，加油冒险者！"
-			set dia[4] = null
-			call hSync_moive2force(playerForce,u,dia)
-			call ResetToGameCamera( 1.00 )
-			call hunit.del(u,0)
-		else
-			call hmsg.echo(" # 检测多数为熟手玩家，已自动跳过电影")
-		endif
+		call hmedia.bgm(gg_snd_ready)
 		call dia.destroy()
 
 		//将英雄类型写进酒馆，并生成选英雄
@@ -580,17 +515,16 @@ library Main initializer init needs hJass
 		call hhero.buildDrunkery(chooseTime)
 		call htime.setTimeout(chooseTime + 1.5,function openRect)
 		
-		// 碍事的墙
-		set u_kabei = hunit.createUnitXY(player_passive,'n010',4924,1414)
 		// 商店们
-		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04S', -2180,-1982))
-		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04T', -893,-2618))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04S', 663,2081))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04T', 2090,3483))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04V', 2034,680))
 		// 可爱信使
 		set i = player_max_qty
 		loop
 			exitwhen i<=0
 				if(player_isvip[i] == true and hplayer.getStatus(players[i])==hplayer.default_status_gaming)then // vip才有
-					call hunit.createUnitXY(players[i],'n04Z',-2539,-2811)
+					call hunit.createUnitXY(players[i],'n04Z',GetLocationX(Loc_JiuGuanBorn),GetLocationY(Loc_JiuGuanBorn))
 				endif
 			set i=i-1
 		endloop

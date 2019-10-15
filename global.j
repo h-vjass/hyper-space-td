@@ -2,19 +2,18 @@
 globals
 
 location Loc_C = Location(2048,2048)
-location Loc_Ring = Location(0,0)
-location Loc_ZhangLao = Location(-2815,-2837)
-location Loc_JiuGuan = Location(-2250,-2550)
-location Loc_JiuGuanBorn = Location(-2460,-2728)
-location Loc_Leave = Location(6460,-2849)
-location Loc_Death = Location(-2793,-3440)
-location Loc_DeathBack = Location(-597,5510)
+location Loc_Ring = Location(2048,2048)
+location Loc_JiuGuan = Location(1960,2128)
+location Loc_JiuGuanBorn = Location(2061,1851)
+
+location Loc_Area_Death = Location(-578,-5142)
+location Loc_Area_DeathBack = Location(-300,4747)
 
 integer array H_MAP_LV
 integer array H_MAP_LV_GIFT
 integer g_gift_count = 0
 real REBORN_HERO = 25
-real REBORN_SUMMON = 50
+real REBORN_SUMMON = 60
 
 timer g_timer_wave = null
 integer g_max_wave = 120
@@ -22,12 +21,12 @@ integer g_wave = 0
 integer g_first_wave = 0
 integer g_boss_mod = 5
 real g_boss_ready_time = 90
-real g_first_ready_time = 60.00 // 准备时间(第一波)
+real g_first_ready_time = 20.00
 boolean g_waving = false
 group g_crazy_boss = CreateGroup()
 
-real g_game_speed = 5.00 // 5
-real g_game_mon_loop = 0.50 // 0.4 每只怪出兵间隔
+real g_game_speed = 1.00 //
+real g_game_mon_loop = 0.60 // 每只怪出兵间隔
 integer g_token_count = 0
 integer g_building_count = 0
 integer g_hero_count = 0
@@ -65,7 +64,7 @@ real array g_summon_manaback
 real array g_summon_defend
 real array g_summon_attackPhysical
 
-integer g_gp_max = 360 // 360
+integer g_gp_max = 60
 group g_gp_mon = CreateGroup()
 group g_gp_summon = CreateGroup()
 real g_ring_break_up = 0
@@ -78,8 +77,6 @@ rect rectHanabi = null
 rect rectLeave = null
 rect rectBattle = null
 rect rectBattleInner = null
-rect rectDeath = null
-rect rectDeathBack = null
 weathereffect rectWeathereffect = null
 string rectWeatherString = null
 
@@ -99,10 +96,10 @@ boolean array player_isvip
 integer array player_prolv
 
 // 黑暗埋骨地
-unit u_death_portal = null
+rect rectDeathBack = null
 unit u_death_back_portal = null
-trigger tg_death = null
 trigger tg_death_back = null
+
 
 // 任务指示
 quest q_into_space = null
@@ -1295,8 +1292,7 @@ struct hGlobals
         set tempu = null
     endmethod
 
-    private static method fly2Death takes nothing returns nothing
-		local unit u = GetTriggerUnit()
+    private static method fly2Death takes unit u returns nothing
 		local player p = GetOwningPlayer(u)
         local location loc = null
         local integer i = 0
@@ -1306,14 +1302,11 @@ struct hGlobals
             set p = null
             return
         endif
-		call SetUnitPosition(u, -843, 5677)
+		call SetUnitPosition(u, GetLocationX(Loc_Area_Death), GetLocationY(Loc_Area_Death))
 		call hmedia.bgm2Player(gg_snd_ziyuan,p)
-		call hcamera.toXY(-843,5677,p,0)
+		call hcamera.toXY(GetLocationX(Loc_Area_Death), GetLocationY(Loc_Area_Death),p,0)
 		call hcamera.lock(p,u)
 		call hmsg.echoTo(p,"这是什么鬼地方...看不清楚",0)
-		call hunit.del(u_death_portal,0)
-		call DisableTrigger( tg_death )
-    	call DestroyTrigger( tg_death )
 		call SetBlight( player_aggressive, -3075, -3075, 2816, true )
         call hattr.subSight(u,650,0)
         set i = 10
@@ -1337,29 +1330,13 @@ struct hGlobals
 	private static method fly2DeathBack takes nothing returns nothing
 		local unit u = GetTriggerUnit()
 		local player p = GetOwningPlayer(u)
-        local integer i = 0
-        local unit ghost = null
         call hcamera.reset(p,3.00)
-		call SetUnitPosition(u, -2608, -3175)
+		call SetUnitPosition(u, GetLocationX(Loc_JiuGuanBorn), GetLocationY(Loc_JiuGuanBorn))
 		call hmedia.bgm2Player(gg_snd_bgm_nj_t03_dspadpcm,p)
-		call hcamera.toXY(-2608,-3175,p,0)
-		call hmsg.echoTo(p,"村庄怎么了...这不是我的错...",0)
+		call hcamera.toXY(GetLocationX(Loc_JiuGuanBorn), GetLocationY(Loc_JiuGuanBorn),p,0)
         call hattr.addSight(u,650,0)
-        set i = 20
-        loop
-            exitwhen i <=0
-                set ghost = henemy.createUnitXY('n040',-1717,-2279)
-                call hattrEffect.setToxicVal(ghost,-3,0)
-                call hattrEffect.setToxicDuring(ghost,5,0)
-                call hattrEffect.setColdVal(ghost,5,0)
-                call hattrEffect.setColdDuring(ghost,2,0)
-            set i = i - 1
-        endloop
-        call QuestSetCompleted( q_death_quest, true )
-        call QuestMessageBJ( playerForce, bj_QUESTMESSAGE_DISCOVERED, "杀死僵尸！" )
         set u = null
         set p = null
-        set ghost = null
 	endmethod
 
     private static method itemUseAction takes nothing returns nothing
@@ -1369,17 +1346,6 @@ struct hGlobals
         local player p = GetOwningPlayer(u)
         local string txt = null
         if(itid == 'I00K')then
-            call hmsg.echoTo(p,"下方出现了一个传送门",0)
-			call PingMinimapLocForForceEx( GetPlayersAll(),Loc_Death,5, bj_MINIMAPPINGSTYLE_FLASHY, 100, 0, 0 )
-			set u_death_portal = hunit.createUnit(player_passive, 'n004', Loc_Death)
-			set u_death_back_portal = hunit.createUnit(player_passive, 'n004', Loc_DeathBack)
-			set tg_death = CreateTrigger()
-			call TriggerRegisterEnterRectSimple( tg_death, rectDeath )
-			call TriggerAddAction(tg_death, function thistype.fly2Death)
-			set tg_death_back = CreateTrigger()
-			call TriggerRegisterEnterRectSimple( tg_death_back, rectDeathBack )
-			call TriggerAddAction(tg_death_back, function thistype.fly2DeathBack)
-            // 任务F9提醒
             set txt = ""
             set txt = txt + "村庄下面忽然出现了一个传送门"
             set txt = txt + "|n难不成是宝藏？"
@@ -1387,6 +1353,7 @@ struct hGlobals
             call QuestMessageBJ( playerForce, bj_QUESTMESSAGE_DISCOVERED, "探索古怪的传送门" )
             set q_death_quest = CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "探索古怪的传送门",txt, "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp" )
             call FlashQuestDialogButton()
+            call thistype.fly2Death(u)
         elseif(itid == 'I00H')then
             call hattr.addLifeBack(u,20.0,60.0)
             call hattr.addManaBack(u,3.0,60.0)
@@ -2332,11 +2299,16 @@ struct hGlobals
         set player_ally =  players[12]
         
         set rectHanabi = hrect.createInLoc(GetLocationX(Loc_Ring),GetLocationY(Loc_Ring),2000,2000)
-        set rectLeave = hrect.createInLoc(GetLocationX(Loc_Leave),GetLocationY(Loc_Leave),120,120)
         set rectBattle = hrect.createInLoc(GetLocationX(Loc_C),GetLocationY(Loc_C),spaceDistance,spaceDistance)
         set rectBattleInner = hrect.createInLoc(GetLocationX(Loc_C),GetLocationY(Loc_C),spaceDistance - 100,spaceDistance - 100)
-        set rectDeath = hrect.createInLoc(GetLocationX(Loc_Death),GetLocationY(Loc_Death),120,120)
-        set rectDeathBack = hrect.createInLoc(GetLocationX(Loc_DeathBack),GetLocationY(Loc_DeathBack),120,120)
+
+        // 支线区域的传送门
+        set rectDeathBack = hrect.createInLoc(GetLocationX(Loc_Area_DeathBack),GetLocationY(Loc_Area_DeathBack),120,120)
+
+		set u_death_back_portal = hunit.createUnit(player_passive, 'n004', Loc_Area_DeathBack)
+		set tg_death_back = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg_death_back, rectDeathBack )
+		call TriggerAddAction(tg_death_back, function thistype.fly2DeathBack)
 
         // hero 英雄
         call thistype.registerHero('H00M',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNHeroArchMage.blp",2.00) // t01 大魔法师

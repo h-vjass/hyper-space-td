@@ -437,125 +437,6 @@ struct hSet
 		call RemoveDestructable( GetEnumDestructable() )
 	endmethod
 
-	private static method randomEnv takes nothing returns nothing
-		local integer randomIndex = GetRandomInt(1,9)
-		local integer i = 0
-		local integer rectQty = GetRandomInt(16,16)
-		local integer rectArea = 0
-		local real x = 1200.0
-		local real y = 1200.0
-		local rect tempRect = null
-		local hWeatherBean wb = 0
-		local integer weatherIndex = GetRandomInt(1,3)
-		call EnumDestructablesInRectAll(rectBattle, function thistype.removeEnumDestructable )
-		call henv.clearUnits()
-		call SetTerrainType( GetLocationX(Loc_C) , GetLocationY(Loc_C), 'Adrd', -1, 21, 1 )
-		call SetTerrainType( GetLocationX(Loc_Ring) , GetLocationY(Loc_Ring), 'Agrd', -1, 7, 0 )
-		call SetTerrainType( GetLocationX(Loc_Ring) , GetLocationY(Loc_Ring), 'Avin', -1, 2, 0 )
-		if (rectWeathereffect != null) then
-			call hweather.del(rectWeathereffect)
-		endif
-		set i = 1
-		loop
-			exitwhen i>rectQty
-				set rectArea = GetRandomInt(175,495)
-				set hxy.x = GetRandomReal(GetRectMinX(rectBattleInner)+rectArea, GetRectMaxX(rectBattleInner)-rectArea)
-				set hxy.y = GetRandomReal(GetRectMinY(rectBattleInner)+rectArea, GetRectMaxY(rectBattleInner)-rectArea)
-				if(hxy.x > GetLocationX(Loc_Ring)-x/2 and hxy.x < GetLocationX(Loc_Ring)+x/2 and hxy.y > GetLocationY(Loc_Ring)-y/2 and hxy.y < GetLocationY(Loc_Ring)+y/2)then
-					// nothing
-				else 
-					set tempRect = hrect.createInLoc(hxy.x,hxy.y,rectArea,rectArea)
-					set wb = hWeatherBean.create()
-					set wb.x = 2048
-					set wb.y = 2048
-					set wb.width = spaceDistance
-					set wb.height = spaceDistance
-					if (randomIndex == 1) then
-						call henv.randomSummer(tempRect,x,y,true)
-						if (weatherIndex == 1) then
-							set rectWeathereffect = hweather.rain(wb)
-							set rectWeatherString = "rain"
-						elseif (weatherIndex == 2) then
-							set rectWeathereffect = hweather.rainstorm(wb)
-							set rectWeatherString = "rainstorm"
-						endif
-					elseif (randomIndex == 2) then
-						call henv.randomAutumn(tempRect,x,y,true)
-						if (weatherIndex == 1) then
-							set rectWeathereffect = hweather.rain(wb)
-							set rectWeatherString = "rain"
-						elseif (weatherIndex == 2) then
-							set rectWeathereffect = hweather.wind(wb)
-							set rectWeatherString = "wind"
-						endif
-					elseif (randomIndex == 3) then
-						call henv.randomWinter(tempRect,x,y,true)
-						if (weatherIndex == 1) then
-							set rectWeathereffect = hweather.snow(wb)
-							set rectWeatherString = "snow"
-						elseif (weatherIndex == 2) then
-							set rectWeathereffect = hweather.wind(wb)
-							set rectWeatherString = "wind"
-						endif
-					elseif (randomIndex == 4) then
-						call henv.randomWinterShow(tempRect,x,y,true)
-						if (weatherIndex == 1) then
-							set rectWeathereffect = hweather.snowstorm(wb)
-							set rectWeatherString = "snowstorm"
-						elseif (weatherIndex == 2) then
-							set rectWeathereffect = hweather.windstorm(wb)
-							set rectWeatherString = "windstorm"
-						endif
-					elseif (randomIndex == 5) then
-						call henv.randomDark(tempRect,x,y,true)
-						if (weatherIndex == 1) then
-							set rectWeathereffect = hweather.rain(wb)
-							set rectWeatherString = "rain"
-						elseif (weatherIndex == 2) then
-							set rectWeathereffect = hweather.mistblue(wb)
-							set rectWeatherString = "mistblue"
-						endif
-					elseif (randomIndex == 6) then
-						call henv.randomPoor(tempRect,x,y,true)
-						if (weatherIndex == 1) then
-							set rectWeathereffect = hweather.wind(wb)
-							set rectWeatherString = "wind"
-						elseif (weatherIndex == 2) then
-							set rectWeathereffect = hweather.windstorm(wb)
-							set rectWeatherString = "windstorm"
-						endif
-					elseif (randomIndex == 7) then
-						call henv.randomRuins(tempRect,x,y,true)
-						if (weatherIndex == 1) then
-							set rectWeathereffect = hweather.rain(wb)
-							set rectWeatherString = "rain"
-						elseif (weatherIndex == 2) then
-							set rectWeathereffect = hweather.rainstorm(wb)
-							set rectWeatherString = "rainstorm"
-						elseif (weatherIndex == 3) then
-							set rectWeathereffect = hweather.mistgreen(wb)
-							set rectWeatherString = "mistgreen"
-						endif
-					elseif (randomIndex == 8) then
-						call henv.randomFire(tempRect,x,y,true)
-						if (weatherIndex == 1) then
-							set rectWeathereffect = hweather.mistred(wb)
-							set rectWeatherString = "mistred"
-						endif
-					elseif (randomIndex == 9) then
-						call henv.randomUnderground(tempRect,x,y,true)
-						if (weatherIndex == 1) then
-							set rectWeathereffect = hweather.shield(wb)
-							set rectWeatherString = "shield"
-						endif
-					endif
-					set tempRect = null
-					call wb.destroy()
-					set i=i+1
-				endif
-		endloop
-	endmethod
-
 	public static method failEnv takes nothing returns nothing
 		local integer i = 0
 		local integer j = 0
@@ -685,16 +566,16 @@ struct hSet
 		set exp = R2I(I2R(g_wave) * 15 * g_game_speed)
 		set gold = R2I(I2R(g_wave) * 2 * g_game_speed)
 		if(killer != null)then
-			call haward.forGroup(killer,exp,0,0)
+			call haward.forGroup(killer,exp,gold,0)
 		endif
 		call hunit.del(u,2.00)
         // gold
 		if (gold<1)then
 			set gold = 1
 		endif
-		call hitem.toXY(momentItems[1],gold,x,y,90.00)
 		if(GetRandomInt(1,100) == 44)then
-			call hitem.toXY(momentItems[3],g_wave*100,x,y,120.00)
+			call hitem.toXY(momentItems[1],gold,x,y,90.00)
+			call hitem.toXY(momentItems[3],g_wave*100,x,y,90.00)
 		endif
 		set u = null
 		set killer = null
@@ -703,7 +584,7 @@ struct hSet
 	public static method createEnemy takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		local integer i = htime.getInteger(t,1)
-		local integer rand = GetRandomInt(1,spaceDegQty)
+		local integer j = 0 
 		local location loc = null
 		local unit u = null
 		if(i >= R2I(g_gp_max / g_game_speed))then
@@ -722,16 +603,20 @@ struct hSet
 			return
 		endif
 		call htime.setInteger(t,1,1+i)
-		set loc = Location(spaceDegX[rand],spaceDegY[rand])
-		set u = henemy.createUnitAttackToLoc(g_mon[g_wave],loc,Loc_Ring)
-		call RemoveLocation(loc)
-		call GroupAddUnit(g_gp_mon,u)
-		call TriggerRegisterUnitEvent( enemyDeadTg, u, EVENT_UNIT_DEATH )
-        call hattr.setLife(u,(g_mon_life[g_wave]*(1.00+0.12*g_game_speed))*(g_ring_break_up+1.0),0)
-        call hattr.setDefend(u,(g_mon_defend[g_wave]+g_game_speed)*(g_ring_break_up+1.0),0)
-		call hattr.setMove(u,(g_mon_move[g_wave]+g_game_speed)*(g_ring_break_up+1.0),0)
-        call hattr.setAttackPhysical(u,(g_mon_attackPhysical[g_wave])*(g_ring_break_up+1.0),0)
-		call hGlobals.enemyBuilt(u)
+		set j = 0
+		loop
+			exitwhen j>spaceDegQty
+				set loc = Location(spaceDegX[j],spaceDegY[j])
+				set u = henemy.createUnitAttackToLoc(g_mon[g_wave],loc,Loc_Ring)
+				call RemoveLocation(loc)
+				call GroupAddUnit(g_gp_mon,u)
+				call TriggerRegisterUnitEvent( enemyDeadTg, u, EVENT_UNIT_DEATH )
+				call hattr.setLife(u,g_wave*50,0)
+				call hattr.setMove(u,200+g_wave,0)
+				call hattr.setAttackPhysical(u,g_wave*5,0)
+				call hGlobals.enemyBuilt(u)
+				set j = j+1
+		endloop
 		set t = null
 		set u = null
 		set loc = null
@@ -900,51 +785,6 @@ struct hSet
 			call hmsg.echo("|cffffff00Lv."+I2S(g_wave)+" 来袭！来袭！|r")
 			call mildDirect()
 		else
-			call thistype.randomEnv()
-			/*
-			if(g_wave < 8)then
-				set spaceDegQty = 3
-			elseif(g_wave < 28)then
-				set spaceDegQty = 4
-			elseif(g_wave < 64)then
-				set spaceDegQty = 5
-			elseif(g_wave < 88)then
-				set spaceDegQty = 6
-			elseif(g_wave < 128)then
-				set spaceDegQty = 7
-			else
-				set spaceDegQty = 8
-			endif
-			set spaceDegQty = spaceDegQty + player_current_qty
-			set i = spaceDegQty
-			loop
-				exitwhen(i<=0)
-					set hxy.x = GetLocationX(Loc_C)
-					set hxy.y = GetLocationY(Loc_C)
-					set hxy = hlogic.polarProjection(hxy,spaceDistance/2-GetRandomReal(0,1600),GetRandomReal(0,360))
-					set spaceDegX[i] = hxy.x
-					set spaceDegY[i] = hxy.y
-					set t = htime.setTimeout(1,function thistype.nextWaveClearEnv)
-					call htime.setReal(t,1,hxy.x)
-					call htime.setReal(t,2,hxy.y)
-					set loc = Location(hxy.x,hxy.y)
-					call hunit.kill(hunit.createUnitXY(player_ally,'n012',hxy.x,hxy.y),holdon)
-					call PingMinimapLocForForceEx( GetPlayersAll(),loc,20, bj_MINIMAPPINGSTYLE_FLASHY, 100, 0, 0 )
-					call RemoveLocation(loc)
-					set loc = null
-				set i = i-1
-			endloop 
-			*/
-			set t = htime.setTimeout(1,function thistype.nextWaveClearEnv)
-			call htime.setReal(t,1,GetUnitX(u_timering1))
-			call htime.setReal(t,2,GetUnitY(u_timering1))
-			set t = htime.setTimeout(1,function thistype.nextWaveClearEnv)
-			call htime.setReal(t,1,GetUnitX(u_timering2))
-			call htime.setReal(t,2,GetUnitY(u_timering2))
-			set t = htime.setTimeout(1,function thistype.nextWaveClearEnv)
-			call htime.setReal(t,1,GetUnitX(u_timering3))
-			call htime.setReal(t,2,GetUnitY(u_timering3))
-			//
 			set g_timer_wave = htime.setTimeout( holdon ,function thistype.mild)
 			call SetUnitTimeScalePercent( u_timering, 0.00 )
 			// main
@@ -952,25 +792,6 @@ struct hSet
 			call hattr.addDefend(u_timering,0.50,0)
 			call hattr.addResistance(u_timering,1.0,0)
 			call hattr.addLifeBack(u_timering,0.60,0)
-			// sub
-			if(his.alive(u_timering1))then
-				call hattr.addLife(u_timering1,300,0)
-				call hattr.addDefend(u_timering1,0.3,0)
-				call hattr.addResistance(u_timering1,0.4,0)
-				call hattr.addLifeBack(u_timering1,0.2,0)
-			endif
-			if(his.alive(u_timering2))then
-				call hattr.addLife(u_timering2,300,0)
-				call hattr.addDefend(u_timering2,0.3,0)
-				call hattr.addResistance(u_timering2,0.4,0)
-				call hattr.addLifeBack(u_timering2,0.2,0)
-			endif
-			if(his.alive(u_timering3))then
-				call hattr.addLife(u_timering3,300,0)
-				call hattr.addDefend(u_timering3,0.3,0)
-				call hattr.addResistance(u_timering3,0.4,0)
-				call hattr.addLifeBack(u_timering3,0.2,0)
-			endif
 			//
 			call ForGroupBJ( g_gp_summon, function thistype.allowSommons )
 			if (hlogic.imod(g_wave,g_boss_mod) == 0) then
