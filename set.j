@@ -443,7 +443,6 @@ struct hSet
 		local integer rectArea = 0
 		local real x = 1300.0
 		local real y = 1300.0
-		local rect tempRect = null
 		local hWeatherBean wb = 0
 		call EnumDestructablesInRectAll(rectBattle, function thistype.removeEnumDestructable )
 		call henv.clearUnits()
@@ -452,25 +451,6 @@ struct hSet
 		if (rectWeathereffect != null) then
 			call hweather.del(rectWeathereffect)
 		endif
-		set i = 1
-		loop
-			exitwhen i>16
-				set rectArea = GetRandomInt(0,470)
-				set hxy.x = GetRandomReal(GetRectMinX(rectBattleInner)+rectArea, GetRectMaxX(rectBattleInner))
-				set hxy.y = GetRandomReal(GetRectMinY(rectBattleInner)+rectArea, GetRectMaxY(rectBattleInner))
-				set tempRect = hrect.createInLoc(hxy.x,hxy.y,rectArea,rectArea)
-				set wb = hWeatherBean.create()
-				set wb.x = rectArea
-				set wb.y = rectArea
-				set wb.width = spaceDistance
-				set wb.height = spaceDistance
-				call henv.randomDark(tempRect,x,y,true)
-				set rectWeathereffect = hweather.rainstorm(wb)
-				set tempRect = null
-				call hunit.createUnithXY(player_passive,'n00N',hxy)
-			set i = i+1
-		endloop
-		set tempRect = null
 	endmethod
 
 	private static method winEnv takes nothing returns nothing
@@ -496,7 +476,7 @@ struct hSet
 		call hmark.display(null,"war3mapImported\\win.blp",1.0,10.0,100.0,100.0)
 		set txt = ""
 		set txt = txt + "冒险者感谢你！"
-		set txt = txt + "|n时空境域恢复了原来的生气，看村民都出来游玩了"
+		set txt = txt + "|n时空境域恢复了原来的生气，村民都出来游玩了"
 		set txt = txt + "|n谢谢你，你可以继续留在这里游玩，也可以回到你的世界～"
 		set txt = txt + "|n而混沌魔兽的老大被锁住作为警示了，你也可以去看看"
 		set txt = txt + "|n再次感激！"
@@ -555,11 +535,12 @@ struct hSet
 		if(i >= R2I(g_gp_max / g_game_speed))then
 			call htime.delTimer(t)
 			set t = null
-			if(g_mon_isrunning != false)then
+			if(g_mon_isrunning)then
 				if(hlogic.imod(g_wave+1,g_boss_mod) == 0 or g_wave+1 >= g_max_wave)then
-					call htime.setInterval(3.00,function thistype.checkGGPmon)
+					call thistype.nextWave(60)
+					// call htime.setInterval(3.00,function thistype.checkGGPmon)
 				else
-					call thistype.nextWave(0)
+					call thistype.nextWave(20)
 				endif
 			endif
 			return
@@ -571,15 +552,14 @@ struct hSet
 		set j = 0
 		loop
 			exitwhen j>spaceDegQty
-				set loc = Location(spaceDegX[j],spaceDegY[j])
-				set u = henemy.createUnitAttackToLoc(g_mon[g_wave],loc,Loc_Ring)
-				call RemoveLocation(loc)
+				set u = henemy.createUnitXY(g_mon[g_wave],spaceDegX[j],spaceDegY[j])
 				call GroupAddUnit(g_gp_mon,u)
 				call TriggerRegisterUnitEvent( enemyDeadTg, u, EVENT_UNIT_DEATH )
 				call hattr.setLife(u,g_wave*50,0)
 				call hattr.setMove(u,200+g_wave,0)
 				call hattr.setAttackPhysical(u,g_wave*5,0)
 				call hGlobals.enemyBuilt(u)
+				call SetUnitUserData(u,0)
 				set j = j+1
 		endloop
 		set t = null
@@ -764,11 +744,11 @@ struct hSet
 			if (hlogic.imod(g_wave,g_boss_mod) == 0) then
 				call hmark.display(null,"war3mapImported\\warning.blp",1.0,5.0,100.0,100.0)
 				call hmedia.bgm(gg_snd_dangerComing)
-				call htime.setDialog(g_timer_wave, UnitId2String(g_mon[monRand]) +"※"+ UnitId2String(g_boss[bossRand]))
-				call hmsg.echo("时空炸裂！！小心！|cffff8080"+UnitId2String(g_boss[bossRand])+"|r 要来了～")
+				call htime.setDialog(g_timer_wave, "第"+I2S(g_wave)+"波※BOSS")
+				call hmsg.echo("时空炸裂！！小心！|cffff8080BOSS|r 要来了～")
 			else
 				call hmedia.bgm(gg_snd_ready)
-				call htime.setDialog(g_timer_wave, UnitId2String(g_mon[monRand]))
+				call htime.setDialog(g_timer_wave, "第"+I2S(g_wave)+"波")
 				call hmsg.echo("时空震荡！！小心！敌人围剿啦～")
 			endif
 			//记录

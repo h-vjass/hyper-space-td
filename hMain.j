@@ -360,23 +360,6 @@ library Main initializer init needs hJass
 		set u_dead_timering[3] = 'n059'
 		set u_dead_timering[4] = 'n057'
 		set u_dead_timering[5] = 'n04X'
-		//
-		set spaceDegX[1] = 128
-		set spaceDegY[1] = 3200
-		set spaceDegX[2] = 1280
-		set spaceDegY[2] = 3968
-		set spaceDegX[3] = 3200
-		set spaceDegY[3] = 3968
-		set spaceDegX[4] = 3968
-		set spaceDegY[4] = 2816
-		set spaceDegX[5] = 3968
-		set spaceDegY[5] = 896
-		set spaceDegX[6] = 2816
-		set spaceDegY[6] = 128
-		set spaceDegX[7] = 896
-		set spaceDegY[7] = 128
-		set spaceDegX[8] = 128
-		set spaceDegY[8] = 1280
 		//循环设定玩家参数
 		set i = player_max_qty
 		loop

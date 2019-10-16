@@ -69,14 +69,40 @@ group g_gp_mon = CreateGroup()
 group g_gp_summon = CreateGroup()
 real g_ring_break_up = 0
 
-real spaceDistance = 4224.00
-integer spaceDegQty = 8
+real spaceDistance = 3072.00
+
+integer spaceDegQty = 4
 real array spaceDegX
 real array spaceDegY
+real array spaceDeg2X
+real array spaceDeg2Y
+real array spaceDeg3X
+real array spaceDeg3Y
+real array spaceDeg4X
+real array spaceDeg4Y
+
+rect rectSpaceDeg1_1 = null
+rect rectSpaceDeg1_2 = null
+rect rectSpaceDeg1_3 = null
+rect rectSpaceDeg1_4 = null
+rect rectSpaceDeg2_1 = null
+rect rectSpaceDeg2_2 = null
+rect rectSpaceDeg2_3 = null
+rect rectSpaceDeg2_4 = null
+rect rectSpaceDeg3_1 = null
+rect rectSpaceDeg3_2 = null
+rect rectSpaceDeg3_3 = null
+rect rectSpaceDeg3_4 = null
+rect rectSpaceDeg4_1 = null
+rect rectSpaceDeg4_2 = null
+rect rectSpaceDeg4_3 = null
+rect rectSpaceDeg4_4 = null
+
 rect rectHanabi = null
 rect rectLeave = null
 rect rectBattle = null
-rect rectBattleInner = null
+
+
 weathereffect rectWeathereffect = null
 string rectWeatherString = null
 
@@ -2018,8 +2044,83 @@ struct hGlobals
         endif
     endmethod
 
+
+
+    private static method gotoRectSpaceDeg takes unit u,integer lv, real x,real y, real x2,real y2 returns nothing
+        local integer i = 0
+        if(IsUnitAlly(u, Player(11)) != true)then
+            set u = null
+            return
+        endif
+        set i = GetUnitUserData(u) + 1
+        if(i >= 5)then
+            call SetUnitUserData(u,0)
+            call SetUnitPosition(u, x2, y2)
+            if(lv == 4)then
+                call IssuePointOrder( u, "attack", GetLocationX(Loc_Ring), GetLocationY(Loc_Ring) )
+            endif    
+        else
+            call SetUnitUserData(u,i)
+            if(IsUnitType(u, UNIT_TYPE_ANCIENT) == true)then
+                call IssuePointOrder( u, "attack", x, y )
+            else 
+                call IssuePointOrder( u, "move", x, y )
+            endif
+        endif
+        set u = null
+    endmethod
+    private static method gotoRectSpaceDeg11 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),1,spaceDegX[2],spaceDegY[2],spaceDeg2X[1],spaceDeg2Y[1])
+	endmethod
+    private static method gotoRectSpaceDeg12 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),1,spaceDegX[3],spaceDegY[3],spaceDeg2X[2],spaceDeg2Y[2])
+	endmethod
+    private static method gotoRectSpaceDeg13 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),1,spaceDegX[4],spaceDegY[4],spaceDeg2X[3],spaceDeg2Y[3])
+	endmethod
+    private static method gotoRectSpaceDeg14 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),1,spaceDegX[1],spaceDegY[1],spaceDeg2X[4],spaceDeg2Y[4])
+	endmethod
+    private static method gotoRectSpaceDeg21 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),2,spaceDeg2X[2],spaceDeg2Y[2],spaceDeg3X[1],spaceDeg3Y[1])
+	endmethod
+    private static method gotoRectSpaceDeg22 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),2,spaceDeg2X[3],spaceDeg2Y[3],spaceDeg3X[2],spaceDeg3Y[2])
+	endmethod
+    private static method gotoRectSpaceDeg23 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),2,spaceDeg2X[4],spaceDeg2Y[4],spaceDeg3X[3],spaceDeg3Y[3])
+	endmethod
+    private static method gotoRectSpaceDeg24 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),2,spaceDeg2X[1],spaceDeg2Y[1],spaceDeg3X[4],spaceDeg3Y[4])
+	endmethod
+    private static method gotoRectSpaceDeg31 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),3,spaceDeg3X[2],spaceDeg3Y[2],spaceDeg4X[1],spaceDeg4Y[1])
+	endmethod
+    private static method gotoRectSpaceDeg32 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),3,spaceDeg3X[3],spaceDeg3Y[3],spaceDeg4X[2],spaceDeg4Y[2])
+	endmethod
+    private static method gotoRectSpaceDeg33 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),3,spaceDeg3X[4],spaceDeg3Y[4],spaceDeg4X[3],spaceDeg4Y[3])
+	endmethod
+    private static method gotoRectSpaceDeg34 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),3,spaceDeg3X[1],spaceDeg3Y[1],spaceDeg4X[4],spaceDeg4Y[4])
+	endmethod
+    private static method gotoRectSpaceDeg41 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),4,spaceDeg4X[2],spaceDeg4Y[2],0,0)
+	endmethod
+    private static method gotoRectSpaceDeg42 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),4,spaceDeg4X[3],spaceDeg4Y[3],0,0)
+	endmethod
+    private static method gotoRectSpaceDeg43 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),4,spaceDeg4X[4],spaceDeg4Y[4],0,0)
+	endmethod
+    private static method gotoRectSpaceDeg44 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),4,spaceDeg4X[1],spaceDeg4Y[1],0,0)
+	endmethod
+
     public static method do takes nothing returns nothing
         local integer i = 0
+        local trigger tg = null
 
         // 设置玩家组
         set i = 1
@@ -2032,7 +2133,6 @@ struct hGlobals
         
         set rectHanabi = hrect.createInLoc(GetLocationX(Loc_Ring),GetLocationY(Loc_Ring),2000,2000)
         set rectBattle = hrect.createInLoc(GetLocationX(Loc_C),GetLocationY(Loc_C),spaceDistance,spaceDistance)
-        set rectBattleInner = hrect.createInLoc(GetLocationX(Loc_C),GetLocationY(Loc_C),spaceDistance - 100,spaceDistance - 100)
 
         // hero 英雄
         call thistype.registerHero('H00M',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNHeroArchMage.blp",2.00) // t01 大魔法师
@@ -2236,6 +2336,71 @@ struct hGlobals
         set momentItems[4]= 'o005'
         set momentItems[5]= 'o006'
         set momentItems[6]= 'o007'
+
+        //
+		set spaceDegX[1] = -644
+		set spaceDegY[1] = 4610
+		set spaceDegX[2] = 4740
+		set spaceDegY[2] = 4610
+		set spaceDegX[3] = 4740
+		set spaceDegY[3] = -512
+		set spaceDegX[4] = -644
+		set spaceDegY[4] = -512
+		set spaceDeg2X[1] = 197
+		set spaceDeg2Y[1] = 3840
+		set spaceDeg2X[2] = 3913
+		set spaceDeg2Y[2] = 3840
+		set spaceDeg2X[3] = 3900
+		set spaceDeg2Y[3] = 288
+		set spaceDeg2X[4] = 180
+		set spaceDeg2Y[4] = 308
+        set spaceDeg3X[1] = 197
+		set spaceDeg3Y[1] = 900
+		set spaceDeg3X[2] = 3205
+		set spaceDeg3Y[2] = 3200
+		set spaceDeg3X[3] = 3200
+		set spaceDeg3Y[3] = 900
+		set spaceDeg3X[4] = 900
+		set spaceDeg3Y[4] = 900
+        set spaceDeg4X[1] = 1535
+		set spaceDeg4Y[1] = 2526
+		set spaceDeg4X[2] = 2526
+		set spaceDeg4Y[2] = 2526
+		set spaceDeg4X[3] = 2526
+		set spaceDeg4Y[3] = 1535
+		set spaceDeg4X[4] = 1535
+		set spaceDeg4Y[4] = 1535
+
+        set rectSpaceDeg1_1 = hrect.createInLoc(spaceDegX[1],spaceDegY[1],100,100)
+        set rectSpaceDeg1_2 = hrect.createInLoc(spaceDegX[2],spaceDegY[2],100,100)
+        set rectSpaceDeg1_3 = hrect.createInLoc(spaceDegX[3],spaceDegY[3],100,100)
+        set rectSpaceDeg1_4 = hrect.createInLoc(spaceDegX[4],spaceDegY[4],100,100)
+        set rectSpaceDeg2_1 = hrect.createInLoc(spaceDeg2X[1],spaceDeg2Y[1],100,100)
+        set rectSpaceDeg2_2 = hrect.createInLoc(spaceDeg2X[2],spaceDeg2Y[2],100,100)
+        set rectSpaceDeg2_3 = hrect.createInLoc(spaceDeg2X[3],spaceDeg2Y[3],100,100)
+        set rectSpaceDeg2_4 = hrect.createInLoc(spaceDeg2X[4],spaceDeg2Y[4],100,100)
+        set rectSpaceDeg3_1 = hrect.createInLoc(spaceDeg3X[1],spaceDeg3Y[1],100,100)
+        set rectSpaceDeg3_2 = hrect.createInLoc(spaceDeg3X[2],spaceDeg3Y[2],100,100)
+        set rectSpaceDeg3_3 = hrect.createInLoc(spaceDeg3X[3],spaceDeg3Y[3],100,100)
+        set rectSpaceDeg3_4 = hrect.createInLoc(spaceDeg3X[4],spaceDeg3Y[4],100,100)
+        set rectSpaceDeg4_1 = hrect.createInLoc(spaceDeg4X[1],spaceDeg4Y[1],100,100)
+        set rectSpaceDeg4_2 = hrect.createInLoc(spaceDeg4X[2],spaceDeg4Y[2],100,100)
+        set rectSpaceDeg4_3 = hrect.createInLoc(spaceDeg4X[3],spaceDeg4Y[3],100,100)
+        set rectSpaceDeg4_4 = hrect.createInLoc(spaceDeg4X[4],spaceDeg4Y[4],100,100)
+
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg1_1 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg11)
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg1_2 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg12)
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg1_3 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg13)
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg1_4 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg14)
+        
 
     endmethod
 
