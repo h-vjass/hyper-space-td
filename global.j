@@ -6,9 +6,6 @@ location Loc_Ring = Location(2048,2048)
 location Loc_JiuGuan = Location(1960,2128)
 location Loc_JiuGuanBorn = Location(2061,1851)
 
-location Loc_Area_Death = Location(-578,-5142)
-location Loc_Area_DeathBack = Location(-300,4747)
-
 integer array H_MAP_LV
 integer array H_MAP_LV_GIFT
 integer g_gift_count = 0
@@ -41,6 +38,9 @@ integer array g_hero
 integer array g_boss
 integer array g_mon
 integer array g_summon
+
+integer monRand = 1
+integer bossRand = 1
 
 integer g_summon_upgrade_judge = 200
 boolean g_mon_isrunning = true
@@ -94,11 +94,6 @@ force playerForce = CreateForce()
 player player_ally = null
 boolean array player_isvip
 integer array player_prolv
-
-// 黑暗埋骨地
-rect rectDeathBack = null
-unit u_death_back_portal = null
-trigger tg_death_back = null
 
 
 // 任务指示
@@ -202,213 +197,6 @@ struct hGlobals
         call hhero.setHeroType(g_hero[g_hero_count],typex)
         call hunit.setAvatar(g_hero[g_hero_count],avatar)
         call hunit.setAttackSpeedBaseSpace(g_hero[g_hero_count],attackBaseSpace)
-    endmethod
-
-    private static method registerMon takes integer i,real life,real move,real defend,real attackPhysical,string labal returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        set g_mon_label[i] = labal
-        set g_mon_life[i] = life
-        set g_mon_move[i] = move
-        set g_mon_defend[i] = defend
-        set g_mon_attackPhysical[i] = attackPhysical
-    endmethod
-    
-    private static method registerBoss takes integer i,real life,real move,real defend,real attackPhysical,string labal returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        set g_boss_label[i] = labal
-        set g_boss_life[i] = life
-        set g_boss_move[i] = move
-        set g_boss_defend[i] = defend
-        set g_boss_attackPhysical[i] = attackPhysical
-    endmethod
-    private static method registerMon0110 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerMon(1,50,180,0,20,"lv01 狗头人")
-        call registerMon(2,100,183,0,22,"lv02 狗头占术士")
-        call registerMon(3,160,186,1,23,"lv03 海龟")
-        call registerMon(4,220,188,1,26,"lv04 红龟")
-        call registerMon(5,350,190,1,30,"lv05 大龙龟")
-        call registerMon(6,800,195,1,55,"lv06 黄色小鱼")
-        call registerMon(7,850,197,1,61,"lv07 绿色小鱼")
-        call registerMon(8,900,199,2,64,"lv08 螃蟹")
-        call registerMon(9,960,201,2,67,"lv09 小虾")
-        call registerMon(10,1000,203,2,70,"lv10 巨虾")
-    endmethod
-    private static method registerMon1120 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerMon(11,1420,210,2,84,"lv11 食尸鬼")
-        call registerMon(12,1570,213,2,87,"lv12 憎恶")
-        call registerMon(13,1650,216,2,92,"lv13 蜘蛛")
-        call registerMon(14,1780,219,2,96,"lv14 女妖")
-        call registerMon(15,1850,222,3,100,"lv15 绞肉车")
-        call registerMon(16,2100,228,3,120,"lv16 强盗")
-        call registerMon(17,2400,231,3,130,"lv17 土匪")
-        call registerMon(18,2800,233,3,134,"lv18 匪王")
-        call registerMon(19,3000,235,3,137,"lv19 食人魔")
-        call registerMon(20,3300,237,3,140,"lv20 食人魔法师")
-    endmethod
-    private static method registerMon2130 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerMon(21,4500,240,4,160,"lv21 兔妖")
-        call registerMon(22,5800,242,4,166,"lv22 兔魔")
-        call registerMon(23,6200,244,4,172,"lv23 黑魔牧师")
-        call registerMon(24,6800,246,4,177,"lv24 黑魔猎手")
-        call registerMon(25,6000,248,4,180,"lv25 黑魔狂战士")
-        call registerMon(26,7700,253,5,205,"lv26 水元素")
-        call registerMon(27,8150,255,5,210,"lv27 海元素")
-        call registerMon(28,8500,257,5,214,"lv28 熊怪")
-        call registerMon(29,8800,259,5,220,"lv29 熊法")
-        call registerMon(30,9000,261,5,225,"lv30 熊怪追踪者")
-    endmethod
-    private static method registerMon3140 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerMon(31,9600, 265,5,255,"lv31 巨狼")
-        call registerMon(32,10700,267,5,260,"lv32 白狼")
-        call registerMon(33,11200,268,5,267,"lv33 幽狼")
-        call registerMon(34,12700,270,6,265,"lv34 蝎子")
-        call registerMon(35,13000,272,6,270,"lv35 毒蝎子")
-        call registerMon(36,14500,275,6,280,"lv36 小虫")
-        call registerMon(37,15000,277,7,285,"lv37 死亡雕像")
-        call registerMon(38,16400,279,7,290,"lv38 雪怪")
-        call registerMon(39,17700,281,7,295,"lv39 雪族萨满")
-        call registerMon(40,18000,283,7,300,"lv40 寒冰凛熊")
-    endmethod
-    private static method registerMon4150 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerMon(41,19000,285,7,330,"lv41 豺狼")
-        call registerMon(42,19700,287,7,335,"lv42 豺狼猎手")
-        call registerMon(43,21000,289,7,340,"lv43 电球豺狼")
-        call registerMon(44,22500,291,8,345,"lv44 人马战士")
-        call registerMon(45,23000,293,8,350,"lv45 人马弓手")
-        call registerMon(46,26000,297,8,390,"lv46 图斯卡蓝枪")
-        call registerMon(47,27000,299,8,402,"lv47 图斯卡蓝剑")
-        call registerMon(48,27500,302,8,410,"lv48 图斯卡非酋")
-        call registerMon(49,27800,304,8,415,"lv49 影刺客")
-        call registerMon(50,28000,306,9,420,"lv50 爆刺客")
-    endmethod
-    private static method registerMon5160 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerMon(51,30000,308,9,440,"lv51 紫色78脸")
-        call registerMon(52,31600,309,9,450,"lv52 橘色78脸")
-        call registerMon(53,33000,310,9,460,"lv53 青恶魔")
-        call registerMon(54,34500,311,9,470,"lv54 赤恶魔")
-        call registerMon(55,35000,313,10,475,"lv55 海民")
-        call registerMon(56,37500,317,10,520,"lv56 岩妖")
-        call registerMon(57,39000,318,10,530,"lv57 钢妖")
-        call registerMon(58,40000,320,10,540,"lv58 病毒树人")
-        call registerMon(59,41000,322,11,550,"lv59 疫苗种树精")
-        call registerMon(60,42000,324,11,560,"lv60 灭却龙仔")
-    endmethod
-    private static method registerMon6170 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerMon(61,39000,327,11,630,"lv61 小蚂蚁")
-        call registerMon(62,42000,329,11,650,"lv62 暗黑蚁")
-        call registerMon(63,45000,332,11,660,"lv63 黑蜘蛛")
-        call registerMon(64,47500,335,12,670,"lv64 草蜘蛛")
-        call registerMon(65,50000,337,12,680,"lv65 腐蜘蛛")
-        call registerMon(66,57500,340,12,700,"lv66 古代野人")
-        call registerMon(67,59500,342,12,710,"lv67 猛犸")
-        call registerMon(68,60000,344,12,720,"lv68 黑毛猛犸")
-        call registerMon(69,61500,345,13,730,"lv69 古代战士")
-        call registerMon(70,62000,347,13,750,"lv70 古代撕裂者")
-    endmethod
-    private static method registerMon7180 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerMon(71,61000,350,13,800,"lv71 机关车")
-        call registerMon(72,62500,352,13,810,"lv72 地狱车")
-        call registerMon(73,63500,353,14,820,"lv73 巫医")
-        call registerMon(74,74500,354,14,830,"lv74 巫毒师")
-        call registerMon(75,75000,356,14,840,"lv75 小奇美拉")
-        call registerMon(76,76500,360,14,890,"lv76 白皮豪猪")
-        call registerMon(77,81000,361,15,900,"lv77 提棍豪猪")
-        call registerMon(78,82000,362,15,910,"lv78 豪猪猎人")
-        call registerMon(79,83000,363,15,920,"lv79 龙之盗贼")
-        call registerMon(80,85000,364,15,930,"lv80 龙之战士")
-    endmethod
-    private static method registerMon8190 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerMon(81,86500,367,15,990,"lv81 蜥蜴")
-        call registerMon(82,87500,368,16,1030,"lv82 火蜥蜴")
-        call registerMon(83,88000,369,16,1050,"lv83 狂怒野兽")
-        call registerMon(84,89000,370,16,1070,"lv84 鹰怪")
-        call registerMon(85,90000,371,16,1100,"lv85 鹰妖")
-        call registerMon(86,92500,375,16,1150,"lv86 野兽步兵")
-        call registerMon(87,93500,376,17,1220,"lv87 狂兽步兵")
-        call registerMon(88,94000,377,17,1250,"lv88 石槌黑鬼")
-        call registerMon(89,95500,378,17,1270,"lv89 石槌食人魔")
-        call registerMon(90,96000,379,17,1300,"lv90 斧战")
-    endmethod
-    private static method registerMon91100 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerMon(91, 100000,382,17,1350,"lv91 精灵龙")
-        call registerMon(92, 100500,383,17,1420,"lv92 电棍")
-        call registerMon(93, 102500,385,18,1480,"lv93 魂棍")
-        call registerMon(94, 104000,386,18,1550,"lv94 虚无")
-        call registerMon(95, 105500,389,18,1600,"lv95 骨弓")
-        call registerMon(96, 118000,391,18,1780,"lv96 灵傀")
-        call registerMon(97, 122800,393,19,1840,"lv97 九头蛇")
-        call registerMon(98, 126500,394,19,1900,"lv98 信魔者")
-        call registerMon(99, 128500,396,19,1950,"lv99 埃瑞达男巫")
-        call registerMon(100,130000,398,20,2000,"lv100 丛林漫步者")
-    endmethod
-    private static method registerMon101110 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerMon(101,133000,400,21,2120,"lv101 僵尸")
-        call registerMon(102,146000,403,22,2230,"lv102 大僵尸")
-        call registerMon(103,149000,406,23,2290,"lv103 腐败淤泥")
-        call registerMon(104,142000,409,24,2375,"lv104 吞噬劫难魔怪")
-        call registerMon(105,150000,410,25,2400,"lv105 可怕怪物")
-        call registerMon(106,160000,412,25,2600,"lv106 食尸鬼")
-        call registerMon(107,170000,413,25,2700,"lv107 骷髅战士")
-        call registerMon(108,180000,414,26,2800,"lv108 达拉内")
-        call registerMon(109,190000,415,26,2900,"lv109 飞机")
-        call registerMon(110,200000,416,26,3000,"lv110 机关车")
-    endmethod
-    private static method registerMon111120 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerMon(111,233000,417,27,3120,"lv111 野骑士")
-        call registerMon(112,246000,418,28,3230,"lv112 野枪")
-        call registerMon(113,249000,419,29,3290,"lv113 翼龙")
-        call registerMon(114,242000,420,30,3375,"lv114 巨岩人")
-        call registerMon(115,250000,421,31,3400,"lv115 精铁妖")
-        call registerMon(116,255000,422,32,3420,"lv111 野骑士")
-        call registerMon(117,260000,423,33,3530,"lv112 野枪")
-        call registerMon(118,265000,424,34,3690,"lv113 翼龙")
-        call registerMon(119,270000,425,35,3725,"lv114 巨岩人")
-        call registerMon(120,275000,425,36,3800,"lv115 精铁妖")
-    endmethod
-    private static method registerBoss0110 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerBoss(1, 20000,180,10,400,"巨龙海龟")
-        call registerBoss(2, 40000,200,14,900,"龙虾首领")
-        call registerBoss(3, 70000,210,18,1200,"飞天石像鬼")
-        call registerBoss(4, 120000,220,22,1750,"食人魔统领")
-        call registerBoss(5, 170000,230,26,2100,"冰魔法师")
-        call registerBoss(6, 220000,235,30,2600,"Panda")
-        call registerBoss(7, 280000,245,34,3200,"沙蝎之王")
-        call registerBoss(8, 360000,250,38,3800,"寒冰巨龙")
-        call registerBoss(9, 450000,255,42,4700,"人马可汗")
-        call registerBoss(10,500000,260,46,5600,"疾风隐刺")
-    endmethod
-    private static method registerBoss1120 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerBoss(11,580000,265,50,6500,"潮汐巨人")
-        call registerBoss(12,690000,270,54,7500,"灭却龙")
-        call registerBoss(13,750000,275,58,8600,"猎足之蛛")
-        call registerBoss(14,840000,280,62,9800,"白毛猛犸王")
-        call registerBoss(15,950000,290,66,11000,"奇美拉")
-        call registerBoss(16,1100000,300,70,12350,"龙卵领主")
-        call registerBoss(17,1200000,305,74,13700,"旋风女皇")
-        call registerBoss(18,1350000,310,78,15000,"斧帝")
-        call registerBoss(19,1500000,315,82,16000,"深渊地狱火")
-        call registerBoss(20,1650000,320,86,18500,"毁灭炎尊")
-    endmethod
-    private static method registerBoss2130 takes nothing returns nothing
-        call htime.delTimer(GetExpiredTimer())
-        call registerBoss(21,1800000,325,90,20000,"赐死鹿")
-        call registerBoss(22,2000000,330,95,24000,"机关人")
-        call registerBoss(23,2400000,335,110,27500,"钻石巨人")
-        call registerBoss(24,2750000,337,120,30000,"寒春龙神")
     endmethod
 
     public static method registerSummon takes integer uid,integer gold,integer upgrade,integer upgradegold,real life,real mana,real manaback,real defend,real attackPhysical,real attackSpeedBaseSpace returns nothing
@@ -1292,69 +1080,13 @@ struct hGlobals
         set tempu = null
     endmethod
 
-    private static method fly2Death takes unit u returns nothing
-		local player p = GetOwningPlayer(u)
-        local location loc = null
-        local integer i = 0
-        local unit ghost = null
-        if(GetPlayerController(p) != MAP_CONTROL_USER)then
-            set u = null
-            set p = null
-            return
-        endif
-		call SetUnitPosition(u, GetLocationX(Loc_Area_Death), GetLocationY(Loc_Area_Death))
-		call hmedia.bgm2Player(gg_snd_ziyuan,p)
-		call hcamera.toXY(GetLocationX(Loc_Area_Death), GetLocationY(Loc_Area_Death),p,0)
-		call hcamera.lock(p,u)
-		call hmsg.echoTo(p,"这是什么鬼地方...看不清楚",0)
-		call SetBlight( player_aggressive, -3075, -3075, 2816, true )
-        call hattr.subSight(u,650,0)
-        set i = 10
-        loop
-            exitwhen i <=0
-                set loc = GetRandomLocInRect(gg_rct_ghost)
-                set ghost = henemy.createUnit('n040',loc)
-                call hattrEffect.setToxicVal(ghost,-3,0)
-                call hattrEffect.setToxicDuring(ghost,5,0)
-                call hattrEffect.setColdVal(ghost,5,0)
-                call hattrEffect.setColdDuring(ghost,2,0)
-                call RemoveLocation(loc)
-                set loc = null
-            set i = i - 1
-        endloop
-        set u = null
-        set p = null
-        set loc = null
-        set ghost = null
-	endmethod
-	private static method fly2DeathBack takes nothing returns nothing
-		local unit u = GetTriggerUnit()
-		local player p = GetOwningPlayer(u)
-        call hcamera.reset(p,3.00)
-		call SetUnitPosition(u, GetLocationX(Loc_JiuGuanBorn), GetLocationY(Loc_JiuGuanBorn))
-		call hmedia.bgm2Player(gg_snd_bgm_nj_t03_dspadpcm,p)
-		call hcamera.toXY(GetLocationX(Loc_JiuGuanBorn), GetLocationY(Loc_JiuGuanBorn),p,0)
-        call hattr.addSight(u,650,0)
-        set u = null
-        set p = null
-	endmethod
-
     private static method itemUseAction takes nothing returns nothing
         local unit u = hevent.getTriggerUnit()
         local item it = hevent.getTriggerItem()
-        local integer itid =hevent.getId()
+        local integer itid = hevent.getId()
         local player p = GetOwningPlayer(u)
         local string txt = null
-        if(itid == 'I00K')then
-            set txt = ""
-            set txt = txt + "村庄下面忽然出现了一个传送门"
-            set txt = txt + "|n难不成是宝藏？"
-            set txt = txt + "|n还是被屠杀的村民的愤怒？"
-            call QuestMessageBJ( playerForce, bj_QUESTMESSAGE_DISCOVERED, "探索古怪的传送门" )
-            set q_death_quest = CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "探索古怪的传送门",txt, "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp" )
-            call FlashQuestDialogButton()
-            call thistype.fly2Death(u)
-        elseif(itid == 'I00H')then
+        if(itid == 'I00H')then
             call hattr.addLifeBack(u,20.0,60.0)
             call hattr.addManaBack(u,3.0,60.0)
         endif
@@ -2302,14 +2034,6 @@ struct hGlobals
         set rectBattle = hrect.createInLoc(GetLocationX(Loc_C),GetLocationY(Loc_C),spaceDistance,spaceDistance)
         set rectBattleInner = hrect.createInLoc(GetLocationX(Loc_C),GetLocationY(Loc_C),spaceDistance - 100,spaceDistance - 100)
 
-        // 支线区域的传送门
-        set rectDeathBack = hrect.createInLoc(GetLocationX(Loc_Area_DeathBack),GetLocationY(Loc_Area_DeathBack),120,120)
-
-		set u_death_back_portal = hunit.createUnit(player_passive, 'n004', Loc_Area_DeathBack)
-		set tg_death_back = CreateTrigger()
-		call TriggerRegisterEnterRectSimple( tg_death_back, rectDeathBack )
-		call TriggerAddAction(tg_death_back, function thistype.fly2DeathBack)
-
         // hero 英雄
         call thistype.registerHero('H00M',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNHeroArchMage.blp",2.00) // t01 大魔法师
         call thistype.registerHero('H00K',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNShadowHunter.blp",2.00) // t01 暗影猎手
@@ -2323,21 +2047,6 @@ struct hGlobals
         call thistype.registerHero('H00S',HERO_TYPE_AGI,"ReplaceableTextures\\CommandButtons\\BTNBansheeRanger.blp",2.00) // t10 黑游
         call thistype.registerHero('H00R',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNHeroAlchemist.blp",2.00) // t20 炼金
 
-        call htime.setTimeout(0.10,function thistype.registerMon0110)
-        call htime.setTimeout(0.13,function thistype.registerMon1120)
-        call htime.setTimeout(0.16,function thistype.registerMon2130)
-        call htime.setTimeout(0.19,function thistype.registerMon3140)
-        call htime.setTimeout(0.22,function thistype.registerMon4150)
-        call htime.setTimeout(0.25,function thistype.registerMon5160)
-        call htime.setTimeout(0.28,function thistype.registerMon6170)
-        call htime.setTimeout(0.31,function thistype.registerMon7180)
-        call htime.setTimeout(0.34,function thistype.registerMon8190)
-        call htime.setTimeout(0.37,function thistype.registerMon91100)
-        call htime.setTimeout(0.40,function thistype.registerMon101110)
-        call htime.setTimeout(0.40,function thistype.registerMon111120)
-        call htime.setTimeout(0.50,function thistype.registerBoss0110)
-        call htime.setTimeout(0.55,function thistype.registerBoss1120)
-        call htime.setTimeout(0.60,function thistype.registerBoss2130)
         call htime.setTimeout(0.70,function thistype.registerItem1)
         call htime.setTimeout(0.75,function thistype.registerItem2)
         call htime.setTimeout(0.80,function thistype.registerItem3)

@@ -448,7 +448,7 @@ struct hSet
 		call EnumDestructablesInRectAll(rectBattle, function thistype.removeEnumDestructable )
 		call henv.clearUnits()
 		call SetTerrainType( GetRectCenterX(rectBattle) , GetRectCenterY(rectBattle), 'Adrd', -1, 4, 0 )
-		call SetBlight( player_aggressive, GetRectCenterX(rectBattle) , GetRectCenterY(rectBattle), 3200, true )
+		call SetBlight( player_aggressive, GetRectCenterX(rectBattle) , GetRectCenterY(rectBattle), 6400, true )
 		if (rectWeathereffect != null) then
 			call hweather.del(rectWeathereffect)
 		endif
@@ -492,41 +492,6 @@ struct hSet
 		if (rectWeathereffect != null) then
 			call hweather.del(rectWeathereffect)
 		endif
-		set i = 1
-		loop
-			exitwhen i>16
-				set rectArea = GetRandomInt(0,470)
-				set hxy.x = GetRandomReal(GetRectMinX(rectBattleInner)+rectArea, GetRectMaxX(rectBattleInner))
-				set hxy.y = GetRandomReal(GetRectMinY(rectBattleInner)+rectArea, GetRectMaxY(rectBattleInner))
-				set tempRect = hrect.createInLoc(hxy.x,hxy.y,rectArea,rectArea)
-				set wb = hWeatherBean.create()
-				set wb.x = 2500
-				set wb.y = 2500
-				set wb.width = spaceDistance
-				set wb.height = spaceDistance
-				call henv.randomSummer(tempRect,x,y,true)
-				set rectWeathereffect = hweather.sun(wb)
-				set j = GetRandomInt(1,5)
-				if(j == 1)then
-					call hunit.createUnithXY(player_passive,'n018',hxy)
-				elseif(j == 2)then
-					call hunit.createUnithXY(player_passive,'n019',hxy)
-				elseif(j == 3)then
-					call hunit.createUnithXY(player_passive,'n01A',hxy)
-				elseif(j == 4)then
-					call hunit.createUnithXY(player_passive,'n01B',hxy)
-				elseif(j == 5)then
-					call hunit.createUnithXY(player_passive,'n01C',hxy)
-				endif
-			set i = i+1
-		endloop
-		//生成长老/魔兽
-		call hunit.createUnitXYFacing(player_ally,'n002',2330,2551, 270)
-		call hunit.createUnitXY(player_ally,'n012',2086,4689)
-		set u = henemy.createUnitXYFacing(last_boss_uid,2086,4689, 270)
-		call hattr.setMove(u,0,0)
-		call hattr.setLife(u,5000000,0)
-		call hattr.setLifeBack(u,20000,0)
 		// 任务F9提醒
 		call hmark.display(null,"war3mapImported\\win.blp",1.0,10.0,100.0,100.0)
 		set txt = ""
@@ -563,8 +528,8 @@ struct hSet
 		if(g_gp_mon != null)then
 			call GroupRemoveUnit(g_gp_mon,u)
 		endif
-		set exp = R2I(I2R(g_wave) * 15 * g_game_speed)
-		set gold = R2I(I2R(g_wave) * 2 * g_game_speed)
+		set exp = R2I(I2R(g_wave) * 21 * g_game_speed)
+		set gold = R2I(I2R(g_wave) * 1.5 * g_game_speed)
 		if(killer != null)then
 			call haward.forGroup(killer,exp,gold,0)
 		endif
@@ -664,20 +629,20 @@ struct hSet
 		local timer t = GetExpiredTimer()
 		local unit u = null
         local location loc = null
-		local integer bossIndex = g_wave / g_boss_mod
+		local integer bossIndex = bossRand
 		local integer rand = GetRandomInt(1,spaceDegQty)
 		local real bossPercent = 0
 		local real bossPercentLittle = 0
 		local real bossPercentTiny = 0
 		call htime.delTimer(t)
 		set loc = Location(spaceDegX[rand],spaceDegY[rand])
-		set u = henemy.createUnitAttackToLoc(g_boss[bossIndex],loc,Loc_Ring)
 		set last_boss_uid = g_boss[bossIndex]
+		set u = henemy.createUnitAttackToLoc(last_boss_uid,loc,Loc_Ring)
 		call GroupAddUnit(g_gp_mon,u)
 		call TriggerRegisterUnitEvent( bossDeadTg, u, EVENT_UNIT_DEATH )
-		set bossPercent = I2R(bossIndex) * 5
-		set bossPercentLittle = I2R(bossIndex) * 4
-		set bossPercentTiny = I2R(bossIndex) * 3
+		set bossPercent = g_wave * 5
+		set bossPercentLittle = g_wave * 4
+		set bossPercentTiny = g_wave * 3
 		if(bossPercent > 90)then
 			set bossPercent = 90
 		endif
@@ -687,12 +652,12 @@ struct hSet
 		if(bossPercentTiny > 60)then
 			set bossPercentTiny = 60
 		endif
-        call hattr.setLife(u,g_boss_life[bossIndex],0)
-        call hattr.setDefend(u,g_boss_defend[bossIndex],0)
-		call hattr.setMove(u,g_boss_move[bossIndex],0)
-        call hattr.setAttackPhysical(u,g_boss_attackPhysical[bossIndex],0)
-        call hattr.setAttackSpeed(u,I2R(bossIndex) * 1,0)
-        call hattr.setLifeBack(u,I2R(bossIndex) * 10.0,0)
+        call hattr.setLife(u, g_wave*5000 ,0)
+        call hattr.setDefend(u, g_wave*10 ,0)
+		call hattr.setMove(u, 150 + g_wave*10 ,0)
+        call hattr.setAttackPhysical(u, 100 + g_wave*25  ,0)
+        call hattr.setAttackSpeed(u, 30 + g_wave*5 ,0)
+        call hattr.setLifeBack(u, g_wave*12 ,0)
         call hattr.setAim(u,bossPercent,0)
         call hattr.setAvoid(u,bossPercentLittle,0)
 		call hattr.setInvincible(u,bossPercent,0)
@@ -702,8 +667,8 @@ struct hSet
         call hattr.setFetterOppose(u,bossPercent,0)
         call hattr.setBombOppose(u,bossPercentTiny,0)
         call hattr.setCrackFlyOppose(u,bossPercentLittle,0)
-        call hattr.setKnockingOppose(u,I2R(bossIndex) * 1000,0)
-        call hattr.setViolenceOppose(u,I2R(bossIndex) * 1500,0)
+        call hattr.setKnockingOppose(u,1000 + g_wave * 600,0)
+        call hattr.setViolenceOppose(u,1400 + g_wave * 800,0)
 		call hGlobals.bossBuilt(u)
 		//警告
 		call PingMinimapLocForForceEx( GetPlayersAll(),loc,3, bj_MINIMAPPINGSTYLE_FLASHY, 100, 0, 0 )
@@ -781,6 +746,8 @@ struct hSet
 		local location loc = null
 		local integer i = 0
 		local timer t = null
+		set monRand = GetRandomInt(1,g_mon_count)
+		set bossRand = GetRandomInt(1,g_boss_count)
 		if (holdon <= 0) then
 			call hmsg.echo("|cffffff00Lv."+I2S(g_wave)+" 来袭！来袭！|r")
 			call mildDirect()
@@ -797,13 +764,11 @@ struct hSet
 			if (hlogic.imod(g_wave,g_boss_mod) == 0) then
 				call hmark.display(null,"war3mapImported\\warning.blp",1.0,5.0,100.0,100.0)
 				call hmedia.bgm(gg_snd_dangerComing)
-				call htime.setDialog(g_timer_wave, g_mon_label[g_wave] +"※"+ g_boss_label[g_wave/g_boss_mod])
-				// 创建boss的关卡时候，增加总敌军数 20
-				set g_gp_max = g_gp_max + 20 * player_current_qty
-				call hmsg.echo("时空炸裂！！小心！|cffff8080"+g_boss_label[g_wave/g_boss_mod]+"|r 要来了～")
+				call htime.setDialog(g_timer_wave, UnitId2String(g_mon[monRand]) +"※"+ UnitId2String(g_boss[bossRand]))
+				call hmsg.echo("时空炸裂！！小心！|cffff8080"+UnitId2String(g_boss[bossRand])+"|r 要来了～")
 			else
 				call hmedia.bgm(gg_snd_ready)
-				call htime.setDialog(g_timer_wave, g_mon_label[g_wave])
+				call htime.setDialog(g_timer_wave, UnitId2String(g_mon[monRand]))
 				call hmsg.echo("时空震荡！！小心！敌人围剿啦～")
 			endif
 			//记录
@@ -826,8 +791,6 @@ struct hSet
 	public static method firstWave takes nothing returns nothing
 		if (g_wave == g_first_wave)then
 			set g_wave = g_first_wave+1
-			// 开启一个N秒一次的debug
-			call htime.setInterval(15,function thistype.enemyDebug)
 			call thistype.readyWave(g_first_ready_time)
 		endif
 	endmethod
