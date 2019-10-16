@@ -391,7 +391,7 @@ library Main initializer init needs hJass
 					call hplayer.setLumber(players[i],0)
 					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,15)
 					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,15)
-					call hhero.setPlayerAllowQty(players[i],3)
+					call hhero.setPlayerAllowQty(players[i],2)
 					set g_summon_upgrade_judge = 225
 					call hplayer.setGoldRatio(players[i],93.0+15*player_current_qty,0)
 					call hmsg.echoTo(players[i], " # 您是支持|cffffffcc抢先体验包("+giftTxt+")用户|r，拥有更多的资源、全部测试许可，以及所有后续版本内容!感谢您的支持 ^_^", 0)
@@ -441,12 +441,14 @@ library Main initializer init needs hJass
 		//设定作为敌人的电脑玩家
 		call henemy.setIsShareView(true)
 		call henemy.setEnemyName("混沌魔军")
+		call henemy.setEnemyPlayer(players[5])
 		call henemy.setEnemyPlayer(players[6])
 		call henemy.setEnemyPlayer(players[7])
 		call henemy.setEnemyPlayer(players[8])
 		call henemy.setEnemyPlayer(players[9])
 		call henemy.setEnemyPlayer(players[10])
 		call henemy.setEnemyPlayer(players[11])
+		call SetPlayerTechResearchedSwap( 'R002', 1, players[5] )
 		call SetPlayerTechResearchedSwap( 'R002', 1, players[6] )
 		call SetPlayerTechResearchedSwap( 'R002', 1, players[7] )
 		call SetPlayerTechResearchedSwap( 'R002', 1, players[8] )
@@ -499,9 +501,9 @@ library Main initializer init needs hJass
 		call htime.setTimeout(chooseTime + 1.5,function openRect)
 		
 		// 商店们
-		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04S', 663,2081))
-		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04T', 2090,3483))
-		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04V', 2034,680))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04S', 1500,1208))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04T', 1800,1208))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04V', 2100,1208))
 		// 可爱信使
 		set i = player_max_qty
 		loop

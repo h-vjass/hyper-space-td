@@ -23,7 +23,7 @@ boolean g_waving = false
 group g_crazy_boss = CreateGroup()
 
 real g_game_speed = 1.00 //
-real g_game_mon_loop = 0.60 // 每只怪出兵间隔
+real g_game_mon_loop = 0.75 // 每只怪出兵间隔
 integer g_token_count = 0
 integer g_building_count = 0
 integer g_hero_count = 0
@@ -66,6 +66,7 @@ real array g_summon_attackPhysical
 
 integer g_gp_max = 60
 group g_gp_mon = CreateGroup()
+group g_gp_attack = CreateGroup()
 group g_gp_summon = CreateGroup()
 real g_ring_break_up = 0
 
@@ -1793,35 +1794,24 @@ struct hGlobals
     public static method bossBuilt takes unit mon returns nothing
         local integer uid = GetUnitTypeId(mon)
         call GroupAddUnit(g_crazy_boss,mon)
-        call hattr.addMana(mon,100.0,0)
-        call hattr.addManaBack(mon,10.0,0)
         if(uid == 'n046')then // 5
             call hattrNatural.addWaterOppose(mon,50.0,0)
             call hattr.addHuntRebound(mon,30.0,0)
-            call hattr.addLife(mon,1000.0,0)
-            call hattr.addDefend(mon,6.0,0)
-            call hattr.addResistance(mon,15.0,0)
         elseif(uid == 'n047')then // 10
             call hattrNatural.addWaterOppose(mon,50.0,0)
-            call hattr.addDefend(mon,9.0,0)
-            call hattr.addResistance(mon,20.0,0)
-            call hattr.addLifeBack(mon,15.0,0)
             call hattrEffect.addCrackFlyOdds(mon,25.0,0)
             call hattrEffect.addCrackFlyVal(mon,300,0)
             call hattrEffect.addCrackFlyHigh(mon,150,0)
-            call hattrEffect.addCrackFlyDistance(mon,150,0)
+            call hattrEffect.addCrackFlyDistance(mon,0,0)
         elseif(uid == 'n048')then // 15
             call hattr.addHemophagia(mon,20.0,0)
             call heffect.toUnit("war3mapImported\\DarkSwirl.mdl",mon,"origin",0.60)
         elseif(uid == 'n049')then // 20
-            call hattr.addLife(mon,5000.0,0)
-            call hattr.addDefend(mon,15.0,0)
-            call hattr.addResistance(mon,30.0,0)
             call hattr.addSplit(mon,15.0,0)
             call hattrEffect.addCrackFlyOdds(mon,13.0,0)
             call hattrEffect.addCrackFlyVal(mon,600,0)
             call hattrEffect.addCrackFlyHigh(mon,175,0)
-            call hattrEffect.addCrackFlyDistance(mon,200,0)
+            call hattrEffect.addCrackFlyDistance(mon,0,0)
         elseif(uid == 'n04A')then // 25
             call hattrNatural.addIceOppose(mon,50.0,0)
             call hattrNatural.addThunderOppose(mon,25.0,0)
@@ -1833,8 +1823,6 @@ struct hGlobals
             call hattrEffect.addSilentOdds(mon,25.0,0)
             call hattrEffect.addSilentDuring(mon,2.0,0)
         elseif(uid == 'n04B')then // 30
-            call hattr.addLife(mon,10000.0,0)
-            call hattr.addResistance(mon,75.0,0)
             call hattrEffect.addAttackPhysicalVal(mon,60.0,0)
             call hattrEffect.addAttackPhysicalDuring(mon,15.0,0)
             call hattrEffect.addAttackSpeedVal(mon,10.0,0)
@@ -1861,13 +1849,8 @@ struct hGlobals
             call hattrEffect.addUnarmOdds(mon,35.0,0)
             call hattrEffect.addUnarmDuring(mon,3.0,0)
         elseif(uid == 'n04O')then // 45
-            call hattr.addLife(mon,50000.0,0)
-            call hattr.addDefend(mon,30.0,0)
             call hattr.addToughness(mon,200.0,0)
-            call hattr.addKnocking(mon,7000.0,0)
         elseif(uid == 'n04L')then // 50
-            call hattr.addKnocking(mon,8500.0,0)
-            call hattr.addViolence(mon,85000.0,0)
             call hattr.addAttackHuntType(mon,"dark",0)
             call hattrNatural.addDarkOppose(mon,30.0,0)
             call hattrEffect.addAttackSpeedVal(mon,10.0,0)
@@ -1879,14 +1862,12 @@ struct hGlobals
         elseif(uid == 'n04P')then // 55
             call hattr.addAttackHuntType(mon,"water",0)
             call hattrNatural.addWaterOppose(mon,50.0,0)
-            call hattr.addDefend(mon,10.0,0)
-            call hattr.addResistance(mon,30.0,0)
             call hattrEffect.addSwimOdds(mon,25.0,0)
             call hattrEffect.addSwimDuring(mon,1,0)
             call hattrEffect.addCrackFlyOdds(mon,15.0,0)
             call hattrEffect.addCrackFlyVal(mon,1300,0)
             call hattrEffect.addCrackFlyHigh(mon,175,0)
-            call hattrEffect.addCrackFlyDistance(mon,200,0)
+            call hattrEffect.addCrackFlyDistance(mon,0,0)
         elseif(uid == 'n04N')then // 60
             call hattr.addAttackHuntType(mon,"poison",0)
             call hattrNatural.addPoison(mon,25.0,0)
@@ -1903,7 +1884,7 @@ struct hGlobals
             call hattrEffect.addCrackFlyOdds(mon,17.0,0)
             call hattrEffect.addCrackFlyVal(mon,2300,0)
             call hattrEffect.addCrackFlyHigh(mon,150,0)
-            call hattrEffect.addCrackFlyDistance(mon,400,0)
+            call hattrEffect.addCrackFlyDistance(mon,0,0)
         elseif(uid == 'n04J')then // 75
             call hattr.addAttackHuntType(mon,"poison",0)
             call hattrNatural.addPoison(mon,25.0,0)
@@ -1937,9 +1918,9 @@ struct hGlobals
             call hattrEffect.addToxicVal(mon,8,0)
             call hattrEffect.addToxicDuring(mon,15.0,0)
             call hattrEffect.addCrackFlyOdds(mon,50.0,0)
-            call hattrEffect.addCrackFlyVal(mon,3000,0)
-            call hattrEffect.addCrackFlyHigh(mon,375,0)
-            call hattrEffect.addCrackFlyDistance(mon,150,0)
+            call hattrEffect.addCrackFlyVal(mon,1000,0)
+            call hattrEffect.addCrackFlyHigh(mon,475,0)
+            call hattrEffect.addCrackFlyDistance(mon,0,0)
         endif
         if(uid == 'n04E')then // 100
             call hattr.addAttackHuntType(mon,"firemetal",0)
@@ -1967,7 +1948,6 @@ struct hGlobals
             call hattrEffect.setBombRange(mon,100,0)
             call hattrEffect.setBombModel(mon,"war3mapImported\\Arcane Nova.mdl")
         elseif(uid == 'n052')then // 110
-            call hattr.addDefend(mon,20.0,0)
             call hattr.addAttackHuntType(mon,"metal",0)
             call hattrNatural.addMetalOppose(mon,100.0,0)
             call hattrEffect.addAttackSpeedVal(mon,5,0)
@@ -1975,7 +1955,6 @@ struct hGlobals
             call hattrEffect.addSwimOdds(mon,25.0,0)
             call hattrEffect.addSwimDuring(mon,1.5,0)
         elseif(uid == 'n05B')then // 115
-            call hattr.addDefend(mon,30.0,0)
             call hattr.addHuntRebound(mon,30.0,0)
             call hattr.addAttackHuntType(mon,"soilmetal",0)
             call hattrNatural.addFireOppose(mon,100.0,0)
@@ -2048,20 +2027,24 @@ struct hGlobals
 
     private static method gotoRectSpaceDeg takes unit u,integer lv, real x,real y, real x2,real y2 returns nothing
         local integer i = 0
-        if(IsUnitAlly(u, Player(11)) != true)then
+        if(IsUnitAlly(u, Player(10)) != true)then
             set u = null
             return
         endif
         set i = GetUnitUserData(u) + 1
         if(i >= 5)then
             call SetUnitUserData(u,0)
-            call SetUnitPosition(u, x2, y2)
             if(lv == 4)then
                 call IssuePointOrder( u, "attack", GetLocationX(Loc_Ring), GetLocationY(Loc_Ring) )
+            else
+                call SetUnitPosition(u, x2, y2)
+                call heffect.toXY("war3mapImported\\LightningSphere_FX.mdl", x,y,0.4)
+                call heffect.toXY("war3mapImported\\LightningSphere_FX.mdl", x2,y2,0.4)
             endif    
         else
             call SetUnitUserData(u,i)
             if(IsUnitType(u, UNIT_TYPE_ANCIENT) == true)then
+                call GroupAddUnit(g_gp_attack,u)
                 call IssuePointOrder( u, "attack", x, y )
             else 
                 call IssuePointOrder( u, "move", x, y )
@@ -2352,10 +2335,10 @@ struct hGlobals
 		set spaceDeg2Y[2] = 3840
 		set spaceDeg2X[3] = 3900
 		set spaceDeg2Y[3] = 288
-		set spaceDeg2X[4] = 180
-		set spaceDeg2Y[4] = 308
-        set spaceDeg3X[1] = 197
-		set spaceDeg3Y[1] = 900
+		set spaceDeg2X[4] = 200
+		set spaceDeg2Y[4] = 270
+        set spaceDeg3X[1] = 900
+		set spaceDeg3Y[1] = 3205
 		set spaceDeg3X[2] = 3205
 		set spaceDeg3Y[2] = 3200
 		set spaceDeg3X[3] = 3200
@@ -2400,7 +2383,45 @@ struct hGlobals
         set tg = CreateTrigger()
 		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg1_4 )
 		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg14)
+
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg2_1 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg21)
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg2_2 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg22)
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg2_3 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg23)
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg2_4 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg24)
         
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg3_1 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg31)
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg3_2 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg32)
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg3_3 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg33)
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg3_4 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg34)
+
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg4_1 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg41)
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg4_2 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg42)
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg4_3 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg43)
+        set tg = CreateTrigger()
+		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg4_4 )
+		call TriggerAddAction(tg, function thistype.gotoRectSpaceDeg44)
 
     endmethod
 

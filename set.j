@@ -488,13 +488,6 @@ struct hSet
 		set u = null
 	endmethod
 
-	private static method checkGGPmon takes nothing returns nothing
-		if(hgroup.count(g_gp_mon) <= 0)then
-			call htime.delTimer(GetExpiredTimer())
-			call thistype.nextWave(90)
-		endif
-	endmethod
-
 	// 刷兵机制
     private static method onEnemyDead takes nothing returns nothing
 		local unit u = GetTriggerUnit()
@@ -507,6 +500,9 @@ struct hSet
 		call hGlobals.enemyDeadDrop(u)
 		if(g_gp_mon != null)then
 			call GroupRemoveUnit(g_gp_mon,u)
+		endif
+		if(g_gp_attack != null and IsUnitInGroup(u, g_gp_attack) == true)then
+			call GroupRemoveUnit(g_gp_attack,u)
 		endif
 		set exp = R2I(I2R(g_wave) * 21 * g_game_speed)
 		set gold = R2I(I2R(g_wave) * 1.5 * g_game_speed)
@@ -540,23 +536,23 @@ struct hSet
 					call thistype.nextWave(60)
 					// call htime.setInterval(3.00,function thistype.checkGGPmon)
 				else
-					call thistype.nextWave(20)
+					call thistype.nextWave(0)
 				endif
 			endif
 			return
 		endif
-		if(hgroup.count(g_gp_mon) >= 200)then
+		if(hgroup.count(g_gp_mon) >= 380)then
 			return
 		endif
 		call htime.setInteger(t,1,1+i)
-		set j = 0
+		set j = 1
 		loop
 			exitwhen j>spaceDegQty
-				set u = henemy.createUnitXY(g_mon[g_wave],spaceDegX[j],spaceDegY[j])
+				set u = henemy.createUnitXY(g_mon[monRand],spaceDegX[j],spaceDegY[j])
 				call GroupAddUnit(g_gp_mon,u)
 				call TriggerRegisterUnitEvent( enemyDeadTg, u, EVENT_UNIT_DEATH )
 				call hattr.setLife(u,g_wave*50,0)
-				call hattr.setMove(u,200+g_wave,0)
+				call hattr.setMove(u,500+g_wave,0)
 				call hattr.setAttackPhysical(u,g_wave*5,0)
 				call hGlobals.enemyBuilt(u)
 				call SetUnitUserData(u,0)
@@ -578,6 +574,9 @@ struct hSet
 		call hmsg.echo("|cffffff80"+GetUnitName(u)+"|r被狠狠地打死了～|r")
 		if(g_gp_mon != null)then
 			call GroupRemoveUnit(g_gp_mon,u)
+		endif
+		if(g_gp_attack != null and IsUnitInGroup(u, g_gp_attack) == true)then
+			call GroupRemoveUnit(g_gp_attack,u)
 		endif
 		set exp = g_wave * 3000
 		set gold = g_wave * 70
@@ -617,7 +616,7 @@ struct hSet
 		call htime.delTimer(t)
 		set loc = Location(spaceDegX[rand],spaceDegY[rand])
 		set last_boss_uid = g_boss[bossIndex]
-		set u = henemy.createUnitAttackToLoc(last_boss_uid,loc,Loc_Ring)
+		set u = henemy.createUnit(last_boss_uid,loc)
 		call GroupAddUnit(g_gp_mon,u)
 		call TriggerRegisterUnitEvent( bossDeadTg, u, EVENT_UNIT_DEATH )
 		set bossPercent = g_wave * 5
@@ -633,11 +632,14 @@ struct hSet
 			set bossPercentTiny = 60
 		endif
         call hattr.setLife(u, g_wave*5000 ,0)
+		call hattr.setLifeBack(u, g_wave*15 ,0)
+		call hattr.addMana(u,1000.0,0)
+        call hattr.addManaBack(u,30.0,0)
         call hattr.setDefend(u, g_wave*10 ,0)
+		call hattr.addResistance(u,bossPercentLittle,0)
 		call hattr.setMove(u, 150 + g_wave*10 ,0)
         call hattr.setAttackPhysical(u, 100 + g_wave*25  ,0)
         call hattr.setAttackSpeed(u, 30 + g_wave*5 ,0)
-        call hattr.setLifeBack(u, g_wave*12 ,0)
         call hattr.setAim(u,bossPercent,0)
         call hattr.setAvoid(u,bossPercentLittle,0)
 		call hattr.setInvincible(u,bossPercent,0)
@@ -705,7 +707,7 @@ struct hSet
 	private static method enemyDebug takes nothing returns nothing
 		local integer i = 0
 		local integer waveBoss = 0
-		call GroupPointOrderLoc( g_gp_mon , "attack", Loc_Ring )
+		call GroupPointOrderLoc( g_gp_attack , "attack", Loc_Ring )
 		//记录
 		set waveBoss = R2I((I2R(g_wave)/5)) * 5
 		set i = player_max_qty
@@ -771,6 +773,8 @@ struct hSet
 	public static method firstWave takes nothing returns nothing
 		if (g_wave == g_first_wave)then
 			set g_wave = g_first_wave+1
+			// 开启一个N秒一次的debug
+			call htime.setInterval(15,function thistype.enemyDebug)
 			call thistype.readyWave(g_first_ready_time)
 		endif
 	endmethod
