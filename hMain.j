@@ -389,8 +389,8 @@ library Main initializer init needs hJass
 				if(player_isvip[i] == true)then
 					call hplayer.setGold(players[i],3000)
 					call hplayer.setLumber(players[i],0)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,15)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,15)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,30)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,30)
 					call hhero.setPlayerAllowQty(players[i],2)
 					set g_summon_upgrade_judge = 225
 					call hplayer.setGoldRatio(players[i],93.0+15*player_current_qty,0)
@@ -405,8 +405,8 @@ library Main initializer init needs hJass
 					endloop
 				else
 					call hplayer.setGold(players[i],2000)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,9)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,9)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,10)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,10)
 					call hhero.setPlayerAllowQty(players[i],1)
 					set g_summon_upgrade_judge = 150
 					call hplayer.setGoldRatio(players[i],85.0+15*player_current_qty,0)

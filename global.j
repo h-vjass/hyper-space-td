@@ -461,13 +461,6 @@ struct hGlobals
 					call hattr.setManaBack(u,g_summon_manaback[i],0)
 					call hattr.setDefend(u,g_summon_defend[i],0)
 					call hattr.setAttackPhysical(u,g_summon_attackPhysical[i],0)
-					if(g_waving == true)then
-						call hattr.setMove(u,0,0)
-						call UnitAddAbility(u,'A044')
-					else
-						call hattr.setMove(u,522,0)
-						call UnitAddAbility(u,'A03W')
-					endif
 					call GroupAddUnit(g_gp_summon, u)
 					call hhero.setHeroPrevLevel(u,1)
 					call UnitAddAbility(u,ITEM_ABILITY)

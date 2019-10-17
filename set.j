@@ -465,7 +465,6 @@ struct hSet
 		local unit u = null
 		call hmedia.bgm(gg_snd_bgm_xy_gts_dspadpcm)
 		call SetUnitTimeScalePercent( u_timering, 0.00 )
-		call ForGroupBJ( g_gp_summon, function thistype.allowSommons )
 		call EnumDestructablesInRectAll(rectBattle, function thistype.removeEnumDestructable )
 		call henv.clearUnits()
 		call SetTerrainType( GetRectCenterX(rectBattle) , GetRectCenterY(rectBattle), 'Agrd', -1, 18, 0 )
@@ -552,7 +551,7 @@ struct hSet
 				call GroupAddUnit(g_gp_mon,u)
 				call TriggerRegisterUnitEvent( enemyDeadTg, u, EVENT_UNIT_DEATH )
 				call hattr.setLife(u,g_wave*50,0)
-				call hattr.setMove(u,500+g_wave,0)
+				call hattr.setMove(u,200+g_wave*3,0)
 				call hattr.setAttackPhysical(u,g_wave*5,0)
 				call hGlobals.enemyBuilt(u)
 				call SetUnitUserData(u,0)
@@ -663,23 +662,6 @@ struct hSet
 		set loc = null
 	endmethod
 
-	private static method stopSommons takes nothing returns nothing
-		set g_waving = true
-		call hattr.setMove( GetEnumUnit(), 0, 0 )
-		call UnitRemoveAbility(GetEnumUnit(),'A03W')
-		call UnitAddAbility(GetEnumUnit(),'A044')
-		call IssueImmediateOrder(GetEnumUnit(), "holdposition" )
-	endmethod
-
-	private static method allowSommons takes nothing returns nothing
-		set g_waving = false
-		if(GetUnitTypeId(GetEnumUnit()) != 'H00Y')then
-			call hattr.setMove( GetEnumUnit(), 522, 0 )
-		endif
-		call UnitRemoveAbility(GetEnumUnit(),'A044')
-		call UnitAddAbility(GetEnumUnit(),'A03W')
-	endmethod
-
     private static method mildDirect takes nothing returns nothing
 		local timer t = null
 		set t = htime.setInterval(g_game_mon_loop,function thistype.createEnemy)
@@ -695,7 +677,6 @@ struct hSet
 		call hmedia.bgm(gg_snd_gyq_battle)
 		call hmedia.soundPlay(gg_snd_audio_effect_4)
 		call SetUnitTimeScalePercent( u_timering, 100.00 )
-		call ForGroupBJ( g_gp_summon, function thistype.stopSommons )
 		set t = htime.setInterval(g_game_mon_loop,function thistype.createEnemy)
 		call htime.setInteger(t,1,0)
 		if (hlogic.imod(g_wave,g_boss_mod) == 0) then
@@ -742,7 +723,6 @@ struct hSet
 			call hattr.addResistance(u_timering,1.0,0)
 			call hattr.addLifeBack(u_timering,0.60,0)
 			//
-			call ForGroupBJ( g_gp_summon, function thistype.allowSommons )
 			if (hlogic.imod(g_wave,g_boss_mod) == 0) then
 				call hmark.display(null,"war3mapImported\\warning.blp",1.0,5.0,100.0,100.0)
 				call hmedia.bgm(gg_snd_dangerComing)
