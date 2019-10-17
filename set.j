@@ -826,9 +826,6 @@ struct hSet
 	private static method onSommonDead takes nothing returns nothing
 		call hGlobals.deadSummon(GetTriggerUnit())
 	endmethod
-	private static method onSommonLevelup takes nothing returns nothing
-		call hGlobals.upgradeSummon(GetTriggerUnit())
-	endmethod
 	private static method onConstructFinish takes nothing returns nothing
 		call hGlobals.initSummon(GetTriggerUnit())
 	endmethod
@@ -845,7 +842,6 @@ struct hSet
         call TriggerAddAction(bossDeadTg,function thistype.onBossDead)
         call TriggerAddAction(heroDeadTg,function thistype.onHeroDead)
         call TriggerAddAction(sommonDeadTg,function thistype.onSommonDead)
-        call TriggerAddAction(sommonLevelupTg,function thistype.onSommonLevelup)
 
         call hevent.onPickHero(function thistype.onHeroPick)
 
