@@ -1742,6 +1742,7 @@ struct hGlobals
         call thistype.registerSummon('o008',500,300,100,0,1,45,2.00) // 民兵
         call thistype.registerSummon('o00C',1500,1000,100,0,6,100,2.00) // 步兵
         call thistype.registerSummon('o00D',3000,1300,100,0,7,275,2.00) // 剑士
+        call thistype.registerSummon('o00E',7500,2500,100,0,11,500,2.00) // 斗战士
 
 
         call thistype.registerSummon('H00Y',30,400,50,0,3,0,2.00) // 凤凰蛋
