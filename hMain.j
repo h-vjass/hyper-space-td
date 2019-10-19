@@ -2,6 +2,7 @@
 //载入 h-vjass
 #include "../h-vjass/h-vjass.j"
 #include "global.j"
+#include "env.j"
 #include "set.j"
 
 //载入 房间音乐
@@ -83,38 +84,10 @@ library Main initializer init needs hJass
 	endfunction
 
 	private function fail takes nothing returns nothing
-		local MovieDialogue dia = MovieDialogue.create()
-		local integer i = 0
-		call DisableTrigger(GetTriggeringTrigger())
-		call DestroyTrigger(GetTriggeringTrigger())
-		//BGM走起
-		call hmedia.bgm(gg_snd_main)
-		call QuestSetCompleted( q_quit_space, true )
-		call QuestMessageBJ( playerForce, bj_QUESTMESSAGE_COMPLETED, "已逃离混沌领域!" )
-		//镜头
-		call CameraSetupApplyForceDuration( gg_cam_cam_failA1, true, 0.00 )
-		call CameraSetupApplyForceDuration( gg_cam_cam_failA2, true, 9.00 )
-		//生成初始长老
-		set dia[1] = "时空领域已经现在已经完全黯淡了..."
-		set dia[2] = "我现在开始准备传送了...而这个时空..."
-		set dia[3] = "我知道...这并不是你的错..."
-		set dia[4] = null
-		call hSync_moive2force(playerForce,u_zhanglao,dia)
-		//镜头
-		call CameraSetupApplyForceDuration( gg_cam_cam_failB1, true, 0.00 )
-		call CameraSetupApplyForceDuration( gg_cam_cam_failB2, true, 17.00 )
-		set dia[1] = "怪物已经充斥只有烈火、暴雨及黑暗..."
-		set dia[2] = "或许下一个冒险者会改变这一切吧..."
-		set dia[3] = "传送阵已经准备好了～离开这里吧～已经不行了～"
-		set dia[4] = "后会有期！冒险者"
-		set dia[5] = null
-		call hSync_moive2force(playerForce,u_zhanglao,dia)
-		call dia.destroy()
-		//循环设定玩家参数
-		set i = player_max_qty
+		local integer i = player_max_qty
 		loop
 			exitwhen i<=0
-				call hplayer.defeat(players[i], "传送离开")
+				call hplayer.defeat(players[i], "守护失败")
 			set i = i-1
 		endloop
 	endfunction
@@ -136,7 +109,7 @@ library Main initializer init needs hJass
 		call RemoveLocation(loc)
 		call PolledWait( 2.00 )
 		//BGM走起
-		call hmedia.bgm(gg_snd_danger)
+		call hmedia.bgm(gg_snd_main)
 		//镜头
 		call CameraSetupApplyForceDuration( gg_cam_cam_lost1, true, 0.00 )
 		call CameraSetupApplyForceDuration( gg_cam_cam_lost2, true, 5.00 )
@@ -155,6 +128,8 @@ library Main initializer init needs hJass
 		//
 		// 失败提醒
 		call hmark.display(null,"war3mapImported\\defeat.blp",1.0,6.0,100.0,100.0)
+		//
+		call htime.setTimeout(15.00, function fail)
 		set u = null
 		set tg = null
 		set loc = null
@@ -203,69 +178,17 @@ library Main initializer init needs hJass
 		endif
 	endfunction
 
-	private function waveSelectDialog takes nothing returns nothing
+	private function difcSelectDialog takes nothing returns nothing
 		local dialog d = GetClickedDialog()
 		local button b = GetClickedButton()
 		local integer bi = LoadInteger(hash_player,GetHandleId(b),7)
-		local integer zhazhaWave = 0
-		local integer i = 0
-		local integer gold = 0
-		local integer lumber = 0
-		local integer exp = 0
-		local real life = 0
-		local real defend = 0
-		local real resistance = 0
-		local real lifeBack = 0
-		if(bi == 1)then
-			set zhazhaWave = LoadInteger(hash_player,GetHandleId(b),70)
-			set g_first_wave = zhazhaWave-1
-			set g_wave = zhazhaWave-1
-			set g_first_ready_time = g_first_ready_time + I2R(g_wave)*2
-			set i = 1
-			set gold = 0
-			set lumber = 0
-			set exp = 0
-			loop
-				exitwhen(i>g_first_wave)
-					set exp = exp + i * 16 * g_gp_max
-					set gold = gold + i * 2 * g_gp_max
-					if (hlogic.imod(i,g_boss_mod) == 0) then
-						set g_gp_max = g_gp_max + 20
-						set exp = exp + i * (3000+1000)
-						set gold = gold + i * (70+30) * 20
-						set lumber = lumber + 1
-					endif
-				set i=i+1
-			endloop
-			call hitem.toXY(momentItems[4],gold,0,512,0)
-			call hitem.toXY(momentItems[5],lumber,256,256,0)
-			call hitem.toXY(momentItems[6],exp,512,0,0)
-			// main
-			set life = 500 * g_wave
-			set defend = 0.5 * g_wave
-			set resistance = 1 * g_wave
-			set lifeBack = 0.6 * g_wave
-			call hattr.addLife(u_timering,life,0)
-			call hattr.addDefend(u_timering,defend,0)
-			call hattr.addResistance(u_timering,resistance,0)
-			call hattr.addLifeBack(u_timering,lifeBack,0)
-			// sub
-			set life = 300 * g_wave
-			set defend = 0.3 * g_wave
-			set resistance = 0.4 * g_wave
-			set lifeBack = 0.2 * g_wave
-			call hattr.addLife(u_timering1,life,0)
-			call hattr.addDefend(u_timering1,defend,0)
-			call hattr.addResistance(u_timering1,resistance,0)
-			call hattr.addLifeBack(u_timering1,lifeBack,0)
-			call hattr.addLife(u_timering2,life,0)
-			call hattr.addDefend(u_timering2,defend,0)
-			call hattr.addResistance(u_timering2,resistance,0)
-			call hattr.addLifeBack(u_timering2,lifeBack,0)
-			call hattr.addLife(u_timering3,life,0)
-			call hattr.addDefend(u_timering3,defend,0)
-			call hattr.addResistance(u_timering3,resistance,0)
-			call hattr.addLifeBack(u_timering3,lifeBack,0)
+		set g_diff = bi
+		if(g_diff == 2)then
+			call hmsg.echo("选择了难度|cffffff80（普通）|r")
+		elseif(g_diff == 3)then
+			call hmsg.echo("选择了难度|cffff0000（地狱）|r")
+		else
+			call hmsg.echo("选择了难度|cff00ff00（简单）|r")
 		endif
 		call FlushChildHashtable(hash_player, GetHandleId(b))
 		call DialogClear( d )
@@ -274,6 +197,8 @@ library Main initializer init needs hJass
 		call DestroyTrigger(GetTriggeringTrigger())
 		set d = null
 		set b = null
+		set g_first_wave = 0
+		set g_wave = 0
 		call openSpace()
 	endfunction
 
@@ -284,9 +209,9 @@ library Main initializer init needs hJass
 		local button b = null
 		local trigger dtg = null
 		local integer i = 0
-		local integer zhazhaWave = 0
+		local integer dalaoWave = 0
 		call htime.delTimer(GetExpiredTimer())
-		call hmsg.echo("时空轮组已经召唤！"+"|cffffff80 加油！")
+		call hmsg.echo("时空轮组已经召唤！"+"|cffffff80 加油！|r")
 		call PingMinimapLocForForceEx( playerForce,Loc_Ring,5, bj_MINIMAPPINGSTYLE_FLASHY, 100, 0, 0 )
 		//
 		set u_timering = hunit.createUnit(player_ally, 'n00Z', Loc_Ring)
@@ -294,49 +219,54 @@ library Main initializer init needs hJass
 		// 任务F9提醒
 		set txt = ""
 		set txt = txt + "进入时空境域，防御敌人"
-		set txt = txt + "|n英雄按 B 即可建造兵塔，兵塔会吸收作战经验升级或者主动花金币升级"
+		set txt = txt + "|n英雄按 B 即可建造兵塔，兵塔会吸收作战经验成长也可以转职为高级兵塔"
+		set txt = txt + "|n兵塔在转职或联合时会清空成长值！"
 		set txt = txt + "|n加油吧～"
-		call QuestMessageBJ( playerForce, bj_QUESTMESSAGE_DISCOVERED, "发现新的传送门" )
-		set q_into_space = CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "进入时空境域",txt, "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp" )
-		call FlashQuestDialogButton()
-		// call hunit.exploded(u_timering,15.00) // 测试失败用
-		// $ 继承上一关
-		// 先找出所有玩家里玩得最渣的
-		set zhazhaWave = 9999
+		 call hunit.exploded(u_timering,15.00) // 测试失败用
+		
+		// $ 继承关
+		// 先找出所有玩家里玩得最好的
+		set dalaoWave = 0
 		set i = 1
 		loop
 			exitwhen(i>player_max_qty)
-				if (player_prolv[i] < zhazhaWave and GetPlayerController(players[i]) == MAP_CONTROL_USER and GetPlayerSlotState(players[i]) == PLAYER_SLOT_STATE_PLAYING) then
-					set zhazhaWave = player_prolv[i]
+				if (player_prolv[i] > dalaoWave and GetPlayerController(players[i]) == MAP_CONTROL_USER and GetPlayerSlotState(players[i]) == PLAYER_SLOT_STATE_PLAYING) then
+					set dalaoWave = player_prolv[i]
 				endif
 			set i=i+1
 		endloop
-		// set zhazhaWave = 0
-		if(zhazhaWave >= 2)then
-			set d = DialogCreate()
-			call DialogSetMessage( d, "时空轮回之力" )
-			set b = DialogAddButton(d,"轮回再续Lv"+I2S(zhazhaWave),0)
-			call SaveInteger(hash_player,GetHandleId(b),7,1)
-			call SaveInteger(hash_player,GetHandleId(b),70,zhazhaWave)
-			set b = DialogAddButton(d,"从头开始(不会清空最佳存档)",0)
-			call SaveInteger(hash_player,GetHandleId(b),7,2)
-			set dtg = CreateTrigger()
-			call TriggerAddAction(dtg, function waveSelectDialog)
-			call TriggerRegisterDialogEvent( dtg , d )
+		if(dalaoWave > 0)then
+			call hmsg.echo("队伍里有大佬曾经达到了第 "+I2S(dalaoWave)+" 波,奖励全员 |cffffff80"+I2S(dalaoWave*20)+"|r 金币")
 			set i = 1
 			loop
 				exitwhen(i>player_max_qty)
-					if (hplayer.getStatus(players[i]) == "游戏中") then
-						call DialogDisplay(players[i],d, true )
-						call DoNothing() YDNL exitwhen true//(  )
-					endif
+					call hplayer.addGold(players[i],dalaoWave*20)
 				set i=i+1
 			endloop
-		else
-			set g_first_wave = 0
-			set g_wave = 0
-			call openSpace()
 		endif
+
+		// 选难度
+		set d = DialogCreate()
+		call DialogSetMessage( d, "选择难度" )
+		set b = DialogAddButton(d,"简单",0)
+		call SaveInteger(hash_player,GetHandleId(b),7,1)
+		set b = DialogAddButton(d,"困难",0)
+		call SaveInteger(hash_player,GetHandleId(b),7,2)
+		set b = DialogAddButton(d,"地狱",0)
+		call SaveInteger(hash_player,GetHandleId(b),7,3)
+		set dtg = CreateTrigger()
+		call TriggerAddAction(dtg, function difcSelectDialog)
+		call TriggerRegisterDialogEvent( dtg , d )
+		set i = 1
+		loop
+			exitwhen(i>player_max_qty)
+				if (hplayer.getStatus(players[i]) == "游戏中") then
+					call DialogDisplay(players[i],d, true )
+					call DoNothing() YDNL exitwhen true//(  )
+				endif
+			set i=i+1
+		endloop
+
 		set tg = null
 		set txt = null
 		set d = null
@@ -354,13 +284,15 @@ library Main initializer init needs hJass
 		local MovieDialogue dia = MovieDialogue.create()
 		local string giftTxt = null
 		local string txt = null
-		//死亡轮
+		local real stopX = 1540.00
+		local real stopY = 1400.00
+		// 死亡轮
 		set u_dead_timering[1] = 'n04Y'
 		set u_dead_timering[2] = 'n058'
 		set u_dead_timering[3] = 'n059'
 		set u_dead_timering[4] = 'n057'
 		set u_dead_timering[5] = 'n04X'
-		//循环设定玩家参数
+		// 循环设定玩家参数
 		set i = player_max_qty
 		loop
 			exitwhen i<=0
@@ -387,7 +319,7 @@ library Main initializer init needs hJass
 				call hplayer.setLumberRatio(players[i],100*player_current_qty,0)
 				call hplayer.setExpRatio(players[i],50.0+50*player_current_qty,0)
 				if(player_isvip[i] == true)then
-					call hplayer.setGold(players[i],3000)
+					call hplayer.setGold(players[i],2000)
 					call hplayer.setLumber(players[i],0)
 					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,10)
 					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,100)
@@ -404,7 +336,7 @@ library Main initializer init needs hJass
 						set j=j+1
 					endloop
 				else
-					call hplayer.setGold(players[i],2000)
+					call hplayer.setGold(players[i],1000)
 					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,5)
 					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,50)
 					call hhero.setPlayerAllowQty(players[i],1)
@@ -501,9 +433,9 @@ library Main initializer init needs hJass
 		call htime.setTimeout(chooseTime + 1.5,function openRect)
 		
 		// 商店们
-		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04S', 1500,1208))
-		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04T', 1800,1208))
-		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04V', 2100,1208))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04S', stopX+128*0,stopY))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04T', stopX+128*1,stopY))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04V', stopX+128*2,stopY))
 		// 可爱信使
 		set i = player_max_qty
 		loop
@@ -522,11 +454,20 @@ library Main initializer init needs hJass
 
 	private function init takes nothing returns nothing
 		local trigger startTrigger = null
+		local MyEnv myenv
 		local hGlobals hg
+		local real i = 0
 		//globals
 		set player_max_qty = 3
 		set hg = hGlobals.create()
 		call hg.do()
+		// 随机地形
+		set i = 0
+		loop
+			exitwhen i > 10
+				call htime.setTimeout(i,function MyEnv.randomEnv)
+			set i = i + 1.3
+		endloop
 		//预读
 		call preread()
 		//镜头模式

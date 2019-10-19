@@ -12,18 +12,19 @@ integer g_gift_count = 0
 real REBORN_HERO = 30
 real REBORN_SUMMON = 90
 
+integer g_diff = 1
 timer g_timer_wave = null
 integer g_max_wave = 120
 integer g_wave = 0
 integer g_first_wave = 0
 integer g_boss_mod = 5
 real g_boss_ready_time = 90
-real g_first_ready_time = 20.00
+real g_first_ready_time = 30.00
 boolean g_waving = false
 group g_crazy_boss = CreateGroup()
 
 real g_game_speed = 1.00 //
-real g_game_mon_loop = 0.75 // 每只怪出兵间隔
+real g_game_mon_loop = 0.90 // 每只怪出兵间隔
 integer g_token_count = 0
 integer g_building_count = 0
 integer g_hero_count = 0
@@ -68,7 +69,8 @@ group g_gp_attack = CreateGroup()
 group g_gp_summon = CreateGroup()
 real g_ring_break_up = 0
 
-real spaceDistance = 3072.00
+real spaceDistance = 2304.00
+real spaceInnerDistance = 640.00
 
 integer spaceDegQty = 4
 real array spaceDegX
@@ -100,6 +102,7 @@ rect rectSpaceDeg4_4 = null
 rect rectHanabi = null
 rect rectLeave = null
 rect rectBattle = null
+rect rectBattleInner = null
 
 
 weathereffect rectWeathereffect = null
@@ -1561,8 +1564,9 @@ struct hGlobals
         endloop
         set player_ally =  players[12]
         
-        set rectHanabi = hrect.createInLoc(GetLocationX(Loc_Ring),GetLocationY(Loc_Ring),2000,2000)
-        set rectBattle = hrect.createInLoc(GetLocationX(Loc_C),GetLocationY(Loc_C),spaceDistance,spaceDistance)
+        set rectHanabi = hrect.createInLoc(GetLocationX(Loc_Ring),GetLocationY(Loc_Ring),spaceDistance,spaceDistance)
+        set rectBattle = hrect.createInLoc(GetLocationX(Loc_Ring),GetLocationY(Loc_Ring),spaceDistance,spaceDistance)
+        set rectBattleInner = hrect.createInLoc(GetLocationX(Loc_Ring),GetLocationY(Loc_Ring),spaceInnerDistance,spaceInnerDistance)
 
         // hero 英雄
         call thistype.registerHero('H00M',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNHeroArchMage.blp",2.00) // t01 大魔法师
@@ -1779,38 +1783,38 @@ struct hGlobals
         set momentItems[6]= 'o007'
 
         //
-		set spaceDegX[1] = -644
-		set spaceDegY[1] = 4610
-		set spaceDegX[2] = 4740
-		set spaceDegY[2] = 4610
-		set spaceDegX[3] = 4740
-		set spaceDegY[3] = -512
-		set spaceDegX[4] = -644
-		set spaceDegY[4] = -512
-		set spaceDeg2X[1] = 197
-		set spaceDeg2Y[1] = 3840
-		set spaceDeg2X[2] = 3913
-		set spaceDeg2Y[2] = 3840
-		set spaceDeg2X[3] = 3900
-		set spaceDeg2Y[3] = 288
-		set spaceDeg2X[4] = 200
-		set spaceDeg2Y[4] = 270
-        set spaceDeg3X[1] = 900
-		set spaceDeg3Y[1] = 3205
-		set spaceDeg3X[2] = 3205
-		set spaceDeg3Y[2] = 3200
-		set spaceDeg3X[3] = 3200
-		set spaceDeg3Y[3] = 900
-		set spaceDeg3X[4] = 900
-		set spaceDeg3Y[4] = 900
-        set spaceDeg4X[1] = 1535
-		set spaceDeg4Y[1] = 2526
-		set spaceDeg4X[2] = 2526
-		set spaceDeg4Y[2] = 2526
-		set spaceDeg4X[3] = 2526
-		set spaceDeg4Y[3] = 1535
-		set spaceDeg4X[4] = 1535
-		set spaceDeg4Y[4] = 1535
+		set spaceDegX[1] = 34
+		set spaceDegY[1] = 4072
+		set spaceDegX[2] = 4069
+		set spaceDegY[2] = 4058
+		set spaceDegX[3] = 4085
+		set spaceDegY[3] = 38
+		set spaceDegX[4] = 52
+		set spaceDegY[4] = 45
+		set spaceDeg2X[1] = 585
+		set spaceDeg2Y[1] = 3535
+		set spaceDeg2X[2] = 3535
+		set spaceDeg2Y[2] = 3535
+		set spaceDeg2X[3] = 3535
+		set spaceDeg2Y[3] = 588
+		set spaceDeg2X[4] = 588
+		set spaceDeg2Y[4] = 588
+        set spaceDeg3X[1] = 1100
+		set spaceDeg3Y[1] = 3020
+		set spaceDeg3X[2] = 3020
+		set spaceDeg3Y[2] = 3020
+		set spaceDeg3X[3] = 3020
+		set spaceDeg3Y[3] = 1100
+		set spaceDeg3X[4] = 1100
+		set spaceDeg3Y[4] = 1100
+        set spaceDeg4X[1] = 1580
+		set spaceDeg4Y[1] = 2490
+		set spaceDeg4X[2] = 2490
+		set spaceDeg4Y[2] = 2490
+		set spaceDeg4X[3] = 2490
+		set spaceDeg4Y[3] = 1580
+		set spaceDeg4X[4] = 1580
+		set spaceDeg4Y[4] = 1580
 
         set rectSpaceDeg1_1 = hrect.createInLoc(spaceDegX[1],spaceDegY[1],100,100)
         set rectSpaceDeg1_2 = hrect.createInLoc(spaceDegX[2],spaceDegY[2],100,100)

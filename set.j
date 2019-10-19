@@ -447,7 +447,7 @@ struct hSet
 		call EnumDestructablesInRectAll(rectBattle, function thistype.removeEnumDestructable )
 		call henv.clearUnits()
 		call SetTerrainType( GetRectCenterX(rectBattle) , GetRectCenterY(rectBattle), 'Adrd', -1, 4, 0 )
-		call SetBlight( player_aggressive, GetRectCenterX(rectBattle) , GetRectCenterY(rectBattle), 6400, true )
+		call SetBlight( player_aggressive, GetRectCenterX(rectBattle) , GetRectCenterY(rectBattle), GetRectMaxX(GetPlayableMapRect())-GetRectMinX(GetPlayableMapRect()), true )
 		if (rectWeathereffect != null) then
 			call hweather.del(rectWeathereffect)
 		endif
@@ -492,6 +492,7 @@ struct hSet
 		local unit u = GetTriggerUnit()
 		local unit killer = hevent.getLastDamageUnit(u)
 		local integer exp = 0
+		local integer expk = 0
 		local integer gold = 0
         local real x = GetUnitX(u)
         local real y = GetUnitY(u)
@@ -503,10 +504,12 @@ struct hSet
 		if(g_gp_attack != null and IsUnitInGroup(u, g_gp_attack) == true)then
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
-		set exp = R2I(I2R(g_wave) * 21 * g_game_speed)
+		set exp = R2I(I2R(g_wave) * 16 * g_game_speed)
+		set expk = R2I(I2R(g_wave) * 30 * g_game_speed)
 		set gold = R2I(I2R(g_wave) * 1.5 * g_game_speed)
 		if(killer != null)then
-			call haward.forGroup(killer,exp,gold,0)
+			call haward.forUnit(killer,expk,gold,0)
+			call haward.forGroup(killer,exp,0,0)
 		endif
 		call hunit.del(u,2.00)
         // gold
@@ -514,7 +517,7 @@ struct hSet
 			set gold = 1
 		endif
 		if(GetRandomInt(1,100) == 44)then
-			call hitem.toXY(momentItems[1],gold,x,y,90.00)
+			call hitem.toXY(momentItems[1],gold*10,x,y,90.00)
 			call hitem.toXY(momentItems[3],g_wave*100,x,y,90.00)
 		endif
 		set u = null
@@ -532,7 +535,7 @@ struct hSet
 			set t = null
 			if(g_mon_isrunning)then
 				if(hlogic.imod(g_wave+1,g_boss_mod) == 0 or g_wave+1 >= g_max_wave)then
-					call thistype.nextWave(60)
+					call thistype.nextWave(100)
 					// call htime.setInterval(3.00,function thistype.checkGGPmon)
 				else
 					call thistype.nextWave(0)
