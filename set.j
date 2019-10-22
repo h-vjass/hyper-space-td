@@ -830,12 +830,16 @@ struct hSet
 		call hGlobals.deadSummon(GetTriggerUnit())
 	endmethod
 	private static method onConstructFinish takes nothing returns nothing
-		call hGlobals.initSummon(GetTriggerUnit())
+		call hGlobals.initSummon(GetTriggerUnit(),1.00)
+	endmethod
+	private static method onConstructUpgrade takes nothing returns nothing
+		call hGlobals.upgradeSummon(GetTriggerUnit())
 	endmethod
 
     public static method setInit takes nothing returns nothing
         local unit u = null
         local integer qty = 0
+		local trigger tg = null
         set heroDeadTg = CreateTrigger()
         set sommonDeadTg = CreateTrigger()
         set enemyDeadTg = CreateTrigger()
@@ -853,7 +857,12 @@ struct hSet
 
 		// build
 		call hevent.onConstructFinish(function thistype.onConstructFinish)
+		// 升级建筑
+		set tg = CreateTrigger()
+		call TriggerRegisterAnyUnitEventBJ( tg, EVENT_PLAYER_UNIT_UPGRADE_FINISH )
+		call TriggerAddAction( tg, function thistype.onConstructUpgrade )
 		set u = null
+		set tg = null
     endmethod
 
 endstruct

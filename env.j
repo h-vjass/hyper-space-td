@@ -74,6 +74,8 @@ integer myenv_u_typha2 = 'n00C'
 integer myenv_randomIndex = GetRandomInt(1,9)
 integer myenv_weatherIndex = GetRandomInt(1,3)
 
+boolean myenv_randomFlag = false
+
 endglobals
 
 type MyEnvUnit extends integer array[20] // 最大支持20种单位
@@ -145,12 +147,17 @@ struct MyEnv
 		endif
 		if(buildType == -1)then
 			return
+		elseif(buildType == 4 and myenv_randomFlag == true)then
+			set buildType = 3
+			set myenv_randomFlag = false
 		endif
 		//
 		if(buildType <= 3)then
 			call hunit.createUnitXY(players[12], uid, x,y)
+			set myenv_randomFlag = false
 		elseif(buildType == 4)then
 			call SetDestructableInvulnerable( CreateDestructable(did, x , y, GetRandomDirectionDeg(), GetRandomReal(0.5,1.1), 0 ), false )
+			set myenv_randomFlag = true
 			if(whichGround > 0 and  GetTerrainType(x, y) !='Ybtl' )then
 				call SetTerrainType( x , y, whichGround, -1, 1, 0 )
 			endif
@@ -415,7 +422,7 @@ struct MyEnv
 		set i = 1
 		loop
 			exitwhen i>rectQty
-				set rectArea = GetRandomInt(150,360)
+				set rectArea = GetRandomInt(170,420)
 				set hxy.x = GetRandomReal(GetRectMinX(GetPlayableMapRect()), GetRectMaxX(GetPlayableMapRect()))
 				set hxy.y = GetRandomReal(GetRectMinY(GetPlayableMapRect()), GetRectMaxY(GetPlayableMapRect()))
 				if(hxy.x > GetLocationX(Loc_Ring)-x/2 and hxy.x < GetLocationX(Loc_Ring)+x/2 and hxy.y > GetLocationY(Loc_Ring)-y/2 and hxy.y < GetLocationY(Loc_Ring)+y/2)then

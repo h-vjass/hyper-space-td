@@ -443,7 +443,7 @@ struct hGlobals
         endif
     endmethod
 
-    public static method initSummon takes unit u returns nothing
+    public static method initSummon takes unit u,real percent returns nothing
         local integer triggerUID = GetUnitTypeId(u)
 		local integer i = 0
         call SetUnitUserData(u,0)
@@ -451,27 +451,44 @@ struct hGlobals
 		loop
 			exitwhen i > g_summon_count
 				if(triggerUID == g_summon[i])then
-                    call UnitRemoveType(u,UNIT_TYPE_MECHANICAL)
-                    call hplayer.adjustGold(GetOwningPlayer(u))
-					call hattr.setLife(u,g_summon_life[i],0)
-					call hattr.setMana(u,g_summon_mana[i],0)
-					call hattr.setManaBack(u,g_summon_manaback[i],0)
-					call hattr.setDefend(u,g_summon_defend[i],0)
-					call hattr.setAttackPhysical(u,g_summon_attackPhysical[i],0)
-					call GroupAddUnit(g_gp_summon, u)
-					call hhero.setHeroPrevLevel(u,1)
-					call UnitAddAbility(u,ITEM_ABILITY)
-                    call hitem.initUnit(u)
-					call UnitAddAbility(u,'A03Q')
-					call UnitAddAbility(u,'A045') // reborn
-					call TriggerRegisterUnitEvent( sommonDeadTg, u, EVENT_UNIT_DEATH )
-                    call hevent.onSkillHappen(u,function thistype.onSummonSkillHappen)
-                    call hevent.onAttack(u,function thistype.onSummonAttack)
+                    if(IsUnitInGroup(u, g_gp_summon) == true)then
+                        call hattr.resetSkill(u)
+                        call UnitRemoveType(u,UNIT_TYPE_MECHANICAL)
+                        call hplayer.adjustGold(GetOwningPlayer(u))
+                        call hattr.setLife(u,g_summon_life[i]*percent,0)
+                        call hattr.setMana(u,g_summon_mana[i]*percent,0)
+                        call hattr.setManaBack(u,g_summon_manaback[i]*percent,0)
+                        call hattr.setDefend(u,g_summon_defend[i]*percent,0)
+                        call hattr.setAttackPhysical(u,g_summon_attackPhysical[i]*percent,0)
+                    else
+                        call GroupAddUnit(g_gp_summon, u)
+                        call hplayer.adjustGold(GetOwningPlayer(u))
+                        call hattr.setLife(u,g_summon_life[i]*percent,0)
+                        call hattr.setMana(u,g_summon_mana[i]*percent,0)
+                        call hattr.setManaBack(u,g_summon_manaback[i]*percent,0)
+                        call hattr.setDefend(u,g_summon_defend[i]*percent,0)
+                        call hattr.setAttackPhysical(u,g_summon_attackPhysical[i]*percent,0)
+                        call UnitAddAbility(u,ITEM_ABILITY)
+                        call hitem.initUnit(u)
+                        call UnitAddAbility(u,'A03Q')
+                        call UnitAddAbility(u,'A03U') // link
+                        call UnitAddAbility(u,'A045') // reborn
+                        call UnitMakeAbilityPermanent( u, true, 'A03Q' )
+                        call UnitMakeAbilityPermanent( u, true, 'A03U' )
+                        call UnitMakeAbilityPermanent( u, true, 'A045' )
+                        call TriggerRegisterUnitEvent( sommonDeadTg, u, EVENT_UNIT_DEATH )
+                        call hevent.onSkillHappen(u,function thistype.onSummonSkillHappen)
+                        call hevent.onAttack(u,function thistype.onSummonAttack)
+                    endif
+
 					call DoNothing() YDNL exitwhen true//(  )
 				endif
 			set i = i+1
 		endloop
         call thistype.initSummonSP(u)
+    endmethod
+    public static method upgradeSummon takes unit u returns nothing
+        call initSummon(u,1.00)
     endmethod
 
     private static method deadSummonCall takes nothing returns nothing
@@ -484,10 +501,10 @@ struct hGlobals
         local player p = htime.getPlayer(t,6)
         local unit tempu = htime.getUnit(t,7)
         local unit u = null
+        local real percent = 1.00 + I2R(GetUnitUserData(u)) * 0.15
         call htime.delTimer(t)
         set u = hunit.createUnitXY(p,uid,x,y)
-        call initSummon(u)
-        call SetUnitUserData(u,666)
+        call initSummon(u,percent)
         call heffect.toUnit("Abilities\\Spells\\Other\\Awaken\\Awaken.mdl",u,"origin",0.80)
         call hitem.copy(tempu,u)
         call hunit.del(tempu,0)
@@ -512,7 +529,7 @@ struct hGlobals
         // 解散
         call SetUnitUserData(u,1+GetUnitUserData(u))
         if(GetUnitUserData(u) > 3)then
-            
+            call hmsg.echo(name+" 被 "+GetUnitName(killer)+" 狠狠地永久击倒了！灵魂消散~")
             return
         endif
         // 假死亡
@@ -530,7 +547,7 @@ struct hGlobals
             set rebornTime = rebornTime * 0.5
         endif
         set g_thisturn_hero_dead_qty = g_thisturn_hero_dead_qty + 1
-        call hmsg.echo(name+" 被 "+GetUnitName(killer)+" 狠狠地打死了！"+I2S(R2I(rebornTime))+" 秒后在原地复活～")
+        call hmsg.echo(name+" 被 "+GetUnitName(killer)+" 狠狠地击倒了！"+I2S(R2I(rebornTime))+" 秒后在原地复活～")
         set tempu = hunit.createUnitXYFacing(p,u_dead_timering[GetUnitFoodUsed(u)],x,y,270)
         call SetUnitVertexColor(tempu, 255, 255, 255, 200)
         call hunit.shadow(uid,x+15,y+15,270,50,0,75,120,rebornTime)
@@ -1515,16 +1532,16 @@ struct hGlobals
         call thistype.gotoRectSpaceDeg(GetTriggerUnit(),1,spaceDegX[1],spaceDegY[1],spaceDeg2X[4],spaceDeg2Y[4])
 	endmethod
     private static method gotoRectSpaceDeg21 takes nothing returns nothing
-        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),2,spaceDeg2X[2],spaceDeg2Y[2],spaceDeg3X[1],spaceDeg3Y[1])
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),2,spaceDeg2X[4],spaceDeg2Y[4],spaceDeg3X[1],spaceDeg3Y[1])
 	endmethod
     private static method gotoRectSpaceDeg22 takes nothing returns nothing
-        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),2,spaceDeg2X[3],spaceDeg2Y[3],spaceDeg3X[2],spaceDeg3Y[2])
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),2,spaceDeg2X[1],spaceDeg2Y[1],spaceDeg3X[2],spaceDeg3Y[2])
 	endmethod
     private static method gotoRectSpaceDeg23 takes nothing returns nothing
-        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),2,spaceDeg2X[4],spaceDeg2Y[4],spaceDeg3X[3],spaceDeg3Y[3])
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),2,spaceDeg2X[2],spaceDeg2Y[2],spaceDeg3X[3],spaceDeg3Y[3])
 	endmethod
     private static method gotoRectSpaceDeg24 takes nothing returns nothing
-        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),2,spaceDeg2X[1],spaceDeg2Y[1],spaceDeg3X[4],spaceDeg3Y[4])
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),2,spaceDeg2X[3],spaceDeg2Y[3],spaceDeg3X[4],spaceDeg3Y[4])
 	endmethod
     private static method gotoRectSpaceDeg31 takes nothing returns nothing
         call thistype.gotoRectSpaceDeg(GetTriggerUnit(),3,spaceDeg3X[2],spaceDeg3Y[2],spaceDeg4X[1],spaceDeg4Y[1])
@@ -1539,16 +1556,16 @@ struct hGlobals
         call thistype.gotoRectSpaceDeg(GetTriggerUnit(),3,spaceDeg3X[1],spaceDeg3Y[1],spaceDeg4X[4],spaceDeg4Y[4])
 	endmethod
     private static method gotoRectSpaceDeg41 takes nothing returns nothing
-        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),4,spaceDeg4X[2],spaceDeg4Y[2],0,0)
-	endmethod
-    private static method gotoRectSpaceDeg42 takes nothing returns nothing
-        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),4,spaceDeg4X[3],spaceDeg4Y[3],0,0)
-	endmethod
-    private static method gotoRectSpaceDeg43 takes nothing returns nothing
         call thistype.gotoRectSpaceDeg(GetTriggerUnit(),4,spaceDeg4X[4],spaceDeg4Y[4],0,0)
 	endmethod
-    private static method gotoRectSpaceDeg44 takes nothing returns nothing
+    private static method gotoRectSpaceDeg42 takes nothing returns nothing
         call thistype.gotoRectSpaceDeg(GetTriggerUnit(),4,spaceDeg4X[1],spaceDeg4Y[1],0,0)
+	endmethod
+    private static method gotoRectSpaceDeg43 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),4,spaceDeg4X[2],spaceDeg4Y[2],0,0)
+	endmethod
+    private static method gotoRectSpaceDeg44 takes nothing returns nothing
+        call thistype.gotoRectSpaceDeg(GetTriggerUnit(),4,spaceDeg4X[3],spaceDeg4Y[3],0,0)
 	endmethod
 
     public static method do takes nothing returns nothing
@@ -1739,14 +1756,16 @@ struct hGlobals
 
         // uid, gold, life, mana, manaback, defend, attackPhysical, attackSpeedBaseSpace
         // 农场
-        call thistype.registerSummon('o009',2000,1000,0,0,20,0,0.00) // 农场
-        call thistype.registerSummon('o00A',5000,3000,0,0,35,0,0.00) // 大农场
+        call thistype.registerSummon('o009',1500,1000,0,0,20,0,0.00) // 农场
+        call thistype.registerSummon('o00A',2800,3000,0,0,35,0,0.00) // 大农场
+        //
+        call thistype.registerSummon('o00G',200,200,0,0,2,0,0.00) // 塔基
         // 农民
-        call thistype.registerSummon('o00B',100,100,100,0,0,10,2.00) // 农民
-        call thistype.registerSummon('o008',500,300,100,0,1,45,2.00) // 民兵
-        call thistype.registerSummon('o00C',1500,1000,100,0,6,100,2.00) // 步兵
-        call thistype.registerSummon('o00D',3000,1300,100,0,7,275,2.00) // 剑士
-        call thistype.registerSummon('o00E',7500,2500,100,0,11,500,2.00) // 斗战士
+        call thistype.registerSummon('o00B',300,100,100,0,0,35,2.00) // 农民
+        call thistype.registerSummon('o008',550,300,100,0,1,70,2.00) // 民兵
+        call thistype.registerSummon('o00C',1000,1000,100,0,6,140,2.00) // 步兵
+        call thistype.registerSummon('o00D',1900,1300,100,0,7,300,2.00) // 剑士
+        call thistype.registerSummon('o00E',3600,2500,100,0,11,595,2.00) // 斗战士
 
 
         call thistype.registerSummon('H00Y',30,400,50,0,3,0,2.00) // 凤凰蛋
