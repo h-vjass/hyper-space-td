@@ -530,12 +530,15 @@ struct hSet
 		local integer j = 0 
 		local location loc = null
 		local unit u = null
+		local real life = 0
+		local real move = 0
+		local real attack = 0
 		if(i >= R2I(g_gp_max / g_game_speed))then
 			call htime.delTimer(t)
 			set t = null
 			if(g_mon_isrunning)then
 				if(hlogic.imod(g_wave+1,g_boss_mod) == 0 or g_wave+1 >= g_max_wave)then
-					call thistype.nextWave(100)
+					call thistype.nextWave(g_boss_ready_time)
 					// call htime.setInterval(3.00,function thistype.checkGGPmon)
 				else
 					call thistype.nextWave(0)
@@ -547,15 +550,18 @@ struct hSet
 			return
 		endif
 		call htime.setInteger(t,1,1+i)
+		set life = g_wave * (25 + g_diff * 15)
+		set move = 130 + g_wave * 2 + g_diff * 5
+		set attack = g_wave * 3 + g_diff * 7
 		set j = 1
 		loop
 			exitwhen j>spaceDegQty
 				set u = henemy.createUnitXY(g_mon[monRand],spaceDegX[j],spaceDegY[j])
 				call GroupAddUnit(g_gp_mon,u)
 				call TriggerRegisterUnitEvent( enemyDeadTg, u, EVENT_UNIT_DEATH )
-				call hattr.setLife(u,g_wave*50,0)
-				call hattr.setMove(u,200+g_wave*3,0)
-				call hattr.setAttackPhysical(u,g_wave*5,0)
+				call hattr.setLife(u,life,0)
+				call hattr.setMove(u,move,0)
+				call hattr.setAttackPhysical(u,attack,0)
 				call hGlobals.enemyBuilt(u)
 				call SetUnitUserData(u,0)
 				set j = j+1
@@ -621,27 +627,28 @@ struct hSet
 		set u = henemy.createUnit(last_boss_uid,loc)
 		call GroupAddUnit(g_gp_mon,u)
 		call TriggerRegisterUnitEvent( bossDeadTg, u, EVENT_UNIT_DEATH )
-		set bossPercent = g_wave * 5
-		set bossPercentLittle = g_wave * 4
-		set bossPercentTiny = g_wave * 3
-		if(bossPercent > 90)then
-			set bossPercent = 90
+		set bossPercent = g_wave * 5 + g_diff
+		set bossPercentLittle = g_wave * 4 + g_diff
+		set bossPercentTiny = g_wave * 3 + g_diff
+		if(bossPercent > 80)then
+			set bossPercent = 80
 		endif
-		if(bossPercentLittle > 75)then
-			set bossPercentLittle = 75
+		if(bossPercentLittle > 65)then
+			set bossPercentLittle = 65
 		endif
-		if(bossPercentTiny > 60)then
-			set bossPercentTiny = 60
+		if(bossPercentTiny > 50)then
+			set bossPercentTiny = 50
 		endif
-        call hattr.setLife(u, g_wave*5000 ,0)
-		call hattr.setLifeBack(u, g_wave*15 ,0)
-		call hattr.addMana(u,1000.0,0)
-        call hattr.addManaBack(u,30.0,0)
-        call hattr.setDefend(u, g_wave*10 ,0)
-		call hattr.addResistance(u,bossPercentLittle,0)
-		call hattr.setMove(u, 150 + g_wave*10 ,0)
-        call hattr.setAttackPhysical(u, 100 + g_wave*25  ,0)
-        call hattr.setAttackSpeed(u, 30 + g_wave*5 ,0)
+        call hattr.setLife(u, g_wave * (3000+1000*g_diff) ,0)
+		call hattr.setLifeBack(u, g_wave* (10+15*g_diff) ,0)
+		call hattr.addMana(u,1000*g_diff,0)
+        call hattr.addManaBack(u,30*g_diff,0)
+        call hattr.setDefend(u, (g_wave+g_diff)*5 ,0)
+		call hattr.addResistance(u,bossPercent,0)
+		call hattr.setMove(u, 140 + g_wave*7 + g_diff*4 ,0)
+        call hattr.setAttackPhysical(u, 40 + g_wave*(12 + g_diff*2)  ,0)
+		call hattr.setAttackMagic(u, 60 + g_wave*(13 + g_diff*2)  ,0)
+        call hattr.setAttackSpeed(u, g_wave * 3 + g_diff * 6 ,0)
         call hattr.setAim(u,bossPercent,0)
         call hattr.setAvoid(u,bossPercentLittle,0)
 		call hattr.setInvincible(u,bossPercent,0)
@@ -651,8 +658,12 @@ struct hSet
         call hattr.setFetterOppose(u,bossPercent,0)
         call hattr.setBombOppose(u,bossPercentTiny,0)
         call hattr.setCrackFlyOppose(u,bossPercentLittle,0)
-        call hattr.setKnockingOppose(u,1000 + g_wave * 600,0)
-        call hattr.setViolenceOppose(u,1400 + g_wave * 800,0)
+        call hattr.setKnockingOppose(u,-850 + g_wave * 550 + g_diff * 300,0)
+        call hattr.setViolenceOppose(u,-950 + g_wave * 600 + g_diff * 350,0)
+		call hattrEffect.addCrackFlyOdds(u,g_wave*4 + g_diff,0)
+		call hattrEffect.addCrackFlyVal(u,g_wave*(25 + g_diff),0)
+		call hattrEffect.addCrackFlyHigh(u,g_wave*(6 + g_diff),0)
+		call hattrEffect.addCrackFlyDistance(u,0,0)
 		call hGlobals.bossBuilt(u)
 		//警告
 		call PingMinimapLocForForceEx( GetPlayersAll(),loc,3, bj_MINIMAPPINGSTYLE_FLASHY, 100, 0, 0 )

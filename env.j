@@ -414,15 +414,15 @@ struct MyEnv
 		local integer i = 0
 		local integer rectQty = 20
 		local integer rectArea = 0
-		local real x = 2700
-		local real y = 2700
+		local real x = 2200
+		local real y = 2200
 		local rect tempRect = null
 		local hWeatherBean wb = 0
 		//
 		set i = 1
 		loop
 			exitwhen i>rectQty
-				set rectArea = GetRandomInt(170,420)
+				set rectArea = GetRandomInt(200,500)
 				set hxy.x = GetRandomReal(GetRectMinX(GetPlayableMapRect()), GetRectMaxX(GetPlayableMapRect()))
 				set hxy.y = GetRandomReal(GetRectMinY(GetPlayableMapRect()), GetRectMaxY(GetPlayableMapRect()))
 				if(hxy.x > GetLocationX(Loc_Ring)-x/2 and hxy.x < GetLocationX(Loc_Ring)+x/2 and hxy.y > GetLocationY(Loc_Ring)-y/2 and hxy.y < GetLocationY(Loc_Ring)+y/2)then
@@ -430,8 +430,8 @@ struct MyEnv
 				else 
 					set tempRect = hrect.createInLoc(hxy.x,hxy.y,rectArea,rectArea)
 					set wb = hWeatherBean.create()
-					set wb.x = 2048
-					set wb.y = 2048
+					set wb.x = hxy.x
+					set wb.y = hxy.y
 					set wb.width = rectArea
 					set wb.height = rectArea
 					if (myenv_randomIndex == 1) then

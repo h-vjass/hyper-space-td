@@ -13,8 +13,9 @@ real REBORN_HERO = 30
 real REBORN_SUMMON = 90
 
 integer g_diff = 1
+string array g_diff_label
 timer g_timer_wave = null
-integer g_max_wave = 120
+integer g_max_wave = 100
 integer g_wave = 0
 integer g_first_wave = 0
 integer g_boss_mod = 5
@@ -24,7 +25,7 @@ boolean g_waving = false
 group g_crazy_boss = CreateGroup()
 
 real g_game_speed = 1.00 //
-real g_game_mon_loop = 0.90 // 每只怪出兵间隔
+real g_game_mon_loop = 1.00 // 每只怪出兵间隔
 integer g_token_count = 0
 integer g_building_count = 0
 integer g_hero_count = 0
@@ -1261,49 +1262,42 @@ struct hGlobals
     public static method bossBuilt takes unit mon returns nothing
         local integer uid = GetUnitTypeId(mon)
         call GroupAddUnit(g_crazy_boss,mon)
-        if(uid == 'n046')then // 5
-            call hattrNatural.addWaterOppose(mon,50.0,0)
+        if(uid == 'n046')then // 巨龙海龟
+            call hattrNatural.addWaterOppose(mon,40.0,0)
             call hattr.addHuntRebound(mon,30.0,0)
-        elseif(uid == 'n047')then // 10
+        elseif(uid == 'n047')then // 龙虾首领
             call hattrNatural.addWaterOppose(mon,50.0,0)
-            call hattrEffect.addCrackFlyOdds(mon,25.0,0)
-            call hattrEffect.addCrackFlyVal(mon,300,0)
-            call hattrEffect.addCrackFlyHigh(mon,150,0)
-            call hattrEffect.addCrackFlyDistance(mon,0,0)
-        elseif(uid == 'n048')then // 15
-            call hattr.addHemophagia(mon,20.0,0)
+        elseif(uid == 'n048')then // 飞天食尸鬼
+            call hattr.addHemophagia(mon,15.0,0)
             call heffect.toUnit("war3mapImported\\DarkSwirl.mdl",mon,"origin",0.60)
-        elseif(uid == 'n049')then // 20
+        elseif(uid == 'n049')then // 食人魔统领
             call hattr.addSplit(mon,15.0,0)
-            call hattrEffect.addCrackFlyOdds(mon,13.0,0)
-            call hattrEffect.addCrackFlyVal(mon,600,0)
-            call hattrEffect.addCrackFlyHigh(mon,175,0)
-            call hattrEffect.addCrackFlyDistance(mon,0,0)
-        elseif(uid == 'n04A')then // 25
+        elseif(uid == 'n04A')then // 冰魔法师
+            call hattr.addAttackHuntType(mon,"ice",0)
             call hattrNatural.addIceOppose(mon,50.0,0)
             call hattrNatural.addThunderOppose(mon,25.0,0)
-            call hattrEffect.addLightningChainOdds(mon,35.0,0)
-            call hattrEffect.addLightningChainVal(mon,550.0,0)
-            call hattrEffect.addLightningChainQty(mon,5,0)
+            call hattrEffect.addLightningChainOdds(mon,30.0,0)
+            call hattrEffect.addLightningChainVal(mon,g_wave*50,0)
+            call hattrEffect.addLightningChainQty(mon,4,0)
             call hattrEffect.addFreezeVal(mon,3.0,0)
-            call hattrEffect.addFreezeDuring(mon,10.0,0)
-            call hattrEffect.addSilentOdds(mon,25.0,0)
-            call hattrEffect.addSilentDuring(mon,2.0,0)
-        elseif(uid == 'n04B')then // 30
-            call hattrEffect.addAttackPhysicalVal(mon,60.0,0)
+            call hattrEffect.addFreezeDuring(mon,8.0,0)
+            call hattrEffect.addSilentOdds(mon,15.0,0)
+            call hattrEffect.addSilentDuring(mon,3.0,0)
+        elseif(uid == 'n04B')then // 熊猫Panda
+            call hattrEffect.addAttackPhysicalVal(mon,g_wave*6.0,0)
             call hattrEffect.addAttackPhysicalDuring(mon,15.0,0)
-            call hattrEffect.addAttackSpeedVal(mon,10.0,0)
+            call hattrEffect.addAttackSpeedVal(mon,g_wave*1,0)
             call hattrEffect.addAttackSpeedDuring(mon,15.0,0)
-            call hattrEffect.addKnockingVal(mon,1500.0,0)
+            call hattrEffect.addKnockingVal(mon,g_wave*110,0)
             call hattrEffect.addKnockingDuring(mon,25.0,0)
         elseif(uid == 'n04C')then // 35
             call hattr.addAttackHuntType(mon,"soil",0)
-            call hattrNatural.addSoilOppose(mon,50.0,0)
-            call hattrNatural.addPoisonOppose(mon,50.0,0)
-            call hattrNatural.subFireOppose(mon,10.0,0)
+            call hattrNatural.addSoilOppose(mon,40.0,0)
+            call hattrNatural.addPoisonOppose(mon,40.0,0)
+            call hattrNatural.subFireOppose(mon,20.0,0)
             call hattrEffect.addToxicVal(mon,5.0,0)
             call hattrEffect.addToxicDuring(mon,10.0,0)
-            call hattrEffect.addCorrosionVal(mon,2.0,0)
+            call hattrEffect.addCorrosionVal(mon,3.0,0)
             call hattrEffect.addCorrosionDuring(mon,10.0,0)
             call hattrEffect.addFreezeVal(mon,5.0,0)
             call hattrEffect.addFreezeDuring(mon,10.0,0)
@@ -1571,6 +1565,10 @@ struct hGlobals
     public static method do takes nothing returns nothing
         local integer i = 0
         local trigger tg = null
+
+        set g_diff_label[1] = "简单"
+        set g_diff_label[2] = "普通"
+        set g_diff_label[3] = "地狱"
 
         // 设置玩家组
         set i = 1
