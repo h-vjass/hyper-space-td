@@ -74,7 +74,7 @@ integer myenv_u_typha2 = 'n00C'
 integer myenv_randomIndex = 0
 integer myenv_weatherIndex = 0
 
-boolean myenv_randomFlag = false
+integer myenv_randomFlag = 0
 
 endglobals
 
@@ -107,7 +107,7 @@ struct MyEnv
 		local real midY = (rectEndY-rectStartY) * 0.5
 		local real x = rectStartX + indexX * 80
 		local real y = rectStartY + indexY * 80
-		local integer buildType = GetRandomInt(1,7)
+		local integer buildType = GetRandomInt(1,8)
 
 		if(x >= rectEndX and y >= rectEndY) then
 			call htime.delTimer(t)
@@ -147,17 +147,18 @@ struct MyEnv
 		endif
 		if(buildType == -1)then
 			return
-		elseif(buildType == 4 and myenv_randomFlag == true)then
+		elseif(buildType == 4 or myenv_randomFlag > 0)then
 			set buildType = 3
-			set myenv_randomFlag = false
+		endif
+		if(myenv_randomFlag > 2)then
+			set myenv_randomFlag = 0
 		endif
 		//
 		if(buildType <= 3)then
 			call hunit.createUnitXY(players[12], uid, x,y)
-			set myenv_randomFlag = false
 		elseif(buildType == 4)then
 			call SetDestructableInvulnerable( CreateDestructable(did, x , y, GetRandomDirectionDeg(), GetRandomReal(0.5,1.1), 0 ), false )
-			set myenv_randomFlag = true
+			set myenv_randomFlag = myenv_randomFlag + 1
 			if(whichGround > 0 and  GetTerrainType(x, y) !='Ybtl' )then
 				call SetTerrainType( x , y, whichGround, -1, 1, 0 )
 			endif
@@ -346,7 +347,10 @@ struct MyEnv
 			set whichDestructable[1] = myenv_tree_fire
 			set whichDestructable[2] = myenv_volcano
 			set whichDestructable[3] = myenv_stone_red
-			set whichDestructable[4] = 0
+			set whichDestructable[4] = myenv_stone_red
+			set whichDestructable[5] = myenv_stone_red
+			set whichDestructable[6] = myenv_stone_red
+			set whichDestructable[7] = 0
 		elseif(typeStr == "underground")then
 			set whichGround = myenv_ground_underground
 			set whichUnit[1] = myenv_u_mushroom1
@@ -412,10 +416,10 @@ struct MyEnv
 
 	public static method randomEnv takes nothing returns nothing
 		local integer i = 0
-		local integer rectQty = 20
+		local integer rectQty = 18
 		local integer rectArea = 0
-		local real x = 2200
-		local real y = 2200
+		local real x = 2400
+		local real y = 2400
 		local rect tempRect = null
 		local hWeatherBean wb = 0
 		//
@@ -427,7 +431,7 @@ struct MyEnv
 		set i = 1
 		loop
 			exitwhen i>rectQty
-				set rectArea = GetRandomInt(200,500)
+				set rectArea = GetRandomInt(180,460)
 				set hxy.x = GetRandomReal(GetRectMinX(GetPlayableMapRect()), GetRectMaxX(GetPlayableMapRect()))
 				set hxy.y = GetRandomReal(GetRectMinY(GetPlayableMapRect()), GetRectMaxY(GetPlayableMapRect()))
 				if(hxy.x > GetLocationX(Loc_Ring)-x/2 and hxy.x < GetLocationX(Loc_Ring)+x/2 and hxy.y > GetLocationY(Loc_Ring)-y/2 and hxy.y < GetLocationY(Loc_Ring)+y/2)then

@@ -25,7 +25,7 @@ boolean g_waving = false
 group g_crazy_boss = CreateGroup()
 
 real g_game_speed = 1.00 //
-real g_game_mon_loop = 1.00 // 每只怪出兵间隔
+real g_game_mon_loop = 2.00 // 每只怪出兵间隔
 integer g_token_count = 0
 integer g_building_count = 0
 integer g_hero_count = 0
