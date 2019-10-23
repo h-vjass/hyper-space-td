@@ -71,8 +71,8 @@ integer myenv_u_flower5 = 'n00A'
 integer myenv_u_typha1 = 'n00B'
 integer myenv_u_typha2 = 'n00C'
 
-integer myenv_randomIndex = GetRandomInt(1,9)
-integer myenv_weatherIndex = GetRandomInt(1,3)
+integer myenv_randomIndex = 0
+integer myenv_weatherIndex = 0
 
 boolean myenv_randomFlag = false
 
@@ -418,6 +418,11 @@ struct MyEnv
 		local real y = 2200
 		local rect tempRect = null
 		local hWeatherBean wb = 0
+		//
+		if(myenv_randomIndex == 0)then
+			set myenv_randomIndex = GetRandomInt(1,9)
+			set myenv_weatherIndex = GetRandomInt(1,3)
+		endif
 		//
 		set i = 1
 		loop

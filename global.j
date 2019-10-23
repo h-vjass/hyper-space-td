@@ -57,6 +57,7 @@ real array g_boss_defend
 real array g_boss_move
 real array g_boss_attackPhysical
 integer last_boss_uid = 0
+string array g_summon_glv
 integer array g_summon_gold
 real array g_summon_life
 real array g_summon_mana
@@ -228,9 +229,10 @@ struct hGlobals
         call hunit.setAttackSpeedBaseSpace(g_hero[g_hero_count],attackBaseSpace)
     endmethod
 
-    public static method registerSummon takes integer uid,integer gold,real life,real mana,real manaback,real defend,real attackPhysical,real attackSpeedBaseSpace returns nothing
+    public static method registerSummon takes integer uid,string glv,integer gold,real life,real mana,real manaback,real defend,real attackPhysical,real attackSpeedBaseSpace returns nothing
         set g_summon_count = g_summon_count + 1
         set g_summon[g_summon_count] = uid
+        set g_summon_glv[g_summon_count] = glv
         set g_summon_gold[g_summon_count] = gold
         set g_summon_life[g_summon_count] = life
         set g_summon_mana[g_summon_count] = mana
@@ -244,8 +246,11 @@ struct hGlobals
 		local unit triggerUnit = hevent.getTriggerUnit()
         local unit targetUnit = hevent.getTargetUnit()
         local integer triggerUID = 0
+        local integer targetUID = 0
 		local integer skillid = hevent.getTriggerSkill()
         local player p = null
+        local real x = 0
+        local real y = 0
 		local location loc = null
 		local location loc2 = null
 		local hAttrHuntBean bean = 0
@@ -274,6 +279,39 @@ struct hGlobals
 			call hitem.drop(triggerUnit)
 			call GroupRemoveUnit(g_gp_summon, triggerUnit)
 			call hunit.del(triggerUnit,0)
+        elseif(skillid == 'A04J')then // 升级连锁
+            set p = GetOwningPlayer(triggerUnit)
+            set triggerUID = GetUnitTypeId(triggerUnit)
+            if(triggerUID != GetUnitTypeId(targetUnit))then
+                call hmsg.echoTo(p,"不同类型的单位不可以进行连锁升级",0)
+            elseif(p != GetOwningPlayer(targetUnit))then
+                call hmsg.echoTo(p,"不是自己的单位暂时不能进行连锁升级",0)
+            else
+                set x = GetUnitX(triggerUnit)
+                set y = GetUnitY(triggerUnit)
+                call GroupRemoveUnit(g_gp_summon, triggerUnit)
+                call GroupRemoveUnit(g_gp_summon, targetUnit)
+                call RemoveUnit(targetUnit)
+                call RemoveUnit(triggerUnit)
+                set targetUID = 0
+                if(triggerUID == 'o009')then
+                    set targetUID = 'o00A'
+                endif
+                if(triggerUID == 'o00B')then
+                    set targetUID = 'o008'
+                elseif(triggerUID == 'o008')then
+                    set targetUID = 'o00C'
+                elseif(triggerUID == 'o00C')then
+                    set targetUID = 'o00D'
+                elseif(triggerUID == 'o00D')then
+                    set targetUID = 'o00E'
+                endif
+                if(targetUID != 0)then
+                    set targetUnit = hunit.createUnitXY(p,targetUID, x, y)
+                endif
+                call hmsg.echoTo(p,GetUnitName(triggerUnit)+" 连锁升级成功为 |cffffff80"+GetUnitName(targetUnit)+"|r",0)
+                call thistype.initSummon(targetUnit,1.1)
+            endif
 		elseif(skillid == 'A08V')then // 丧病
 			call hunit.setUserData(triggerUnit,777,3.5)
 			call hattr.addHuntReboundOppose(triggerUnit,100,3.5)
@@ -477,6 +515,26 @@ struct hGlobals
                         call UnitMakeAbilityPermanent( u, true, 'A03Q' )
                         call UnitMakeAbilityPermanent( u, true, 'A04J' )
                         call UnitMakeAbilityPermanent( u, true, 'A045' )
+                        // glv
+                        if(g_summon_glv[i] == "E")then
+                            call UnitAddAbility(u,'A03U')
+                            call UnitMakeAbilityPermanent( u, true, 'A03U' )
+                        elseif(g_summon_glv[i] == "D")then
+                            call UnitAddAbility(u,'A064')
+                            call UnitMakeAbilityPermanent( u, true, 'A064' )
+                        elseif(g_summon_glv[i] == "C")then
+                            call UnitAddAbility(u,'A066')
+                            call UnitMakeAbilityPermanent( u, true, 'A066' )
+                        elseif(g_summon_glv[i] == "B")then
+                            call UnitAddAbility(u,'A067')
+                            call UnitMakeAbilityPermanent( u, true, 'A067' )
+                        elseif(g_summon_glv[i] == "A")then
+                            call UnitAddAbility(u,'A069')
+                            call UnitMakeAbilityPermanent( u, true, 'A069' )
+                        elseif(g_summon_glv[i] == "S")then
+                            call UnitAddAbility(u,'A068')
+                            call UnitMakeAbilityPermanent( u, true, 'A068' )
+                        endif
                         call TriggerRegisterUnitEvent( sommonDeadTg, u, EVENT_UNIT_DEATH )
                         call hevent.onSkillHappen(u,function thistype.onSummonSkillHappen)
                         call hevent.onAttack(u,function thistype.onSummonAttack)
@@ -1490,12 +1548,7 @@ struct hGlobals
             endif    
         else
             call SetUnitUserData(u,i)
-            if(IsUnitType(u, UNIT_TYPE_ANCIENT) == true)then
-                call GroupAddUnit(g_gp_attack,u)
-                call IssuePointOrder( u, "attack", x, y )
-            else 
-                call IssuePointOrder( u, "move", x, y )
-            endif
+            call IssuePointOrder( u, "move", x, y )
         endif
         set u = null
     endmethod
@@ -1740,41 +1793,16 @@ struct hGlobals
 
         // uid, gold, life, mana, manaback, defend, attackPhysical, attackSpeedBaseSpace
         // 农场
-        call thistype.registerSummon('o009',1500,1000,0,0,20,0,0.00) // 农场
-        call thistype.registerSummon('o00A',2800,3000,0,0,35,0,0.00) // 大农场
+        call thistype.registerSummon('o009',"N",1500,1000,0,0,20,0,0.00) // 农场
+        call thistype.registerSummon('o00A',"N",2800,3000,0,0,35,0,0.00) // 大农场
         //
-        call thistype.registerSummon('o00G',200,200,0,0,2,0,0.00) // 塔基
+        call thistype.registerSummon('o00G',"N",200,200,0,0,2,0,0.00) // 塔基
         // 农民
-        call thistype.registerSummon('o00B',300,100,100,0,0,35,2.00) // 农民
-        call thistype.registerSummon('o008',550,300,100,0,1,70,2.00) // 民兵
-        call thistype.registerSummon('o00C',1000,1000,100,0,6,140,2.00) // 步兵
-        call thistype.registerSummon('o00D',1900,1300,100,0,7,300,2.00) // 剑士
-        call thistype.registerSummon('o00E',3600,2500,100,0,11,595,2.00) // 斗战士
-
-
-        call thistype.registerSummon('H00Y',30,400,50,0,3,0,2.00) // 凤凰蛋
-        call thistype.registerSummon('H004',50,700,50,0,2,10,2.00) // 铁甲步兵
-        call thistype.registerSummon('H00W',50,800,50,0,1,12,2.00) // 树人
-        call thistype.registerSummon('H005',60,500,50,0,0,14,2.00) // 铁枪手
-        call thistype.registerSummon('H012',70,400,50,0,0,31,1.50) // 狂战猎手
-        call thistype.registerSummon('H007',80,550,50,0,0,45,3.00) // 迫击炮手
-        call thistype.registerSummon('H008',100,450,50,1.0,1,25,2.00) // 牧师
-        call thistype.registerSummon('H00T',100,450,50,1.0,1,30,2.00) // 巫医
-        call thistype.registerSummon('H009',200,600,50,0,3,50,2.00) // 斗剑士
-        call thistype.registerSummon('H00A',400,800,50,0,2,30,2.00) // 精灵射手
-        call thistype.registerSummon('H00U',450,750,50,0,0,45,2.00) // 黑暗精灵
-        call thistype.registerSummon('H00C',600,1200,50,0,2,45,2.20) // 露娜
-        call thistype.registerSummon('H013',700,1400,50,0,0,60,3.75) // 投刃车
-        call thistype.registerSummon('H00D',1200,1600,50,0,3,70,2.50) // 牛头巨兽
-        call thistype.registerSummon('H00E',1800,2000,50,0,4,105,3.00) // 山岭巨人
-        call thistype.registerSummon('H00L',3600,2400,50,0,4,125,2.80) // 山岭巨人·战棍
-        call thistype.registerSummon('H00F',5500,3300,50,0,5,225,3.00) // 参天树精
-        call thistype.registerSummon('H00G',4000,1800,50,0,4,200,2.00) // 青蓝暴龙
-        call thistype.registerSummon('H00H',8000,4000,50,0,3,340,3.00) // 青焰飞狱龙
-        call thistype.registerSummon('H00V',6000,3600,50,0,3,300,3.00) // 冰骨之龙
-        call thistype.registerSummon('H00Z',6000,4250,50,0,2,320,3.00) // 炽热之龙
-        call thistype.registerSummon('H010',7000,5000,50,0,4,275,3.00) // 火凤凰
-        call thistype.registerSummon('H011',7000,5000,50,0,4,275,3.00) // 火凤凰3
+        call thistype.registerSummon('o00B',"E",300,100,100,0,0,35,2.00) // 农民
+        call thistype.registerSummon('o008',"D",480,250,100,0,1,70,2.00) // 民兵
+        call thistype.registerSummon('o00C',"C",850,700,100,0,6,140,2.00) // 步兵
+        call thistype.registerSummon('o00D',"B",1600,1200,100,0,7,300,2.00) // 剑士
+        call thistype.registerSummon('o00E',"A",3000,2500,100,0,11,595,2.00) // 斗战士
 
         // 瞬时物品
         set momentItems_count = 6
