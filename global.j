@@ -472,10 +472,10 @@ struct hGlobals
                         call UnitAddAbility(u,ITEM_ABILITY)
                         call hitem.initUnit(u)
                         call UnitAddAbility(u,'A03Q')
-                        call UnitAddAbility(u,'A03U') // link
+                        call UnitAddAbility(u,'A04J') // link
                         call UnitAddAbility(u,'A045') // reborn
                         call UnitMakeAbilityPermanent( u, true, 'A03Q' )
-                        call UnitMakeAbilityPermanent( u, true, 'A03U' )
+                        call UnitMakeAbilityPermanent( u, true, 'A04J' )
                         call UnitMakeAbilityPermanent( u, true, 'A045' )
                         call TriggerRegisterUnitEvent( sommonDeadTg, u, EVENT_UNIT_DEATH )
                         call hevent.onSkillHappen(u,function thistype.onSummonSkillHappen)
@@ -1122,43 +1122,43 @@ struct hGlobals
 		local unit u = null
 		local integer i = 0
 		local hFilter hf
-		if(skillid == 'A05R')then // BOSS lv15 飞天石像鬼 穿梭
+		if(skillid == 'A05R')then // BOSS 飞天石像鬼 穿梭
 			call SetUnitVertexColorBJ( triggerUnit, 100, 100, 100, 75.00 )
 			set bean = hAttrHuntBean.create()
-            set bean.damage = 350
+            set bean.damage = g_wave * 30
             set bean.fromUnit = triggerUnit
             set bean.huntEff = "Abilities\\Spells\\Undead\\Sleep\\SleepSpecialArt.mdl"
             set bean.huntKind = "attack"
             set bean.huntType = "physicalwind"
             call hskill.shuttleToUnit(triggerUnit,hevent.getTargetUnit(),400,10,30,5,50,null,"attack",'A06L',bean)
             call bean.destroy()
-		elseif(skillid == 'A062')then // BOSS lv70 白毛猛犸王
+		elseif(skillid == 'A062')then // BOSS 白毛猛犸王
             set hxy.x = GetUnitX(triggerUnit)
             set hxy.y = GetUnitY(triggerUnit)
             set hxy = hlogic.polarProjection(hxy,500,hlogic.getDegBetweenUnit(triggerUnit,hevent.getTargetUnit()))
             set loc = Location(hxy.x,hxy.y)
 			set bean = hAttrHuntBean.create()
-            set bean.damage = 11000
+            set bean.damage = g_wave * 40
             set bean.fromUnit = triggerUnit
             set bean.huntEff = "war3mapImported\\DarkSwirl.mdl"
             set bean.huntKind = "attack"
             set bean.huntType = "physical"
             call hskill.leap(triggerUnit,loc,55,"Objects\\Spawnmodels\\Undead\\ImpaleTargetDust\\ImpaleTargetDust.mdl",150,false,bean)
             call bean.destroy()
-		elseif(skillid == 'A060')then // BOSS lv85 旋风女皇 穿梭
+		elseif(skillid == 'A060')then // BOSS 旋风女皇 穿梭
 			call SetUnitVertexColorBJ( triggerUnit, 100, 100, 100, 75.00 )
 			set bean = hAttrHuntBean.create()
-            set bean.damage = 1800
+            set bean.damage = g_wave * 35
             set bean.fromUnit = triggerUnit
             set bean.huntEff = "Abilities\\Spells\\Other\\Tornado\\TornadoElementalSmall.mdl"
             set bean.huntKind = "attack"
             set bean.huntType = "physicalwind"
             call hskill.shuttleToUnit(triggerUnit,hevent.getTargetUnit(),500,13,30,5,50,null,"attack",'A06M',bean)
             call bean.destroy()
-		elseif(skillid == 'A061')then // BOSS lv105 死神 穿梭
+		elseif(skillid == 'A061')then // BOSS 死神 穿梭
 			call SetUnitVertexColorBJ( triggerUnit, 100, 100, 100, 75.00 )
 			set bean = hAttrHuntBean.create()
-            set bean.damage = 3500
+            set bean.damage = g_wave * 40
             set bean.fromUnit = triggerUnit
             set bean.huntEff = "war3mapImported\\DarkSwirl.mdl"
             set bean.huntKind = "skill"
@@ -1289,8 +1289,8 @@ struct hGlobals
             call hattrEffect.addAttackSpeedVal(mon,g_wave*1,0)
             call hattrEffect.addAttackSpeedDuring(mon,15.0,0)
             call hattrEffect.addKnockingVal(mon,g_wave*110,0)
-            call hattrEffect.addKnockingDuring(mon,25.0,0)
-        elseif(uid == 'n04C')then // 35
+            call hattrEffect.addKnockingDuring(mon,15.0,0)
+        elseif(uid == 'n04C')then // 沙蝎之王
             call hattr.addAttackHuntType(mon,"soil",0)
             call hattrNatural.addSoilOppose(mon,40.0,0)
             call hattrNatural.addPoisonOppose(mon,40.0,0)
@@ -1301,17 +1301,17 @@ struct hGlobals
             call hattrEffect.addCorrosionDuring(mon,10.0,0)
             call hattrEffect.addFreezeVal(mon,5.0,0)
             call hattrEffect.addFreezeDuring(mon,10.0,0)
-        elseif(uid == 'n04K')then // 40
+        elseif(uid == 'n04K')then // 寒冰巨龙
             call hattr.addAttackHuntType(mon,"water",0)
             call hattr.addAttackHuntType(mon,"ice",0)
-            call hattrNatural.addIceOppose(mon,90.0,0)
+            call hattrNatural.addIceOppose(mon,80.0,0)
             call hattrEffect.addFreezeVal(mon,7.5,0)
-            call hattrEffect.addFreezeDuring(mon,15.0,0)
-            call hattrEffect.addUnarmOdds(mon,35.0,0)
+            call hattrEffect.addFreezeDuring(mon,11.0,0)
+            call hattrEffect.addUnarmOdds(mon,16.0,0)
             call hattrEffect.addUnarmDuring(mon,3.0,0)
-        elseif(uid == 'n04O')then // 45
+        elseif(uid == 'n04O')then // 人马可汗
             call hattr.addToughness(mon,200.0,0)
-        elseif(uid == 'n04L')then // 50
+        elseif(uid == 'n04L')then // 疾风隐刺
             call hattr.addAttackHuntType(mon,"dark",0)
             call hattrNatural.addDarkOppose(mon,30.0,0)
             call hattrEffect.addAttackSpeedVal(mon,10.0,0)
@@ -1320,116 +1320,102 @@ struct hGlobals
             call hattrEffect.addKnockingDuring(mon,10.0,0)
             call hattrEffect.addViolenceVal(mon,500.0,0)
             call hattrEffect.addViolenceDuring(mon,10.0,0)
-        elseif(uid == 'n04P')then // 55
+        elseif(uid == 'n04P')then // 潮汐巨人
             call hattr.addAttackHuntType(mon,"water",0)
             call hattrNatural.addWaterOppose(mon,50.0,0)
             call hattrEffect.addSwimOdds(mon,25.0,0)
             call hattrEffect.addSwimDuring(mon,1,0)
-            call hattrEffect.addCrackFlyOdds(mon,15.0,0)
-            call hattrEffect.addCrackFlyVal(mon,1300,0)
-            call hattrEffect.addCrackFlyHigh(mon,175,0)
-            call hattrEffect.addCrackFlyDistance(mon,0,0)
-        elseif(uid == 'n04N')then // 60
+            call hattrEffect.addCrackFlyOdds(mon,5.0,0)
+        elseif(uid == 'n04N')then // 灭却龙
             call hattr.addAttackHuntType(mon,"poison",0)
             call hattrNatural.addPoison(mon,25.0,0)
-            call hattrNatural.addPoisonOppose(mon,90.0,0)
+            call hattrNatural.addPoisonOppose(mon,80.0,0)
             call hattrEffect.addToxicVal(mon,25.0,0)
             call hattrEffect.addToxicDuring(mon,5.0,0)
             call hattrEffect.addCorrosionVal(mon,3.0,0)
             call hattrEffect.addCorrosionDuring(mon,10.0,0)
-        elseif(uid == 'n04Q')then // 65
+        elseif(uid == 'n04Q')then // 猎足蜘蛛
             call hattrNatural.addPoisonOppose(mon,30.0,0)
             call hattrNatural.subFireOppose(mon,10.0,0)
-        elseif(uid == 'n04M')then // 70
+        elseif(uid == 'n04M')then // 白毛猛犸王
             call hattr.addSplit(mon,17.0,0)
-            call hattrEffect.addCrackFlyOdds(mon,17.0,0)
-            call hattrEffect.addCrackFlyVal(mon,2300,0)
-            call hattrEffect.addCrackFlyHigh(mon,150,0)
-            call hattrEffect.addCrackFlyDistance(mon,0,0)
-        elseif(uid == 'n04J')then // 75
+            call hattrEffect.addCrackFlyOdds(mon,7.0,0)
+        elseif(uid == 'n04J')then // 奇美拉
             call hattr.addAttackHuntType(mon,"poison",0)
             call hattrNatural.addPoison(mon,25.0,0)
-            call hattrNatural.addPoisonOppose(mon,90.0,0)
+            call hattrNatural.addPoisonOppose(mon,78.0,0)
             call hattrEffect.addToxicVal(mon,35.0,0)
             call hattrEffect.addToxicDuring(mon,6.0,0)
-        elseif(uid == 'n04D')then // 80
+        elseif(uid == 'n04D')then // 龙卵领主
             call hattrNatural.addThunderOppose(mon,35.0,0)
             call hattr.addAttackPhysical(mon,200.0,0)
             call hattr.addAttackMagic(mon,200.0,0)
             call hattr.addKnocking(mon,10000.0,0)
             call hattrEffect.addLightningChainOdds(mon,15.0,0)
-            call hattrEffect.addLightningChainVal(mon,60.0,0)
+            call hattrEffect.addLightningChainVal(mon,g_wave*30.0,0)
             call hattrEffect.addLightningChainQty(mon,6,0)
-        elseif(uid == 'n04I')then // 85
+        elseif(uid == 'n04I')then // 旋风女皇
             call hattrNatural.addWindOppose(mon,90.0,0)
             call hattr.addAttackSpeed(mon,100.0,0)
             call hattrEffect.addSwimOdds(mon,22.0,0)
             call hattrEffect.addSwimDuring(mon,0.5,0)
-        elseif(uid == 'n04F')then // 90
+        elseif(uid == 'n04F')then // 斧帝
             call hattr.addHuntRebound(mon,30.0,0)
-            call hattrEffect.addBurnVal(mon,10.0,0)
-            call hattrEffect.addBurnDuring(mon,10.0,0)
-            call hattrEffect.addToxicVal(mon,10.0,0)
-            call hattrEffect.addToxicDuring(mon,10.0,0)
-        elseif(uid == 'n04G')then // 95
+        elseif(uid == 'n04G')then // 深渊地狱火
             call hattr.addAttackHuntType(mon,"fire",0)
-            call hattrNatural.addFireOppose(mon,90.0,0)
-            call hattrEffect.addBurnVal(mon,15,0)
-            call hattrEffect.addBurnDuring(mon,15.0,0)
-            call hattrEffect.addToxicVal(mon,8,0)
-            call hattrEffect.addToxicDuring(mon,15.0,0)
-            call hattrEffect.addCrackFlyOdds(mon,50.0,0)
-            call hattrEffect.addCrackFlyVal(mon,1000,0)
-            call hattrEffect.addCrackFlyHigh(mon,475,0)
-            call hattrEffect.addCrackFlyDistance(mon,0,0)
+            call hattrNatural.addFireOppose(mon,80.0,0)
+            call hattrEffect.addBurnVal(mon,6+g_wave,0)
+            call hattrEffect.addBurnDuring(mon,10.0,0)
+            call hattrEffect.addToxicVal(mon,5,0)
+            call hattrEffect.addToxicDuring(mon,10.0,0)
         endif
-        if(uid == 'n04E')then // 100
+        if(uid == 'n04E')then // 毁灭炎尊
             call hattr.addAttackHuntType(mon,"firemetal",0)
             call hattrNatural.addPoisonOppose(mon,90.0,0)
-            call hattrNatural.addFireOppose(mon,110.0,0)
-            call hattrEffect.addBurnVal(mon,20.0,0)
-            call hattrEffect.addBurnDuring(mon,17.0,0)
-            call hattrEffect.addToxicVal(mon,8.0,0)
-            call hattrEffect.addToxicDuring(mon,17.0,0)
-        elseif(uid == 'n04H')then // 105
+            call hattrNatural.addFireOppose(mon,90.0,0)
+            call hattrEffect.addBurnVal(mon,7+g_wave,0)
+            call hattrEffect.addBurnDuring(mon,10.0,0)
+            call hattrEffect.addToxicVal(mon,4.0,0)
+            call hattrEffect.addToxicDuring(mon,10.0,0)
+        elseif(uid == 'n04H')then // 赐死鹿
             call hattr.addAttackHuntType(mon,"dark",0)
             call hattrNatural.addDarkOppose(mon,30.0,0)
             call hattrNatural.addPoisonOppose(mon,100.0,0)
-            call hattrNatural.addFireOppose(mon,100.0,0)
+            call hattrNatural.addFireOppose(mon,30.0,0)
             call hattrEffect.addCorrosionVal(mon,4.0,0)
-            call hattrEffect.addCorrosionDuring(mon,15.0,0)
-            call hattrEffect.addToxicVal(mon,50.0,0)
+            call hattrEffect.addCorrosionDuring(mon,10.0,0)
+            call hattrEffect.addToxicVal(mon,6.0,0)
             call hattrEffect.addToxicDuring(mon,7.5,0)
-            call hattrEffect.addSilentOdds(mon,35.0,0)
+            call hattrEffect.addSilentOdds(mon,5.0,0)
             call hattrEffect.addSilentDuring(mon,3.0,0)
-            call hattrEffect.addUnarmOdds(mon,35.0,0)
+            call hattrEffect.addUnarmOdds(mon,10.0,0)
             call hattrEffect.addUnarmDuring(mon,3.0,0)
-            call hattrEffect.setBombOdds(mon,100,0)
-            call hattrEffect.setBombVal(mon,500,0)
-            call hattrEffect.setBombRange(mon,100,0)
+            call hattrEffect.setBombOdds(mon,10,0)
+            call hattrEffect.setBombVal(mon,g_wave*3,0)
+            call hattrEffect.setBombRange(mon,125,0)
             call hattrEffect.setBombModel(mon,"war3mapImported\\Arcane Nova.mdl")
-        elseif(uid == 'n052')then // 110
+        elseif(uid == 'n052')then // 机车人
             call hattr.addAttackHuntType(mon,"metal",0)
-            call hattrNatural.addMetalOppose(mon,100.0,0)
+            call hattrNatural.addMetalOppose(mon,88.0,0)
             call hattrEffect.addAttackSpeedVal(mon,5,0)
             call hattrEffect.addAttackSpeedDuring(mon,10,0)
             call hattrEffect.addSwimOdds(mon,25.0,0)
-            call hattrEffect.addSwimDuring(mon,1.5,0)
-        elseif(uid == 'n05B')then // 115
-            call hattr.addHuntRebound(mon,30.0,0)
+            call hattrEffect.addSwimDuring(mon,0.5,0)
+        elseif(uid == 'n05B')then // 钻石巨人
+            call hattr.addHuntRebound(mon,34.0,0)
             call hattr.addAttackHuntType(mon,"soilmetal",0)
-            call hattrNatural.addFireOppose(mon,100.0,0)
-            call hattrNatural.addSoilOppose(mon,100.0,0)
-            call hattrNatural.addMetalOppose(mon,100.0,0)
-            call hattrEffect.addSwimOdds(mon,40.0,0)
+            call hattrNatural.addFireOppose(mon,70.0,0)
+            call hattrNatural.addSoilOppose(mon,70.0,0)
+            call hattrNatural.addMetalOppose(mon,75.0,0)
+            call hattrEffect.addSwimOdds(mon,16.0,0)
             call hattrEffect.addSwimDuring(mon,1.5,0)
-        elseif(uid == 'n05H')then // 120
+        elseif(uid == 'n05H')then // 寒春龙神
             call hattr.addAttackHuntType(mon,"icedragon",0)
             call hattrNatural.addIceOppose(mon,100.0,0)
             call hattrNatural.addDragonOppose(mon,100.0,0)
             call hattrEffect.addAttackSpeedVal(mon,10,0)
             call hattrEffect.addAttackSpeedDuring(mon,5,0)
-            call hattrEffect.addSwimOdds(mon,45.0,0)
+            call hattrEffect.addSwimOdds(mon,14.0,0)
             call hattrEffect.addSwimDuring(mon,2.0,0)
         endif
         call hevent.onSkillHappen(mon,function thistype.onBossSkillHappen)

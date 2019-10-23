@@ -639,8 +639,8 @@ struct hSet
 		if(bossPercentTiny > 50)then
 			set bossPercentTiny = 50
 		endif
-        call hattr.setLife(u, g_wave * (3000+1000*g_diff) ,0)
-		call hattr.setLifeBack(u, g_wave* (10+15*g_diff) ,0)
+        call hattr.setLife(u, g_wave * (8500+450*g_diff) ,0)
+		call hattr.setLifeBack(u, g_wave* 2 + g_diff * 5 ,0)
 		call hattr.addMana(u,1000*g_diff,0)
         call hattr.addManaBack(u,30*g_diff,0)
         call hattr.setDefend(u, (g_wave+g_diff)*5 ,0)
