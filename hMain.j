@@ -322,15 +322,14 @@ library Main initializer init needs hJass
 						set player_prolv[i] = 0
 					endif
 				endif
-				call hplayer.setLumberRatio(players[i],100*player_current_qty,0)
-				call hplayer.setExpRatio(players[i],50.0+50*player_current_qty,0)
+				call hplayer.setLumberRatio(players[i],50.0+50.0*player_current_qty,0)
+				call hplayer.setExpRatio(players[i],75.0+25.0*player_current_qty,0)
 				if(player_isvip[i] == true)then
-					call hplayer.setGold(players[i],2000)
+					call hplayer.setGold(players[i],2500)
 					call hplayer.setLumber(players[i],0)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,10)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,100)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,12)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,60)
 					call hhero.setPlayerAllowQty(players[i],2)
-					set g_summon_upgrade_judge = 225
 					call hplayer.setGoldRatio(players[i],93.0+15*player_current_qty,0)
 					call hmsg.echoTo(players[i], " # 您是支持|cffffffcc抢先体验包("+giftTxt+")用户|r，拥有更多的资源、全部测试许可，以及所有后续版本内容!感谢您的支持 ^_^", 0)
 					// 获得所有的升级科技和体验包
@@ -342,11 +341,10 @@ library Main initializer init needs hJass
 						set j=j+1
 					endloop
 				else
-					call hplayer.setGold(players[i],1000)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,5)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,50)
+					call hplayer.setGold(players[i],1200)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,6)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,30)
 					call hhero.setPlayerAllowQty(players[i],1)
-					set g_summon_upgrade_judge = 150
 					call hplayer.setGoldRatio(players[i],85.0+15*player_current_qty,0)
 					call hmsg.echoTo(players[i], " # 您是|cffccffff免费游玩|r的玩家，所以部分游戏内容需要等待后续更新开放。如果您想抢先体验，可购买抢先体验包支持作者 ^_^", 0)
 					// 获得对应的升级科技

@@ -507,7 +507,7 @@ struct hSet
 		endif
 		set exp = R2I(I2R(g_wave) * 16 * g_game_speed)
 		set expk = R2I(I2R(g_wave) * 30 * g_game_speed)
-		set gold = R2I(I2R(g_wave) * 1.5 * g_game_speed)
+		set gold = R2I(I2R(g_wave) * 1.4 * g_game_speed) * player_current_qty
 		if(killer != null)then
 			call haward.forUnit(killer,expk,gold,0)
 			call haward.forGroup(killer,exp,0,0)
@@ -630,20 +630,20 @@ struct hSet
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
 		set exp = g_wave * 3000
-		set gold = g_wave * 70
+		set gold = g_wave * 70 * player_current_qty
 		if(killer!=null)then
 			call haward.forUnit(killer,exp,0,0)
 		endif
 		call hitem.toXY(momentItems[2],1,GetUnitX(u),GetUnitY(u),90.00)
 		set i = 1
 		loop
-			exitwhen i > 20
+			exitwhen i > (15 + player_current_qty * 5)
 				set hxy.x = GetUnitX(u)
         		set hxy.y = GetUnitY(u)
 				set hxy = hlogic.polarProjection(hxy,i*10,i*10)
-				call hitem.toXY(momentItems[1],gold,hxy.x,hxy.y,90.00)
+				call hitem.toXY(momentItems[1],gold,hxy.x,hxy.y,60.00)
 				if(GetRandomInt(1,50) == 33)then
-					call hitem.toXY(momentItems[3],g_wave*1000,hxy.x,hxy.y,90.00)
+					call hitem.toXY(momentItems[3],g_wave*1000,hxy.x,hxy.y,60.00)
 				endif
 			set i = i+1
 		endloop

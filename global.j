@@ -44,7 +44,6 @@ integer array g_summon
 integer monRand = 1
 integer bossRand = 1
 
-integer g_summon_upgrade_judge = 200
 boolean g_mon_isrunning = true
 string array g_mon_label
 real array g_mon_life
@@ -66,7 +65,7 @@ real array g_summon_defend
 real array g_summon_attackPhysical
 real array g_summon_attackMagic
 
-integer g_gp_max = 60
+integer g_gp_max = 50
 group g_gp_mon = CreateGroup()
 group g_gp_attack = CreateGroup()
 group g_gp_summon = CreateGroup()
@@ -1787,20 +1786,29 @@ struct hGlobals
         set g_mon[120] = 'n05I'
 
         // uid, gold, life, mana, manaback, defend, attackPhysical, attackMagic,attackSpeedBaseSpace
-        // 农场
-        call thistype.registerSummon('o009',"N",1500,1000,0,0,20,0,0,0.00) // 农场
-        call thistype.registerSummon('o00A',"N",2800,3000,0,0,35,0,0,0.00) // 大农场
-        //
-        call thistype.registerSummon('o00G',"N",1000,1000,0,0,5,0,0,0.00) // 塔基
+        
+        // 帐篷系列
+        call thistype.registerSummon('o009',"N",1500,1000,0,0,20,0,0,0.00) // 帐篷
+        call thistype.registerSummon('o00A',"N",3000,3000,0,0,35,0,0,0.00) // 农场
+        call thistype.registerSummon('o00M',"N",3000,2000,0,0,25,80,0,0.00) // 地穴
+        // 塔系列
+        call thistype.registerSummon('o00G',"N",500,1000,0,0,5,0,0,0.00) // 塔基
+        call thistype.registerSummon('o00H',"C",1000,1500,0,0,8,75,0,2.00) // 箭塔
 
         call thistype.registerSummon('o00B',"E",300,100,0,0,0,35,0,1.80) // 农民
+        call thistype.registerSummon('o008',"D",600,250,0,0,1,70,0,1.80) // 民兵
+        call thistype.registerSummon('o008',"D",600,240,0,0,0,30,40,1.90) // 血精灵
+        call thistype.registerSummon('o00C',"C",1200,700,0,0,6,140,0,1.80) // 步兵
+        call thistype.registerSummon('o00L',"C",1200,500,300,5,2,130,0,2.00) // 牧师
+        call thistype.registerSummon('o00K',"C",1200,600,0,0,3,180,0,1.60) // 铁抢手
+        call thistype.registerSummon('o00D',"B",2400,1200,0,0,7,300,0,1.80) // 剑士
+        call thistype.registerSummon('o00N',"B",2400,900,0,0,5,350,0,1.80) // 骑士
+
         call thistype.registerSummon('o00I',"E",325,180,0,0,0,50,0,2.10) // 苦力
+
         call thistype.registerSummon('o00J',"E",350,140,0,0,0,10,15,1.95) // 小精灵
 
-        call thistype.registerSummon('o008',"D",480,250,0,0,1,70,0,1.80) // 民兵
-        call thistype.registerSummon('o00C',"C",850,700,0,0,6,140,0,1.80) // 步兵
-        call thistype.registerSummon('o00D',"B",1600,1200,0,0,7,300,0,1.80) // 剑士
-        call thistype.registerSummon('o00E',"A",3000,2500,0,0,11,595,0,1.80) // 斗战士
+
 
         // 瞬时物品
         set momentItems_count = 6
@@ -1845,22 +1853,22 @@ struct hGlobals
 		set spaceDeg4X[4] = 1580
 		set spaceDeg4Y[4] = 1580
 
-        set rectSpaceDeg1_1 = hrect.createInLoc(spaceDegX[1],spaceDegY[1],100,100)
-        set rectSpaceDeg1_2 = hrect.createInLoc(spaceDegX[2],spaceDegY[2],100,100)
-        set rectSpaceDeg1_3 = hrect.createInLoc(spaceDegX[3],spaceDegY[3],100,100)
-        set rectSpaceDeg1_4 = hrect.createInLoc(spaceDegX[4],spaceDegY[4],100,100)
-        set rectSpaceDeg2_1 = hrect.createInLoc(spaceDeg2X[1],spaceDeg2Y[1],100,100)
-        set rectSpaceDeg2_2 = hrect.createInLoc(spaceDeg2X[2],spaceDeg2Y[2],100,100)
-        set rectSpaceDeg2_3 = hrect.createInLoc(spaceDeg2X[3],spaceDeg2Y[3],100,100)
-        set rectSpaceDeg2_4 = hrect.createInLoc(spaceDeg2X[4],spaceDeg2Y[4],100,100)
-        set rectSpaceDeg3_1 = hrect.createInLoc(spaceDeg3X[1],spaceDeg3Y[1],100,100)
-        set rectSpaceDeg3_2 = hrect.createInLoc(spaceDeg3X[2],spaceDeg3Y[2],100,100)
-        set rectSpaceDeg3_3 = hrect.createInLoc(spaceDeg3X[3],spaceDeg3Y[3],100,100)
-        set rectSpaceDeg3_4 = hrect.createInLoc(spaceDeg3X[4],spaceDeg3Y[4],100,100)
-        set rectSpaceDeg4_1 = hrect.createInLoc(spaceDeg4X[1],spaceDeg4Y[1],100,100)
-        set rectSpaceDeg4_2 = hrect.createInLoc(spaceDeg4X[2],spaceDeg4Y[2],100,100)
-        set rectSpaceDeg4_3 = hrect.createInLoc(spaceDeg4X[3],spaceDeg4Y[3],100,100)
-        set rectSpaceDeg4_4 = hrect.createInLoc(spaceDeg4X[4],spaceDeg4Y[4],100,100)
+        set rectSpaceDeg1_1 = hrect.createInLoc(spaceDegX[1], spaceDegY[1], 128,128)
+        set rectSpaceDeg1_2 = hrect.createInLoc(spaceDegX[2], spaceDegY[2], 128,128)
+        set rectSpaceDeg1_3 = hrect.createInLoc(spaceDegX[3], spaceDegY[3], 128,128)
+        set rectSpaceDeg1_4 = hrect.createInLoc(spaceDegX[4], spaceDegY[4], 128,128)
+        set rectSpaceDeg2_1 = hrect.createInLoc(spaceDeg2X[1],spaceDeg2Y[1],128,128)
+        set rectSpaceDeg2_2 = hrect.createInLoc(spaceDeg2X[2],spaceDeg2Y[2],128,128)
+        set rectSpaceDeg2_3 = hrect.createInLoc(spaceDeg2X[3],spaceDeg2Y[3],128,128)
+        set rectSpaceDeg2_4 = hrect.createInLoc(spaceDeg2X[4],spaceDeg2Y[4],128,128)
+        set rectSpaceDeg3_1 = hrect.createInLoc(spaceDeg3X[1],spaceDeg3Y[1],128,128)
+        set rectSpaceDeg3_2 = hrect.createInLoc(spaceDeg3X[2],spaceDeg3Y[2],128,128)
+        set rectSpaceDeg3_3 = hrect.createInLoc(spaceDeg3X[3],spaceDeg3Y[3],128,128)
+        set rectSpaceDeg3_4 = hrect.createInLoc(spaceDeg3X[4],spaceDeg3Y[4],128,128)
+        set rectSpaceDeg4_1 = hrect.createInLoc(spaceDeg4X[1],spaceDeg4Y[1],128,128)
+        set rectSpaceDeg4_2 = hrect.createInLoc(spaceDeg4X[2],spaceDeg4Y[2],128,128)
+        set rectSpaceDeg4_3 = hrect.createInLoc(spaceDeg4X[3],spaceDeg4Y[3],128,128)
+        set rectSpaceDeg4_4 = hrect.createInLoc(spaceDeg4X[4],spaceDeg4Y[4],128,128)
 
         set tg = CreateTrigger()
 		call TriggerRegisterEnterRectSimple( tg, rectSpaceDeg1_1 )
