@@ -64,6 +64,7 @@ real array g_summon_mana
 real array g_summon_manaback
 real array g_summon_defend
 real array g_summon_attackPhysical
+real array g_summon_attackMagic
 
 integer g_gp_max = 60
 group g_gp_mon = CreateGroup()
@@ -229,7 +230,7 @@ struct hGlobals
         call hunit.setAttackSpeedBaseSpace(g_hero[g_hero_count],attackBaseSpace)
     endmethod
 
-    public static method registerSummon takes integer uid,string glv,integer gold,real life,real mana,real manaback,real defend,real attackPhysical,real attackSpeedBaseSpace returns nothing
+    public static method registerSummon takes integer uid,string glv,integer gold,real life,real mana,real manaback,real defend,real attackPhysical,real attackMagic,real attackSpeedBaseSpace returns nothing
         set g_summon_count = g_summon_count + 1
         set g_summon[g_summon_count] = uid
         set g_summon_glv[g_summon_count] = glv
@@ -239,6 +240,7 @@ struct hGlobals
         set g_summon_manaback[g_summon_count] = manaback
         set g_summon_defend[g_summon_count] = defend
         set g_summon_attackPhysical[g_summon_count] = attackPhysical
+        set g_summon_attackMagic[g_summon_count] = attackMagic
         call hunit.setAttackSpeedBaseSpace(g_summon[g_summon_count],attackSpeedBaseSpace)
     endmethod
     
@@ -310,7 +312,7 @@ struct hGlobals
                     set targetUnit = hunit.createUnitXY(p,targetUID, x, y)
                 endif
                 call hmsg.echoTo(p,GetUnitName(triggerUnit)+" 连锁升级成功为 |cffffff80"+GetUnitName(targetUnit)+"|r",0)
-                call thistype.initSummon(targetUnit,1.1)
+                call thistype.initSummon(targetUnit)
             endif
 		elseif(skillid == 'A08V')then // 丧病
 			call hunit.setUserData(triggerUnit,777,3.5)
@@ -482,10 +484,9 @@ struct hGlobals
         endif
     endmethod
 
-    public static method initSummon takes unit u,real percent returns nothing
+    public static method initSummon takes unit u returns nothing
         local integer triggerUID = GetUnitTypeId(u)
 		local integer i = 0
-        call SetUnitUserData(u,0)
 		set i = 1
 		loop
 			exitwhen i > g_summon_count
@@ -494,19 +495,21 @@ struct hGlobals
                         call hattr.resetSkill(u)
                         call UnitRemoveType(u,UNIT_TYPE_MECHANICAL)
                         call hplayer.adjustGold(GetOwningPlayer(u))
-                        call hattr.setLife(u,g_summon_life[i]*percent,0)
-                        call hattr.setMana(u,g_summon_mana[i]*percent,0)
-                        call hattr.setManaBack(u,g_summon_manaback[i]*percent,0)
-                        call hattr.setDefend(u,g_summon_defend[i]*percent,0)
-                        call hattr.setAttackPhysical(u,g_summon_attackPhysical[i]*percent,0)
+                        call hattr.setLife(u,g_summon_life[i],0)
+                        call hattr.setMana(u,g_summon_mana[i],0)
+                        call hattr.setManaBack(u,g_summon_manaback[i],0)
+                        call hattr.setDefend(u,g_summon_defend[i],0)
+                        call hattr.setAttackPhysical(u,g_summon_attackPhysical[i],0)
+                        call hattr.setAttackMagic(u,g_summon_attackMagic[i],0)
                     else
                         call GroupAddUnit(g_gp_summon, u)
                         call hplayer.adjustGold(GetOwningPlayer(u))
-                        call hattr.setLife(u,g_summon_life[i]*percent,0)
-                        call hattr.setMana(u,g_summon_mana[i]*percent,0)
-                        call hattr.setManaBack(u,g_summon_manaback[i]*percent,0)
-                        call hattr.setDefend(u,g_summon_defend[i]*percent,0)
-                        call hattr.setAttackPhysical(u,g_summon_attackPhysical[i]*percent,0)
+                        call hattr.setLife(u,g_summon_life[i],0)
+                        call hattr.setMana(u,g_summon_mana[i],0)
+                        call hattr.setManaBack(u,g_summon_manaback[i],0)
+                        call hattr.setDefend(u,g_summon_defend[i],0)
+                        call hattr.setAttackPhysical(u,g_summon_attackPhysical[i],0)
+                        call hattr.setAttackMagic(u,g_summon_attackMagic[i],0)
                         call UnitAddAbility(u,ITEM_ABILITY)
                         call hitem.initUnit(u)
                         call UnitAddAbility(u,'A03Q')
@@ -546,9 +549,6 @@ struct hGlobals
 		endloop
         call thistype.initSummonSP(u)
     endmethod
-    public static method upgradeSummon takes unit u returns nothing
-        call initSummon(u,1.00)
-    endmethod
 
     private static method deadSummonCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
@@ -560,10 +560,9 @@ struct hGlobals
         local player p = htime.getPlayer(t,6)
         local unit tempu = htime.getUnit(t,7)
         local unit u = null
-        local real percent = 1.00 + I2R(GetUnitUserData(u)) * 0.15
         call htime.delTimer(t)
         set u = hunit.createUnitXY(p,uid,x,y)
-        call initSummon(u,percent)
+        call initSummon(u)
         call heffect.toUnit("Abilities\\Spells\\Other\\Awaken\\Awaken.mdl",u,"origin",0.80)
         call hitem.copy(tempu,u)
         call hunit.del(tempu,0)
@@ -585,12 +584,8 @@ struct hGlobals
         local timer t = null
         local unit tempu = null
         local unit deathShadow = null
-        // 解散
+        // 死亡强化
         call SetUnitUserData(u,1+GetUnitUserData(u))
-        if(GetUnitUserData(u) > 3)then
-            call hmsg.echo(name+" 被 "+GetUnitName(killer)+" 狠狠地永久击倒了！灵魂消散~")
-            return
-        endif
         // 假死亡
 		if(hgroup.isIn(u,sk_group_fusuzhiguang) == true)then
 			set rebornTime = 0
@@ -1791,18 +1786,21 @@ struct hGlobals
         set g_mon[119] = 'n05M'
         set g_mon[120] = 'n05I'
 
-        // uid, gold, life, mana, manaback, defend, attackPhysical, attackSpeedBaseSpace
+        // uid, gold, life, mana, manaback, defend, attackPhysical, attackMagic,attackSpeedBaseSpace
         // 农场
-        call thistype.registerSummon('o009',"N",1500,1000,0,0,20,0,0.00) // 农场
-        call thistype.registerSummon('o00A',"N",2800,3000,0,0,35,0,0.00) // 大农场
+        call thistype.registerSummon('o009',"N",1500,1000,0,0,20,0,0,0.00) // 农场
+        call thistype.registerSummon('o00A',"N",2800,3000,0,0,35,0,0,0.00) // 大农场
         //
-        call thistype.registerSummon('o00G',"N",200,200,0,0,2,0,0.00) // 塔基
-        // 农民
-        call thistype.registerSummon('o00B',"E",300,100,100,0,0,35,2.00) // 农民
-        call thistype.registerSummon('o008',"D",480,250,100,0,1,70,2.00) // 民兵
-        call thistype.registerSummon('o00C',"C",850,700,100,0,6,140,2.00) // 步兵
-        call thistype.registerSummon('o00D',"B",1600,1200,100,0,7,300,2.00) // 剑士
-        call thistype.registerSummon('o00E',"A",3000,2500,100,0,11,595,2.00) // 斗战士
+        call thistype.registerSummon('o00G',"N",1000,1000,0,0,5,0,0,0.00) // 塔基
+
+        call thistype.registerSummon('o00B',"E",300,100,0,0,0,35,0,1.80) // 农民
+        call thistype.registerSummon('o00I',"E",325,180,0,0,0,50,0,2.10) // 苦力
+        call thistype.registerSummon('o00J',"E",350,140,0,0,0,10,15,1.95) // 小精灵
+
+        call thistype.registerSummon('o008',"D",480,250,0,0,1,70,0,1.80) // 民兵
+        call thistype.registerSummon('o00C',"C",850,700,0,0,6,140,0,1.80) // 步兵
+        call thistype.registerSummon('o00D',"B",1600,1200,0,0,7,300,0,1.80) // 剑士
+        call thistype.registerSummon('o00E',"A",3000,2500,0,0,11,595,0,1.80) // 斗战士
 
         // 瞬时物品
         set momentItems_count = 6

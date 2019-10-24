@@ -497,6 +497,7 @@ struct hSet
         local real x = GetUnitX(u)
         local real y = GetUnitY(u)
         local integer uid = GetUnitTypeId(u)
+		local real percent = 1.00
 		call hGlobals.enemyDeadDrop(u)
 		if(g_gp_mon != null)then
 			call GroupRemoveUnit(g_gp_mon,u)
@@ -522,33 +523,44 @@ struct hSet
 		endif
 		// glv
 		if(killer != null)then
+		 	set percent = percent + I2R(GetUnitUserData(killer)) * 0.06
 			if(GetUnitAbilityLevel(killer,'A03U') > 0)then //E
-				call hattr.addLife(killer,2,0)
-				call hattr.addAttackSpeed(killer,0.1,0)
-				call hattr.addAttackPhysical(killer,1,0)
+				call hattr.addLife(killer,1*percent,0)
+				call hattr.addAttackSpeed(killer,0.1*percent,0)
+				call hattr.addAttackPhysical(killer,1*percent,0)
 			elseif(GetUnitAbilityLevel(killer,'A064') > 0)then //D
-				call hattr.addLife(killer,3,0)
-				call hattr.addAttackSpeed(killer,0.13,0)
-				call hattr.addAttackPhysical(killer,1.3,0)
+				call hattr.addLife(killer,2*percent,0)
+				call hattr.addAttackSpeed(killer,0.13*percent,0)
+				call hattr.addAttackPhysical(killer,1.2*percent,0)
 			elseif(GetUnitAbilityLevel(killer,'A066') > 0)then //C
-				call hattr.addLife(killer,4,0)
-				call hattr.addAttackSpeed(killer,0.16,0)
-				call hattr.addAttackPhysical(killer,1.6,0)
+				call hattr.addLife(killer,4*percent,0)
+				call hattr.addAttackSpeed(killer,0.16*percent,0)
+				call hattr.addAttackPhysical(killer,1.6*percent,0)
 			elseif(GetUnitAbilityLevel(killer,'A067') > 0)then //B
-				call hattr.addLife(killer,6,0)
-				call hattr.addAttackSpeed(killer,0.2,0)
-				call hattr.addAttackPhysical(killer,1,0)
-				call hattr.addAttackMagic(killer,1,0)
+				call hattr.addLife(killer,8*percent,0)
+				call hattr.addAttackSpeed(killer,0.20*percent,0)
+				call hattr.addAttackPhysical(killer,1*percent,0)
+				call hattr.addAttackMagic(killer,1*percent,0)
 			elseif(GetUnitAbilityLevel(killer,'A069') > 0)then //A
-				call hattr.addLife(killer,8,0)
-				call hattr.addAttackSpeed(killer,0.25,0)
-				call hattr.addAttackPhysical(killer,1.5,0)
-				call hattr.addAttackMagic(killer,1.5,0)
+				call hattr.addLife(killer,10*percent,0)
+				call hattr.addAttackSpeed(killer,0.24*percent,0)
+				call hattr.addAttackPhysical(killer,1.3*percent,0)
+				call hattr.addAttackMagic(killer,1.3*percent,0)
 			elseif(GetUnitAbilityLevel(killer,'A068') > 0)then //S
-				call hattr.addLife(killer,11,0)
-				call hattr.addAttackSpeed(killer,0.3,0)
-				call hattr.addAttackPhysical(killer,2,0)
-				call hattr.addAttackMagic(killer,2,0)
+				call hattr.addLife(killer,13*percent,0)
+				call hattr.addAttackSpeed(killer,0.28*percent,0)
+				call hattr.addAttackPhysical(killer,1.6*percent,0)
+				call hattr.addAttackMagic(killer,1.6*percent,0)
+			elseif(GetUnitAbilityLevel(killer,'A06A') > 0)then //SS
+				call hattr.addLife(killer,16*percent,0)
+				call hattr.addAttackSpeed(killer,0.35*percent,0)
+				call hattr.addAttackPhysical(killer,2.0*percent,0)
+				call hattr.addAttackMagic(killer,2.0*percent,0)
+			elseif(GetUnitAbilityLevel(killer,'A06B') > 0)then //SSS
+				call hattr.addLife(killer,20*percent,0)
+				call hattr.addAttackSpeed(killer,0.40*percent,0)
+				call hattr.addAttackPhysical(killer,2.5*percent,0)
+				call hattr.addAttackMagic(killer,2.5*percent,0)
 			endif
 		endif
 		set u = null
@@ -872,16 +884,12 @@ struct hSet
 		call hGlobals.deadSummon(GetTriggerUnit())
 	endmethod
 	private static method onConstructFinish takes nothing returns nothing
-		call hGlobals.initSummon(GetTriggerUnit(),1.00)
-	endmethod
-	private static method onConstructUpgrade takes nothing returns nothing
-		call hGlobals.upgradeSummon(GetTriggerUnit())
+		call hGlobals.initSummon(GetTriggerUnit())
 	endmethod
 
     public static method setInit takes nothing returns nothing
         local unit u = null
         local integer qty = 0
-		local trigger tg = null
         set heroDeadTg = CreateTrigger()
         set sommonDeadTg = CreateTrigger()
         set enemyDeadTg = CreateTrigger()
@@ -899,12 +907,7 @@ struct hSet
 
 		// build
 		call hevent.onConstructFinish(function thistype.onConstructFinish)
-		// 升级建筑
-		set tg = CreateTrigger()
-		call TriggerRegisterAnyUnitEventBJ( tg, EVENT_PLAYER_UNIT_UPGRADE_FINISH )
-		call TriggerAddAction( tg, function thistype.onConstructUpgrade )
 		set u = null
-		set tg = null
     endmethod
 
 endstruct
