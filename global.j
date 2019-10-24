@@ -1793,7 +1793,7 @@ struct hGlobals
         call thistype.registerSummon('o00M',"N",3000,2000,0,0,25,80,0,0.00) // 地穴
         // 塔系列
         call thistype.registerSummon('o00G',"N",500,1000,0,0,5,0,0,0.00) // 塔基
-        call thistype.registerSummon('o00H',"C",1000,1500,0,0,8,75,0,2.00) // 箭塔
+        call thistype.registerSummon('o00H',"C",1000,1500,0,0,8,100,0,2.00) // 箭塔
 
         call thistype.registerSummon('o00B',"E",300,100,0,0,0,35,0,1.80) // 农民
         call thistype.registerSummon('o008',"D",600,250,0,0,1,70,0,1.80) // 民兵
