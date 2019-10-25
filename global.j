@@ -1795,18 +1795,17 @@ struct hGlobals
         call thistype.registerSummon('o00G',"N",500,1000,0,0,5,0,0,0.00) // 塔基
         call thistype.registerSummon('o00H',"C",1000,1500,0,0,8,100,0,2.00) // 箭塔
 
-        call thistype.registerSummon('o00B',"E",300,100,0,0,0,35,0,1.80) // 农民
-        call thistype.registerSummon('o008',"D",600,250,0,0,1,70,0,1.80) // 民兵
-        call thistype.registerSummon('o008',"D",600,240,0,0,0,30,40,1.90) // 血精灵
-        call thistype.registerSummon('o00C',"C",1200,700,0,0,6,140,0,1.80) // 步兵
-        call thistype.registerSummon('o00L',"C",1200,500,300,5,2,130,0,2.00) // 牧师
-        call thistype.registerSummon('o00K',"C",1200,600,0,0,3,180,0,1.60) // 铁抢手
-        call thistype.registerSummon('o00D',"B",2400,1200,0,0,7,300,0,1.80) // 剑士
-        call thistype.registerSummon('o00N',"B",2400,900,0,0,5,350,0,1.80) // 骑士
+        call thistype.registerSummon('o00B',"D",300,100,0,0,0,35,0,1.80) // 农民
+        call thistype.registerSummon('o00I',"D",325,180,0,0,0,50,0,2.10) // 苦力
+        call thistype.registerSummon('o00J',"D",350,140,0,0,0,10,15,1.95) // 小精灵
+        call thistype.registerSummon('o008',"C",600,250,0,0,1,70,0,1.80) // 民兵
+        call thistype.registerSummon('o008',"C",600,240,0,0,0,30,40,1.90) // 血精灵
+        call thistype.registerSummon('o00C',"B",1200,700,0,0,6,140,0,1.80) // 步兵
+        call thistype.registerSummon('o00L',"B",1200,500,300,5,2,130,0,2.00) // 牧师
+        call thistype.registerSummon('o00K',"B",1200,600,0,0,3,180,0,1.60) // 铁抢手
+        call thistype.registerSummon('o00D',"A",2400,1200,0,0,7,300,0,1.80) // 剑士
+        call thistype.registerSummon('o00N',"A",2400,900,0,0,5,350,0,1.80) // 骑士
 
-        call thistype.registerSummon('o00I',"E",325,180,0,0,0,50,0,2.10) // 苦力
-
-        call thistype.registerSummon('o00J',"E",350,140,0,0,0,10,15,1.95) // 小精灵
 
 
 
