@@ -225,8 +225,8 @@ library Main initializer init needs hJass
 		// 任务F9提醒
 		set txt = ""
 		set txt = txt + "进入时空境域，防御敌人"
-		set txt = txt + "|n英雄按 B 即可建造兵塔，兵塔会吸收作战经验成长也可以转职为高级兵塔"
-		set txt = txt + "|n兵塔在转职或联合时会清空成长值！"
+		set txt = txt + "|n英雄按 B 即可建造兵塔，兵塔会吸收作战经验成长也可以转职为强力兵塔"
+		set txt = txt + "|n兵塔在死亡时会清空临时成长值！升级时会清空永久成长值！"
 		set txt = txt + "|n加油吧～"
 		// call hunit.exploded(u_timering,15.00) // 测试失败用
 		

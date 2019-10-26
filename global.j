@@ -536,6 +536,15 @@ struct hGlobals
                         elseif(g_summon_glv[i] == "S")then
                             call UnitAddAbility(u,'A068')
                             call UnitMakeAbilityPermanent( u, true, 'A068' )
+                        elseif(g_summon_glv[i] == "SS")then
+                            call UnitAddAbility(u,'A06A')
+                            call UnitMakeAbilityPermanent( u, true, 'A06A' )
+                        elseif(g_summon_glv[i] == "SSS")then
+                            call UnitAddAbility(u,'A06B')
+                            call UnitMakeAbilityPermanent( u, true, 'A06B' )
+                        elseif(g_summon_glv[i] == "N")then
+                            call UnitAddAbility(u,'A06C')
+                            call UnitMakeAbilityPermanent( u, true, 'A06C' )
                         endif
                         call TriggerRegisterUnitEvent( sommonDeadTg, u, EVENT_UNIT_DEATH )
                         call hevent.onSkillHappen(u,function thistype.onSummonSkillHappen)
@@ -572,7 +581,7 @@ struct hGlobals
     endmethod
     public static method deadSummon takes unit u returns nothing
 		local unit killer = hevent.getLastDamageUnit(u)
-		local real rebornTime = REBORN_SUMMON
+		local real rebornTime = 0
         local integer uid = GetUnitTypeId(u)
         local integer lv = GetUnitLevel(u)
         local real x = GetUnitX(u)
@@ -585,6 +594,7 @@ struct hGlobals
         local unit deathShadow = null
         // 死亡强化
         call SetUnitUserData(u,1+GetUnitUserData(u))
+        set rebornTime = 2 * GetUnitUserData(u)
         // 假死亡
 		if(hgroup.isIn(u,sk_group_fusuzhiguang) == true)then
 			set rebornTime = 0
