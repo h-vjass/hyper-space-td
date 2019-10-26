@@ -6,6 +6,8 @@ location Loc_Ring = Location(2048,2048)
 location Loc_JiuGuan = Location(1960,2128)
 location Loc_JiuGuanBorn = Location(2061,1851)
 
+string musicBattle = null
+
 integer array H_MAP_LV
 integer array H_MAP_LV_GIFT
 integer g_gift_count = 0
@@ -15,6 +17,7 @@ real REBORN_SUMMON = 90
 integer g_diff = 1
 string array g_diff_label
 timer g_timer_wave = null
+integer g_temp_mon_limit = 360
 integer g_max_wave = 100
 integer g_wave = 0
 integer g_first_wave = 0
@@ -56,6 +59,7 @@ real array g_boss_defend
 real array g_boss_move
 real array g_boss_attackPhysical
 integer last_boss_uid = 0
+boolean array g_summon_end
 string array g_summon_glv
 integer array g_summon_gold
 real array g_summon_life
@@ -182,10 +186,11 @@ struct hGlobals
     endmethod
 
     private static method registerBuilding takes nothing returns nothing
-        set g_building_count = 3
+        set g_building_count = 4
         set g_building[1] = 'n00Z'
         set g_building[2] = 'n04S'
         set g_building[3] = 'n010'
+        set g_building[4] = 'n040'
     endmethod
 
     private static method registerGift takes nothing returns nothing
@@ -229,10 +234,11 @@ struct hGlobals
         call hunit.setAttackSpeedBaseSpace(g_hero[g_hero_count],attackBaseSpace)
     endmethod
 
-    public static method registerSummon takes integer uid,string glv,integer gold,real life,real mana,real manaback,real defend,real attackPhysical,real attackMagic,real attackSpeedBaseSpace returns nothing
+    public static method registerSummon takes integer uid,boolean isEnd,string glv,integer gold,real life,real mana,real manaback,real defend,real attackPhysical,real attackMagic,real attackSpeedBaseSpace returns nothing
         set g_summon_count = g_summon_count + 1
         set g_summon[g_summon_count] = uid
         set g_summon_glv[g_summon_count] = glv
+        set g_summon_end[g_summon_count] = isEnd
         set g_summon_gold[g_summon_count] = gold
         set g_summon_life[g_summon_count] = life
         set g_summon_mana[g_summon_count] = mana
@@ -512,11 +518,14 @@ struct hGlobals
                         call UnitAddAbility(u,ITEM_ABILITY)
                         call hitem.initUnit(u)
                         call UnitAddAbility(u,'A03Q')
-                        call UnitAddAbility(u,'A04J') // link
                         call UnitAddAbility(u,'A045') // reborn
                         call UnitMakeAbilityPermanent( u, true, 'A03Q' )
-                        call UnitMakeAbilityPermanent( u, true, 'A04J' )
                         call UnitMakeAbilityPermanent( u, true, 'A045' )
+                        // 如果不是终结单位，则赋予升级的权利
+                        if(g_summon_end[i] == false)then
+                            call UnitAddAbility(u,'A04J') // link
+                            call UnitMakeAbilityPermanent( u, true, 'A04J' )
+                        endif
                         // glv
                         if(g_summon_glv[i] == "E")then
                             call UnitAddAbility(u,'A03U')
@@ -1798,23 +1807,23 @@ struct hGlobals
         // uid, gold, life, mana, manaback, defend, attackPhysical, attackMagic,attackSpeedBaseSpace
         
         // 帐篷系列
-        call thistype.registerSummon('o009',"N",1500,1000,0,0,20,0,0,0.00) // 帐篷
-        call thistype.registerSummon('o00A',"N",3000,3000,0,0,35,0,0,0.00) // 农场
-        call thistype.registerSummon('o00M',"N",3000,2000,0,0,25,80,0,0.00) // 地穴
+        call thistype.registerSummon('o009',false,"N",1500,1000,0,0,20,0,0,0.00) // 帐篷
+        call thistype.registerSummon('o00A',true,"N",3000,3000,0,0,35,0,0,0.00) // 农场
+        call thistype.registerSummon('o00M',true,"N",3000,2000,0,0,25,80,0,0.00) // 地穴
         // 塔系列
-        call thistype.registerSummon('o00G',"N",500,1000,0,0,5,0,0,0.00) // 塔基
-        call thistype.registerSummon('o00H',"C",1000,1500,0,0,8,100,0,2.00) // 箭塔
+        call thistype.registerSummon('o00G',false,"N",500,1000,0,0,5,0,0,0.00) // 塔基
+        call thistype.registerSummon('o00H',true,"C",1000,1500,0,0,8,100,0,2.00) // 箭塔
 
-        call thistype.registerSummon('o00B',"D",300,100,0,0,0,35,0,1.80) // 农民
-        call thistype.registerSummon('o00I',"D",325,180,0,0,0,50,0,2.10) // 苦力
-        call thistype.registerSummon('o00J',"D",350,140,0,0,0,10,15,1.95) // 小精灵
-        call thistype.registerSummon('o008',"C",600,250,0,0,1,70,0,1.80) // 民兵
-        call thistype.registerSummon('o008',"C",600,240,0,0,0,30,40,1.90) // 血精灵
-        call thistype.registerSummon('o00C',"B",1200,700,0,0,6,140,0,1.80) // 步兵
-        call thistype.registerSummon('o00L',"B",1200,500,300,5,2,130,0,2.00) // 牧师
-        call thistype.registerSummon('o00K',"B",1200,600,0,0,3,180,0,1.60) // 铁抢手
-        call thistype.registerSummon('o00D',"A",2400,1200,0,0,7,300,0,1.80) // 剑士
-        call thistype.registerSummon('o00N',"A",2400,900,0,0,5,350,0,1.80) // 骑士
+        call thistype.registerSummon('o00B',false,"D",300,100,0,0,0,35,0,1.80) // 农民
+        call thistype.registerSummon('o00I',false,"D",325,180,0,0,0,50,0,2.10) // 苦力
+        call thistype.registerSummon('o00J',false,"D",350,140,0,0,0,10,15,1.95) // 小精灵
+        call thistype.registerSummon('o008',false,"C",600,250,0,0,1,70,0,1.80) // 民兵
+        call thistype.registerSummon('o008',false,"C",600,240,0,0,0,30,40,1.90) // 血精灵
+        call thistype.registerSummon('o00C',false,"B",1200,700,0,0,6,140,0,1.80) // 步兵
+        call thistype.registerSummon('o00L',false,"B",1200,500,300,5,2,130,0,2.00) // 牧师
+        call thistype.registerSummon('o00K',false,"B",1200,600,0,0,3,180,0,1.60) // 铁抢手
+        call thistype.registerSummon('o00D',true,"A",2400,1200,0,0,7,300,0,1.80) // 剑士
+        call thistype.registerSummon('o00N',true,"A",2400,900,0,0,5,350,0,1.80) // 骑士
 
 
 

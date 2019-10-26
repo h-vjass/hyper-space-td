@@ -7,7 +7,7 @@
 
 //载入 房间音乐
 function hBgm takes string s returns nothing
-	local string uri = "main.mp3"	//这个路径你可以播放默认的音乐（在F5）也可以播放F12导入的音乐
+	local string uri = "war3mapImported\\main.mp3"	//这个路径你可以播放默认的音乐（在F5）也可以播放F12导入的音乐
 	call SetMapDescription(s)
 	call PlayMusic(uri)
 	set uri = null
@@ -327,8 +327,8 @@ library Main initializer init needs hJass
 				if(player_isvip[i] == true)then
 					call hplayer.setGold(players[i],2500)
 					call hplayer.setLumber(players[i],0)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,12)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,60)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,4)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,50)
 					call hhero.setPlayerAllowQty(players[i],2)
 					call hplayer.setGoldRatio(players[i],93.0+15*player_current_qty,0)
 					call hmsg.echoTo(players[i], " # 您是支持|cffffffcc抢先体验包("+giftTxt+")用户|r，拥有更多的资源、全部测试许可，以及所有后续版本内容!感谢您的支持 ^_^", 0)
@@ -342,8 +342,8 @@ library Main initializer init needs hJass
 					endloop
 				else
 					call hplayer.setGold(players[i],1200)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,6)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,30)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,4)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,20)
 					call hhero.setPlayerAllowQty(players[i],1)
 					call hplayer.setGoldRatio(players[i],85.0+15*player_current_qty,0)
 					call hmsg.echoTo(players[i], " # 您是|cffccffff免费游玩|r的玩家，所以部分游戏内容需要等待后续更新开放。如果您想抢先体验，可购买抢先体验包支持作者 ^_^", 0)
@@ -368,7 +368,7 @@ library Main initializer init needs hJass
 		set txt = txt + "|n1. 所有关卡及地图内容设定"
 		set txt = txt + "|n2. 地图特定内容的变动和隐藏彩蛋"
 		set txt = txt + "|n3. 后续所有地图更新内容"
-		set txt = txt + "|n4. 多英雄选择权，更多的人口"
+		set txt = txt + "|n4. 多英雄选择权，更多的人口上限"
 		set txt = txt + "|n5. 完整的资源，8%的黄金获取加成"
 		set txt = txt + "|n6. 所有需要地图等级才能获得的奖励"
 		set txt = txt + "|n再次感谢～您的支持～"
@@ -416,7 +416,6 @@ library Main initializer init needs hJass
 		call hSet.setInit()
 
 		//BGM走起
-		call hmedia.bgm(gg_snd_ready)
 		call dia.destroy()
 
 		//将英雄类型写进酒馆，并生成选英雄
@@ -440,6 +439,7 @@ library Main initializer init needs hJass
 		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04S', stopX+128*0,stopY))
 		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04T', stopX+128*1,stopY))
 		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04V', stopX+128*2,stopY))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n040', stopX+128*3,stopY))
 		// 可爱信使
 		set i = player_max_qty
 		loop

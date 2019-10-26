@@ -589,12 +589,12 @@ struct hSet
 			endif
 			return
 		endif
-		if(hgroup.count(g_gp_mon) >= 380)then
+		if(hgroup.count(g_gp_mon) >= g_temp_mon_limit)then
 			return
 		endif
 		call htime.setInteger(t,1,1+i)
-		set life = g_wave * (25 + g_diff * 15)
-		set move = 130 + g_wave * 2 + g_diff * 5
+		set life = g_wave * (24 + g_diff * 17)
+		set move = 125 + g_wave * 2 + g_diff * 5
 		set attack = g_wave * 3 + g_diff * 7
 		set j = 1
 		loop
@@ -649,7 +649,7 @@ struct hSet
 		endloop
 		call hunit.del(u,5)
 		if(g_wave < g_max_wave)then
-			call hmedia.bgm(gg_snd_gyq_battle)
+			call hmedia.bgm(musicBattle)
 		endif
 		set u = null
 		set killer = null
@@ -731,7 +731,6 @@ struct hSet
     private static method mild takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		call htime.delTimer(t)
-		call hmedia.bgm(gg_snd_gyq_battle)
 		call hmedia.soundPlay(gg_snd_audio_effect_4)
 		call SetUnitTimeScalePercent( u_timering, 100.00 )
 		set t = htime.setInterval(g_game_mon_loop,function thistype.createEnemy)
@@ -786,7 +785,6 @@ struct hSet
 				call htime.setDialog(g_timer_wave, "第"+I2S(g_wave)+"波※BOSS")
 				call hmsg.echo("时空炸裂！！小心！|cffff8080BOSS|r 要来了～")
 			else
-				call hmedia.bgm(gg_snd_ready)
 				call htime.setDialog(g_timer_wave, "第"+I2S(g_wave)+"波")
 				call hmsg.echo("时空震荡！！小心！敌人围剿啦～")
 			endif

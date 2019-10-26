@@ -74,8 +74,6 @@ integer myenv_u_typha2 = 'n00C'
 integer myenv_randomIndex = 0
 integer myenv_weatherIndex = 0
 
-integer myenv_randomFlag = 0
-
 endglobals
 
 type MyEnvUnit extends integer array[20] // 最大支持20种单位
@@ -147,20 +145,36 @@ struct MyEnv
 		endif
 		if(buildType == -1)then
 			return
-		elseif(buildType == 4 or myenv_randomFlag > 0)then
-			set buildType = 3
-		endif
-		if(myenv_randomFlag > 2)then
-			set myenv_randomFlag = 0
 		endif
 		//
 		if(buildType <= 3)then
 			call hunit.createUnitXY(players[12], uid, x,y)
 		elseif(buildType == 4)then
 			call SetDestructableInvulnerable( CreateDestructable(did, x , y, GetRandomDirectionDeg(), GetRandomReal(0.5,1.1), 0 ), false )
-			set myenv_randomFlag = myenv_randomFlag + 1
-			if(whichGround > 0 and  GetTerrainType(x, y) !='Ybtl' )then
-				call SetTerrainType( x , y, whichGround, -1, 1, 0 )
+			if(whichGround > 0)then
+				if(GetTerrainType(x, y) !='Ybtl')then
+					call SetTerrainType( x , y, whichGround, -1, 1, 0 )
+				else
+					if (myenv_randomIndex == 1) then // summer
+						call SetTerrainType( x , y, 'Avin', -1, 1, 0 )
+					elseif(myenv_randomIndex == 2)then // autumn
+						call SetTerrainType( x , y, 'Yrtl', -1, 1, 0 )
+					elseif(myenv_randomIndex == 3)then // winter
+						call SetTerrainType( x , y, 'Ywmb', -1, 1, 0 )
+					elseif(myenv_randomIndex == 4)then // WinterShow
+						call SetTerrainType( x , y, 'Xblm', -1, 1, 0 )
+					elseif(myenv_randomIndex == 5)then // dark
+						call SetTerrainType( x , y, 'Xblm', -1, 1, 0 )
+					elseif(myenv_randomIndex == 6)then // poor
+						call SetTerrainType( x , y, 'Yrtl', -1, 1, 0 )
+					elseif(myenv_randomIndex == 7)then // ruins
+						//
+					elseif(myenv_randomIndex == 8)then // fire
+						call SetTerrainType( x , y, 'Yblm', -1, 1, 0 )
+					elseif(myenv_randomIndex == 9)then // underground
+						call SetTerrainType( x , y, 'Yrtl', -1, 1, 0 )
+					endif
+				endif
 			endif
 		endif
 	endmethod
@@ -426,6 +440,26 @@ struct MyEnv
 		if(myenv_randomIndex == 0)then
 			set myenv_randomIndex = GetRandomInt(1,9)
 			set myenv_weatherIndex = GetRandomInt(1,3)
+			if (myenv_randomIndex == 1) then // summer
+				set musicBattle = gg_snd_env_summer
+			elseif(myenv_randomIndex == 2)then // autumn
+				set musicBattle = gg_snd_env_autumn
+			elseif(myenv_randomIndex == 3)then // winter
+				set musicBattle = gg_snd_env_winter
+			elseif(myenv_randomIndex == 4)then // WinterShow
+				set musicBattle = gg_snd_env_winter_show
+			elseif(myenv_randomIndex == 5)then // dark
+				set musicBattle = gg_snd_env_dark
+			elseif(myenv_randomIndex == 6)then // poor
+				set musicBattle = gg_snd_env_poor
+			elseif(myenv_randomIndex == 7)then // ruins
+				set musicBattle = gg_snd_env_ruins
+			elseif(myenv_randomIndex == 8)then // fire
+				set musicBattle = gg_snd_env_fire
+			elseif(myenv_randomIndex == 9)then // underground
+				set musicBattle = gg_snd_env_underground
+			endif
+			call hmedia.bgm(musicBattle)
 		endif
 		//
 		set i = 1
