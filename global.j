@@ -290,12 +290,13 @@ struct hGlobals
             set p = GetOwningPlayer(triggerUnit)
             set triggerUID = GetUnitTypeId(triggerUnit)
             if(triggerUID != GetUnitTypeId(targetUnit))then
-                call hmsg.echoTo(p,"不同类型的单位不可以进行连锁升级",0)
+                call hmsg.echoTo(p,"不同等级的单位不可以进行连锁升级",0)
             elseif(p != GetOwningPlayer(targetUnit))then
                 call hmsg.echoTo(p,"不是自己的单位暂时不能进行连锁升级",0)
             else
-                set x = GetUnitX(triggerUnit)
-                set y = GetUnitY(triggerUnit)
+                call hlightning.unit2unit(lightningCode_linghun_suolian, triggerUnit, targetUnit, 0.6)
+                set x = GetUnitX(targetUnit)
+                set y = GetUnitY(targetUnit)
                 call GroupRemoveUnit(g_gp_summon, triggerUnit)
                 call GroupRemoveUnit(g_gp_summon, targetUnit)
                 call RemoveUnit(targetUnit)
