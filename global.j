@@ -247,6 +247,7 @@ struct hGlobals
         set g_summon_attackPhysical[g_summon_count] = attackPhysical
         set g_summon_attackMagic[g_summon_count] = attackMagic
         call hunit.setAttackSpeedBaseSpace(g_summon[g_summon_count],attackSpeedBaseSpace)
+        call SaveStr(hash_unit,uid,0,glv)
     endmethod
     
     public static method onSummonSkillHappen takes nothing returns nothing
@@ -289,7 +290,7 @@ struct hGlobals
         elseif(skillid == 'A04J')then // 升级连锁
             set p = GetOwningPlayer(triggerUnit)
             set triggerUID = GetUnitTypeId(triggerUnit)
-            if(triggerUID != GetUnitTypeId(targetUnit))then
+            if(LoadStr(hash_unit,triggerUID,0) != LoadStr(hash_unit,GetUnitTypeId(targetUnit),0))then
                 call hmsg.echoTo(p,"不同等级的单位不可以进行连锁升级",0)
             elseif(p != GetOwningPlayer(targetUnit))then
                 call hmsg.echoTo(p,"不是自己的单位暂时不能进行连锁升级",0)
