@@ -149,6 +149,31 @@ struct MyEnv
 		//
 		if(buildType <= 3)then
 			call hunit.createUnitXY(players[12], uid, x,y)
+			if(whichGround > 0 and GetRandomInt(1,2) == 2)then
+				if(GetTerrainType(x, y) !='Ybtl')then
+					call SetTerrainType( x , y, whichGround, -1, 1, 0 )
+				else
+					if (myenv_randomIndex == 1) then // summer
+						call SetTerrainType( x , y, 'Avin', -1, 1, 0 )
+					elseif(myenv_randomIndex == 2)then // autumn
+						call SetTerrainType( x , y, 'Yrtl', -1, 1, 0 )
+					elseif(myenv_randomIndex == 3)then // winter
+						call SetTerrainType( x , y, 'Ywmb', -1, 1, 0 )
+					elseif(myenv_randomIndex == 4)then // WinterShow
+						call SetTerrainType( x , y, 'Xblm', -1, 1, 0 )
+					elseif(myenv_randomIndex == 5)then // dark
+						call SetTerrainType( x , y, 'Xblm', -1, 1, 0 )
+					elseif(myenv_randomIndex == 6)then // poor
+						call SetTerrainType( x , y, 'Yrtl', -1, 1, 0 )
+					elseif(myenv_randomIndex == 7)then // ruins
+						//
+					elseif(myenv_randomIndex == 8)then // fire
+						call SetTerrainType( x , y, 'Yblm', -1, 1, 0 )
+					elseif(myenv_randomIndex == 9)then // underground
+						call SetTerrainType( x , y, 'Yrtl', -1, 1, 0 )
+					endif
+				endif
+			endif
 		elseif(buildType == 4)then
 			call SetDestructableInvulnerable( CreateDestructable(did, x , y, GetRandomDirectionDeg(), GetRandomReal(0.5,1.1), 0 ), false )
 			if(whichGround > 0)then

@@ -260,7 +260,6 @@ struct hGlobals
         local real x = 0
         local real y = 0
 		local location loc = null
-		local location loc2 = null
 		local hAttrHuntBean bean = 0
 		local group g = null
 		local unit u = null
@@ -287,6 +286,12 @@ struct hGlobals
 			call hitem.drop(triggerUnit)
 			call GroupRemoveUnit(g_gp_summon, triggerUnit)
 			call hunit.del(triggerUnit,0)
+        elseif(skillid == 'A06G')then // 建筑移动
+            call RemoveUnit(GetSpellTargetUnit())
+            set loc = GetSpellTargetLoc()
+            call SetUnitPositionLoc( triggerUnit, loc )
+            call RemoveLocation(loc)
+            set loc = null
         elseif(skillid == 'A04J')then // 升级连锁
             set p = GetOwningPlayer(triggerUnit)
             set triggerUID = GetUnitTypeId(triggerUnit)
@@ -295,9 +300,9 @@ struct hGlobals
             elseif(p != GetOwningPlayer(targetUnit))then
                 call hmsg.echoTo(p,"不是自己的单位暂时不能进行连锁升级",0)
             else
-                call hlightning.unit2unit(lightningCode_linghun_suolian, triggerUnit, targetUnit, 0.6)
-                set x = GetUnitX(targetUnit)
-                set y = GetUnitY(targetUnit)
+                call hlightning.unit2unit(lightningCode_linghun_suolian, targetUnit, triggerUnit, 0.6)
+                set x = GetUnitX(triggerUnit)
+                set y = GetUnitY(triggerUnit)
                 call GroupRemoveUnit(g_gp_summon, triggerUnit)
                 call GroupRemoveUnit(g_gp_summon, targetUnit)
                 call RemoveUnit(targetUnit)
@@ -347,7 +352,6 @@ struct hGlobals
         set targetUnit = null
         set p = null
 		set loc = null
-		set loc2 = null
 		set g = null
 		set u = null
         set t = null
@@ -521,8 +525,10 @@ struct hGlobals
                         call hitem.initUnit(u)
                         call UnitAddAbility(u,'A03Q')
                         call UnitAddAbility(u,'A045') // reborn
+                        call UnitAddAbility(u,'A06G') // moveup
                         call UnitMakeAbilityPermanent( u, true, 'A03Q' )
                         call UnitMakeAbilityPermanent( u, true, 'A045' )
+                        call UnitMakeAbilityPermanent( u, true, 'A06G' )
                         // 如果不是终结单位，则赋予升级的权利
                         if(g_summon_end[i] == false)then
                             call UnitAddAbility(u,'A04J') // link
