@@ -109,7 +109,7 @@ library Main initializer init needs hJass
 		call RemoveLocation(loc)
 		call PolledWait( 2.00 )
 		//BGM走起
-		call hmedia.bgm(gg_snd_main)
+		call hmedia.bgm(gg_snd_defeat)
 		//镜头
 		call CameraSetupApplyForceDuration( gg_cam_cam_lost1, true, 0.00 )
 		call CameraSetupApplyForceDuration( gg_cam_cam_lost2, true, 5.00 )
