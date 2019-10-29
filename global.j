@@ -1876,9 +1876,9 @@ struct hGlobals
         call thistype.registerSummon('o01Y',true,"S",8000,2800,     0,0,6,      800,0,2.30) // 山岭巨人·战棍
         call thistype.registerSummon('o01D',true,"S",8000,3200,     0,0,8,      780,0,1.90) // 邪恶科多骑手
         call thistype.registerSummon('o00Q',true,"S",12500,2600,    0,0,7,      100,800,1.70) // 寒冰女巫
-        call thistype.registerSummon('o013',true,"S",14500,3800,    0,0,9,      500,500,1.60) // 火凤凰
+        call thistype.registerSummon('o013',true,"S",14500,3800,    0,0,9,      530,570,1.60) // 火凤凰
         call thistype.registerSummon('o01E',true,"S",15500,4500,    0,0,12,     1300,0,1.80) // 牛头人酋长
-        call thistype.registerSummon('o026',true,"S",17000,3500,    0,0,13,     1450,0,1.50) // 月之女祭司
+        call thistype.registerSummon('o026',true,"S",17000,3500,    0,0,13,     1550,0,1.50) // 月之女祭司
 
 
 
