@@ -523,44 +523,42 @@ struct hSet
 		endif
 		// glv
 		if(killer != null)then
-		 	set percent = percent + I2R(GetUnitUserData(killer)) * 0.06
+		 	set percent = percent + I2R(GetUnitUserData(killer)) * 0.04
 			if(GetUnitAbilityLevel(killer,'A03U') > 0)then //E
 				call hattr.addLife(killer,1*percent,0)
-				call hattr.addAttackSpeed(killer,0.1*percent,0)
-				call hattr.addAttackPhysical(killer,1*percent,0)
+				call hattr.addAttackPhysical(killer,0.5*percent,0)
 			elseif(GetUnitAbilityLevel(killer,'A064') > 0)then //D
 				call hattr.addLife(killer,2*percent,0)
-				call hattr.addAttackSpeed(killer,0.13*percent,0)
-				call hattr.addAttackPhysical(killer,1.2*percent,0)
+				call hattr.addAttackPhysical(killer,0.7*percent,0)
 			elseif(GetUnitAbilityLevel(killer,'A066') > 0)then //C
-				call hattr.addLife(killer,4*percent,0)
-				call hattr.addAttackSpeed(killer,0.16*percent,0)
-				call hattr.addAttackPhysical(killer,1.6*percent,0)
+				call hattr.addLife(killer,3*percent,0)
+				call hattr.addAttackSpeed(killer,0.07*percent,0)
+				call hattr.addAttackPhysical(killer,0.9*percent,0)
 			elseif(GetUnitAbilityLevel(killer,'A067') > 0)then //B
-				call hattr.addLife(killer,8*percent,0)
-				call hattr.addAttackSpeed(killer,0.20*percent,0)
-				call hattr.addAttackPhysical(killer,1*percent,0)
-				call hattr.addAttackMagic(killer,1*percent,0)
+				call hattr.addLife(killer,5*percent,0)
+				call hattr.addAttackSpeed(killer,0.10*percent,0)
+				call hattr.addAttackPhysical(killer,0.55*percent,0)
+				call hattr.addAttackMagic(killer,0.55*percent,0)
 			elseif(GetUnitAbilityLevel(killer,'A069') > 0)then //A
-				call hattr.addLife(killer,10*percent,0)
-				call hattr.addAttackSpeed(killer,0.24*percent,0)
-				call hattr.addAttackPhysical(killer,1.3*percent,0)
-				call hattr.addAttackMagic(killer,1.3*percent,0)
+				call hattr.addLife(killer,7*percent,0)
+				call hattr.addAttackSpeed(killer,0.13*percent,0)
+				call hattr.addAttackPhysical(killer,0.75*percent,0)
+				call hattr.addAttackMagic(killer,0.75*percent,0)
 			elseif(GetUnitAbilityLevel(killer,'A068') > 0)then //S
-				call hattr.addLife(killer,13*percent,0)
-				call hattr.addAttackSpeed(killer,0.28*percent,0)
-				call hattr.addAttackPhysical(killer,1.6*percent,0)
-				call hattr.addAttackMagic(killer,1.6*percent,0)
+				call hattr.addLife(killer,10*percent,0)
+				call hattr.addAttackSpeed(killer,0.16*percent,0)
+				call hattr.addAttackPhysical(killer,1.00*percent,0)
+				call hattr.addAttackMagic(killer,1.00*percent,0)
 			elseif(GetUnitAbilityLevel(killer,'A06A') > 0)then //SS
-				call hattr.addLife(killer,16*percent,0)
-				call hattr.addAttackSpeed(killer,0.35*percent,0)
-				call hattr.addAttackPhysical(killer,2.0*percent,0)
-				call hattr.addAttackMagic(killer,2.0*percent,0)
+				call hattr.addLife(killer,13*percent,0)
+				call hattr.addAttackSpeed(killer,0.20*percent,0)
+				call hattr.addAttackPhysical(killer,1.10*percent,0)
+				call hattr.addAttackMagic(killer,1.10*percent,0)
 			elseif(GetUnitAbilityLevel(killer,'A06B') > 0)then //SSS
-				call hattr.addLife(killer,20*percent,0)
-				call hattr.addAttackSpeed(killer,0.40*percent,0)
-				call hattr.addAttackPhysical(killer,2.5*percent,0)
-				call hattr.addAttackMagic(killer,2.5*percent,0)
+				call hattr.addLife(killer,16*percent,0)
+				call hattr.addAttackSpeed(killer,0.24*percent,0)
+				call hattr.addAttackPhysical(killer,1.25*percent,0)
+				call hattr.addAttackMagic(killer,1.25*percent,0)
 			endif
 		endif
 		set u = null
