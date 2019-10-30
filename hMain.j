@@ -217,14 +217,14 @@ library Main initializer init needs hJass
 		local integer i = 0
 		local integer dalaoWave = 0
 		call htime.delTimer(GetExpiredTimer())
-		call hmsg.echo("时空轮组已经召唤！"+"|cffffff80 加油！|r")
+		call hmsg.echo("时空之轮已经召唤！"+"|cffffff80 守卫它！|r")
 		call PingMinimapLocForForceEx( playerForce,Loc_Ring,5, bj_MINIMAPPINGSTYLE_FLASHY, 100, 0, 0 )
 		//
 		set u_timering = hunit.createUnit(player_ally, 'n00Z', Loc_Ring)
 		call hevent.onDead(u_timering,function timeRingBreak)
 		// 任务F9提醒
 		set txt = ""
-		set txt = txt + "进入时空境域，防御敌人"
+		set txt = txt + "抵御时空境域内顺流逆流的敌人"
 		set txt = txt + "|n英雄按 B 即可建造兵塔，兵塔会吸收作战经验成长也可以转职为强力兵塔"
 		set txt = txt + "|n兵塔在死亡时会清空临时成长值！升级时会清空永久成长值！"
 		set txt = txt + "|n加油吧～"
@@ -292,6 +292,8 @@ library Main initializer init needs hJass
 		local string txt = null
 		local real stopX = 1540.00
 		local real stopY = 1400.00
+		// bgm stop
+		call hmedia.bgmStop()
 		// 死亡轮
 		set u_dead_timering[1] = 'n04Y'
 		set u_dead_timering[2] = 'n058'

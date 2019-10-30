@@ -736,6 +736,9 @@ struct hSet
 		if (hlogic.imod(g_wave,g_boss_mod) == 0) then
 			set t = htime.setTimeout(g_game_mon_loop*0.6*(g_gp_max / g_game_speed),function thistype.createBoss)
 		endif
+		if(g_wave == 1)then
+			call hmedia.bgm(musicBattle)
+		endif
 		set t = null
 	endmethod
 
@@ -766,7 +769,7 @@ struct hSet
 		set monRand = GetRandomInt(1,g_mon_count)
 		set bossRand = GetRandomInt(1,g_boss_count)
 		if (holdon <= 0) then
-			call hmsg.echo("|cffffff00Lv."+I2S(g_wave)+" 来袭！来袭！|r")
+			call hmsg.echo("|cffffff00Lv."+I2S(g_wave)+" 来袭！|r")
 			call mildDirect()
 		else
 			set g_timer_wave = htime.setTimeout( holdon ,function thistype.mild)

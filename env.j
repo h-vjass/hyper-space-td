@@ -484,7 +484,6 @@ struct MyEnv
 			elseif(myenv_randomIndex == 9)then // underground
 				set musicBattle = gg_snd_env_underground
 			endif
-			call hmedia.bgm(musicBattle)
 		endif
 		//
 		set i = 1
