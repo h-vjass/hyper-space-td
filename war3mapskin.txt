@@ -6,7 +6,7 @@ InfoPanelTextFont=fonts.ttf
 MasterFont=fonts.ttf
 MessageFont=fonts.ttf
 SimpleHpBarConsoleSmall=boold2.blp
-IdlePeon=ReplaceableTextures\CommandButtons\BTNRallyPoint.blp
+IdlePeon=ReplaceableTextures\CommandButtons\BTNSnowOwl.blp
 
 [FrameDef]
 BONUS_ATTACK_SPEED= - 提升攻击速度

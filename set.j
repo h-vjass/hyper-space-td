@@ -299,7 +299,7 @@ struct hSet
 		if(hgroup.isIn(u,sk_group_fusuzhiguang) == true)then
 			set rebornTime = 0
 		else
-			call hmsg.echo(GetUnitName(u)+" 被 "+GetUnitName(killer)+" 狠狠地打死了！"+I2S(R2I(rebornTime))+" 秒后在原地复活～")
+			call hmsg.echo(GetUnitName(u)+" 被 "+GetUnitName(killer)+" 狠狠地击倒了！"+I2S(R2I(rebornTime))+" 秒后在原地复活～")
 			set tempu = hunit.createUnitXYFacing(p,'n05A',GetUnitX(u),GetUnitY(u),270)
 			call SetUnitVertexColor(tempu, 255, 255, 0, 200)
 			call hunit.shadow(GetUnitTypeId(u),GetUnitX(u),GetUnitY(u),270,100,0,75,120,rebornTime)
@@ -620,7 +620,7 @@ struct hSet
 		local integer i = 0
 		call hGlobals.bossDeadDrop(u)
 		call hmedia.soundPlay(gg_snd_audio_gandepiaoliang)
-		call hmsg.echo("|cffffff80"+GetUnitName(u)+"|r被狠狠地打死了～|r")
+		call hmsg.echo("|cffffff80"+GetUnitName(u)+"|r被狠狠地击倒了～|r")
 		if(g_gp_mon != null)then
 			call GroupRemoveUnit(g_gp_mon,u)
 		endif

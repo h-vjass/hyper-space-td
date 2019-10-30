@@ -249,6 +249,23 @@ struct hGlobals
         call hunit.setAttackSpeedBaseSpace(g_summon[g_summon_count],attackSpeedBaseSpace)
         call SaveStr(hash_unit,uid,0,glv)
     endmethod
+
+    public static method getSummonTargetUid takes integer triggerUID returns integer
+        local integer targetUID = 0
+        if(triggerUID == 'o009')then
+            set targetUID = 'o00A'
+        endif
+        if(triggerUID == 'o00B')then
+            set targetUID = 'o008'
+        elseif(triggerUID == 'o008')then
+            set targetUID = 'o00C'
+        elseif(triggerUID == 'o00C')then
+            set targetUID = 'o00D'
+        elseif(triggerUID == 'o00D')then
+            set targetUID = 'o00E'
+        endif
+        return targetUID
+    endmethod
     
     public static method onSummonSkillHappen takes nothing returns nothing
 		local unit triggerUnit = hevent.getTriggerUnit()
@@ -267,6 +284,7 @@ struct hGlobals
 		local integer gold = 0
 		local integer i = 0
 		local hFilter hf
+        local texttag ttg = null
         // 单位
 		if(skillid == 'A03Q')then // 解散
             set triggerUID = GetUnitTypeId(triggerUnit)
@@ -296,9 +314,13 @@ struct hGlobals
             set p = GetOwningPlayer(triggerUnit)
             set triggerUID = GetUnitTypeId(triggerUnit)
             if(LoadStr(hash_unit,triggerUID,0) != LoadStr(hash_unit,GetUnitTypeId(targetUnit),0))then
-                call hmsg.echoTo(p,"不同等级的单位不可以进行连锁升级",0)
+                set ttg = hmsg.ttg2Unit(triggerUnit,"不同等级的单位不可以进行连锁升级",7,"",0,1.70,60.00)
+                call hmsg.style(ttg,"scale",0,0.1)
+                set ttg = null
             elseif(p != GetOwningPlayer(targetUnit))then
-                call hmsg.echoTo(p,"不是自己的单位暂时不能进行连锁升级",0)
+                set ttg = hmsg.ttg2Unit(triggerUnit,"不是自己的单位暂时不能进行连锁升级",7,"",0,1.70,60.00)
+                call hmsg.style(ttg,"scale",0,0.1)
+                set ttg = null
             else
                 call hlightning.unit2unit(lightningCode_linghun_suolian, targetUnit, triggerUnit, 0.6)
                 set x = GetUnitX(triggerUnit)
@@ -307,24 +329,14 @@ struct hGlobals
                 call GroupRemoveUnit(g_gp_summon, targetUnit)
                 call RemoveUnit(targetUnit)
                 call RemoveUnit(triggerUnit)
-                set targetUID = 0
-                if(triggerUID == 'o009')then
-                    set targetUID = 'o00A'
-                endif
-                if(triggerUID == 'o00B')then
-                    set targetUID = 'o008'
-                elseif(triggerUID == 'o008')then
-                    set targetUID = 'o00C'
-                elseif(triggerUID == 'o00C')then
-                    set targetUID = 'o00D'
-                elseif(triggerUID == 'o00D')then
-                    set targetUID = 'o00E'
-                endif
+                set targetUID = thistype.getSummonTargetUid(GetUnitTypeId(triggerUnit))
                 if(targetUID != 0)then
                     set targetUnit = hunit.createUnitXY(p,targetUID, x, y)
+                    set ttg = hmsg.ttg2Unit(targetUnit,"成功连锁升级为 |cffffff80"+GetUnitName(targetUnit)+"|r",7,"",0,1.70,60.00)
+                    call hmsg.style(ttg,"scale",0,0.1)
+                    set ttg = null
+                    call thistype.initSummon(targetUnit)
                 endif
-                call hmsg.echoTo(p,GetUnitName(triggerUnit)+" 连锁升级成功为 |cffffff80"+GetUnitName(targetUnit)+"|r",0)
-                call thistype.initSummon(targetUnit)
             endif
 		elseif(skillid == 'A08V')then // 丧病
 			call hunit.setUserData(triggerUnit,777,3.5)
@@ -587,6 +599,7 @@ struct hGlobals
         local unit u = null
         call htime.delTimer(t)
         set u = hunit.createUnitXY(p,uid,x,y)
+        call SetUnitUserData(u,GetUnitUserData(tempu))
         call initSummon(u)
         call heffect.toUnit("Abilities\\Spells\\Other\\Awaken\\Awaken.mdl",u,"origin",0.80)
         call hitem.copy(tempu,u)
@@ -627,8 +640,8 @@ struct hGlobals
             set rebornTime = rebornTime * 0.5
         endif
         set g_thisturn_hero_dead_qty = g_thisturn_hero_dead_qty + 1
-        call hmsg.echo(name+" 被 "+GetUnitName(killer)+" 狠狠地击倒了！"+I2S(R2I(rebornTime))+" 秒后在原地复活～")
         set tempu = hunit.createUnitXYFacing(p,u_dead_timering[GetUnitFoodUsed(u)],x,y,270)
+        call SetUnitUserData(tempu,GetUnitUserData(u))
         call SetUnitVertexColor(tempu, 255, 255, 255, 200)
         call hunit.shadow(uid,x+15,y+15,270,50,0,75,120,rebornTime)
         if(rebornTime>0)then
