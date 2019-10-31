@@ -226,7 +226,7 @@ library Main initializer init needs hJass
 		set txt = ""
 		set txt = txt + "抵御时空境域内顺流逆流的敌人"
 		set txt = txt + "|n英雄按 B 即可建造兵塔，兵塔会吸收作战经验成长也可以转职为强力兵塔"
-		set txt = txt + "|n兵塔在死亡时会清空临时成长值！升级时会清空永久成长值！"
+		set txt = txt + "|n兵塔在杀敌时有可能获得成长！Lv9满级"
 		set txt = txt + "|n加油吧～"
 		// call hunit.exploded(u_timering,15.00) // 测试失败用
 		
@@ -295,6 +295,7 @@ library Main initializer init needs hJass
 		// bgm stop
 		call hmedia.bgmStop()
 		// 死亡轮
+		set u_dead_timering[0] = 'n05N'
 		set u_dead_timering[1] = 'n04Y'
 		set u_dead_timering[2] = 'n058'
 		set u_dead_timering[3] = 'n059'
@@ -472,7 +473,7 @@ library Main initializer init needs hJass
 		loop
 			exitwhen i > 10
 				call htime.setTimeout(i,function MyEnv.randomEnv)
-			set i = i + 1.3
+			set i = i + 1
 		endloop
 		//预读
 		call preread()

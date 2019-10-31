@@ -35,7 +35,6 @@ integer g_hero_count = 0
 integer g_boss_count = 0
 integer g_mon_count = 0
 integer g_summon_count = 0
-integer g_thisturn_hero_dead_qty = 0
 
 integer array g_token
 integer array g_building
@@ -314,7 +313,7 @@ struct hGlobals
             set p = GetOwningPlayer(triggerUnit)
             set triggerUID = GetUnitTypeId(triggerUnit)
             if(LoadStr(hash_unit,triggerUID,0) != LoadStr(hash_unit,GetUnitTypeId(targetUnit),0))then
-                set ttg = hmsg.ttg2Unit(triggerUnit,"不同等级的单位不可以进行连锁升级",7,"",0,1.70,60.00)
+                set ttg = hmsg.ttg2Unit(triggerUnit,"不同阶级的单位不可以进行连锁升级",7,"",0,1.70,60.00)
                 call hmsg.style(ttg,"scale",0,0.1)
                 set ttg = null
             elseif(p != GetOwningPlayer(targetUnit))then
@@ -541,6 +540,10 @@ struct hGlobals
                         call UnitMakeAbilityPermanent( u, true, 'A03Q' )
                         call UnitMakeAbilityPermanent( u, true, 'A045' )
                         call UnitMakeAbilityPermanent( u, true, 'A06G' )
+                        if(g_summon_glv[i] != "N")then
+                            call UnitAddAbility(u,'A09A') // lv0
+                            call UnitMakeAbilityPermanent( u, true, 'A09A' )
+                        endif
                         // 如果不是终结单位，则赋予升级的权利
                         if(g_summon_end[i] == false)then
                             call UnitAddAbility(u,'A04J') // link
@@ -599,7 +602,6 @@ struct hGlobals
         local unit u = null
         call htime.delTimer(t)
         set u = hunit.createUnitXY(p,uid,x,y)
-        call SetUnitUserData(u,GetUnitUserData(tempu))
         call initSummon(u)
         call heffect.toUnit("Abilities\\Spells\\Other\\Awaken\\Awaken.mdl",u,"origin",0.80)
         call hitem.copy(tempu,u)
@@ -623,8 +625,28 @@ struct hGlobals
         local unit tempu = null
         local unit deathShadow = null
         // 死亡强化
-        call SetUnitUserData(u,1+GetUnitUserData(u))
-        set rebornTime = 2 * GetUnitUserData(u)
+        set rebornTime = 10.00
+        if(GetUnitAbilityLevel(killer,'A09A') > 0)then // LV0
+            set rebornTime = rebornTime + 1
+        elseif(GetUnitAbilityLevel(killer,'A03W') > 0)then // LV1
+            set rebornTime = rebornTime + 2
+        elseif(GetUnitAbilityLevel(killer,'A044') > 0)then // LV2
+            set rebornTime = rebornTime + 3
+        elseif(GetUnitAbilityLevel(killer,'A07Z') > 0)then // LV3
+            set rebornTime = rebornTime + 4
+        elseif(GetUnitAbilityLevel(killer,'A088') > 0)then // LV4
+            set rebornTime = rebornTime + 5
+        elseif(GetUnitAbilityLevel(killer,'A08B') > 0)then // LV5
+            set rebornTime = rebornTime + 6
+        elseif(GetUnitAbilityLevel(killer,'A08C') > 0)then // LV6
+            set rebornTime = rebornTime + 7
+        elseif(GetUnitAbilityLevel(killer,'A08L') > 0)then // LV7
+            set rebornTime = rebornTime + 8
+        elseif(GetUnitAbilityLevel(killer,'A08S') > 0)then // LV8
+            set rebornTime = rebornTime + 9
+        elseif(GetUnitAbilityLevel(killer,'A090') > 0)then // LV9
+            set rebornTime = rebornTime + 10
+        endif
         // 假死亡
 		if(hgroup.isIn(u,sk_group_fusuzhiguang) == true)then
 			set rebornTime = 0
@@ -639,9 +661,7 @@ struct hGlobals
         if(GetUnitAbilityLevel(u,'A08N') >= 1)then // 火凤凰 - 涅磐
             set rebornTime = rebornTime * 0.5
         endif
-        set g_thisturn_hero_dead_qty = g_thisturn_hero_dead_qty + 1
         set tempu = hunit.createUnitXYFacing(p,u_dead_timering[GetUnitFoodUsed(u)],x,y,270)
-        call SetUnitUserData(tempu,GetUnitUserData(u))
         call SetUnitVertexColor(tempu, 255, 255, 255, 200)
         call hunit.shadow(uid,x+15,y+15,270,50,0,75,120,rebornTime)
         if(rebornTime>0)then
@@ -1281,7 +1301,7 @@ struct hGlobals
             call GroupRemoveUnit(g_crazy_boss,triggerUnit)
             call UnitAddAbility(triggerUnit,'A05Q')
             call hmsg.style(hmsg.ttg2Unit(triggerUnit,"BOSS开始发狂！",8,"e04240",0,1.70,40.00),"scale",0,0.15)
-            call hattr.addLifeBack(triggerUnit,I2R(g_wave) * 0.008 * hattr.getLife(triggerUnit),9)
+            call hattr.addLifeBack(triggerUnit,I2R(g_wave) * 0.006 * hattr.getLife(triggerUnit),9)
             call hattr.addAttackPhysical(triggerUnit,I2R(g_wave) * 6,20)
             call hattr.addAttackMagic(triggerUnit,I2R(g_wave) * 6,20)
             call hattr.addAttackSpeed(triggerUnit,50 + I2R(g_wave) * 2,20)
@@ -1577,8 +1597,6 @@ struct hGlobals
                 call IssuePointOrder( u, "attack", GetLocationX(Loc_Ring), GetLocationY(Loc_Ring) )
             else
                 call SetUnitPosition(u, x2, y2)
-                call heffect.toXY("war3mapImported\\LightningSphere_FX.mdl", x,y,0.4)
-                call heffect.toXY("war3mapImported\\LightningSphere_FX.mdl", x2,y2,0.4)
             endif    
         else
             call SetUnitUserData(u,i)
@@ -1842,9 +1860,9 @@ struct hGlobals
         call thistype.registerSummon('o00S',false,"C",1000,300,     0,0,1,      80,0,2.20) // 邪恶苦力
         call thistype.registerSummon('o00W',false,"C",1000,280,     300,5,0,    10,60,2.20) // 巨魔巫医
         call thistype.registerSummon('o016',false,"C",1000,290,     300,5,0,    40,35,2.20) // 萨满牛祭司
-        call thistype.registerSummon('o01V',false,"C",1000,260,     0,0,0,      40,35,1.90) // 暗夜弓手
-        call thistype.registerSummon('o01W',false,"C",1000,280,     0,0,0,      40,35,1.90) // 角鹰弓手
-        call thistype.registerSummon('o022',false,"C",1000,270,     0,0,0,      10,35,2.10) // 德鲁伊
+        call thistype.registerSummon('o01V',false,"C",1000,260,     0,0,0,      70,0,1.90) // 暗夜弓手
+        call thistype.registerSummon('o01W',false,"C",1000,280,     0,0,0,      75,0,1.90) // 角鹰弓手
+        call thistype.registerSummon('o022',false,"C",1000,270,     0,0,0,      25,50,2.10) // 德鲁伊
 
         call thistype.registerSummon('o00C',false,"B",2000,700,     0,0,8,      140,0,1.80) // 步兵
         call thistype.registerSummon('o00L',false,"B",2000,520,     400,6,2,    130,0,1.90) // 牧师
@@ -1853,7 +1871,7 @@ struct hGlobals
         call thistype.registerSummon('o017',false,"B",2000,740,     0,0,1,      180,0,2.20) // 灯提白牛
         call thistype.registerSummon('o00T',false,"B",2000,680,     0,0,1,      170,0,2.10) // 狼骑
         call thistype.registerSummon('o00G',false,"B",2000,700,     0,0,0,      150,0,2.40) // 巨魔枪士
-        call thistype.registerSummon('o00V',false,"B",2000,800,     0,0,2,      150,0,2.40) // 邪恶兽人大兵
+        call thistype.registerSummon('o00V',false,"B",2000,800,     0,0,2,      180,0,2.40) // 邪恶兽人大兵
         call thistype.registerSummon('o014',false,"B",2000,600,     0,0,0,      175,0,1.90) // 飞龙骑士
         call thistype.registerSummon('o019',false,"B",2000,660,     0,0,0,      35,135,2.30) // 巫师
         call thistype.registerSummon('o020',false,"B",2000,500,     0,0,0,      70,70,2.00) // 精灵龙

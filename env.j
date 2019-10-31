@@ -158,9 +158,9 @@ struct MyEnv
 					elseif(myenv_randomIndex == 2)then // autumn
 						call SetTerrainType( x , y, 'Yrtl', -1, 1, 0 )
 					elseif(myenv_randomIndex == 3)then // winter
-						call SetTerrainType( x , y, 'Ywmb', -1, 1, 0 )
+						call SetTerrainType( x , y, 'Xbtl', -1, 1, 0 )
 					elseif(myenv_randomIndex == 4)then // WinterShow
-						call SetTerrainType( x , y, 'Xblm', -1, 1, 0 )
+						call SetTerrainType( x , y, 'Xbtl', -1, 1, 0 )
 					elseif(myenv_randomIndex == 5)then // dark
 						call SetTerrainType( x , y, 'Xblm', -1, 1, 0 )
 					elseif(myenv_randomIndex == 6)then // poor
@@ -185,9 +185,9 @@ struct MyEnv
 					elseif(myenv_randomIndex == 2)then // autumn
 						call SetTerrainType( x , y, 'Yrtl', -1, 1, 0 )
 					elseif(myenv_randomIndex == 3)then // winter
-						call SetTerrainType( x , y, 'Ywmb', -1, 1, 0 )
+						call SetTerrainType( x , y, 'Xbtl', -1, 1, 0 )
 					elseif(myenv_randomIndex == 4)then // WinterShow
-						call SetTerrainType( x , y, 'Xblm', -1, 1, 0 )
+						call SetTerrainType( x , y, 'Xbtl', -1, 1, 0 )
 					elseif(myenv_randomIndex == 5)then // dark
 						call SetTerrainType( x , y, 'Xblm', -1, 1, 0 )
 					elseif(myenv_randomIndex == 6)then // poor
@@ -464,7 +464,6 @@ struct MyEnv
 		//
 		if(myenv_randomIndex == 0)then
 			set myenv_randomIndex = GetRandomInt(1,9)
-			set myenv_weatherIndex = GetRandomInt(1,3)
 			if (myenv_randomIndex == 1) then // summer
 				set musicBattle = gg_snd_env_summer
 			elseif(myenv_randomIndex == 2)then // autumn
@@ -494,7 +493,8 @@ struct MyEnv
 				set hxy.y = GetRandomReal(GetRectMinY(GetPlayableMapRect()), GetRectMaxY(GetPlayableMapRect()))
 				if(hxy.x > GetLocationX(Loc_Ring)-x/2 and hxy.x < GetLocationX(Loc_Ring)+x/2 and hxy.y > GetLocationY(Loc_Ring)-y/2 and hxy.y < GetLocationY(Loc_Ring)+y/2)then
 					// nothing
-				else 
+				else
+					set myenv_weatherIndex = GetRandomInt(1,3)
 					set tempRect = hrect.createInLoc(hxy.x,hxy.y,rectArea,rectArea)
 					set wb = hWeatherBean.create()
 					set wb.x = hxy.x

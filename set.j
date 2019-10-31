@@ -65,7 +65,6 @@ struct hSet
 		if(skillid == 'A05I')then // 暗影猎手 - 恩典
 			set hf = hFilter.create()
 			call hf.isAlive(true)
-			call hf.isBuilding(false)
 			call hf.isAlly(true,triggerUnit)
 			set g = hgroup.createByUnit(triggerUnit,600,function hFilter.get)
 			call hf.destroy()
@@ -185,7 +184,6 @@ struct hSet
 		if(skillid == 'A072')then // 森林老鹿 - 森林庇护
 			set hf = hFilter.create()
 			call hf.isAlive(true)
-			call hf.isBuilding(false)
 			call hf.isAlly(true,triggerUnit)
 			set g = hgroup.createByUnit(triggerUnit,600,function hFilter.get)
 			call hf.destroy()
@@ -307,7 +305,6 @@ struct hSet
 				call SetUnitTimeScalePercent(tempu, 1000.0 / rebornTime)
 			endif
 			call hunit.del(tempu,rebornTime)
-			set g_thisturn_hero_dead_qty = g_thisturn_hero_dead_qty + 1
 		endif
         call hunit.rebornAtXY(u,GetUnitX(u),GetUnitY(u),rebornTime,5.00)
 		set u = null
@@ -497,7 +494,7 @@ struct hSet
         local real x = GetUnitX(u)
         local real y = GetUnitY(u)
         local integer uid = GetUnitTypeId(u)
-		local real percent = 1.00
+		local real percent = 0.00
 		call hGlobals.enemyDeadDrop(u)
 		if(g_gp_mon != null)then
 			call GroupRemoveUnit(g_gp_mon,u)
@@ -518,47 +515,96 @@ struct hSet
 			set gold = 1
 		endif
 		if(GetRandomInt(1,100) == 44)then
-			call hitem.toXY(momentItems[1],gold*20,x,y,60.00)
-			call hitem.toXY(momentItems[3],exp*20,x,y,60.00)
+			call hitem.toXY(momentItems[1],gold*21,x,y,60.00)
+			call hitem.toXY(momentItems[3],exp*23,x,y,60.00)
 		endif
 		// glv
 		if(killer != null)then
-		 	set percent = percent + I2R(GetUnitUserData(killer)) * 0.04
-			if(GetUnitAbilityLevel(killer,'A03U') > 0)then //E
-				call hattr.addLife(killer,1*percent,0)
-				call hattr.addAttackPhysical(killer,0.5*percent,0)
-			elseif(GetUnitAbilityLevel(killer,'A064') > 0)then //D
-				call hattr.addLife(killer,2*percent,0)
-				call hattr.addAttackPhysical(killer,0.7*percent,0)
-			elseif(GetUnitAbilityLevel(killer,'A066') > 0)then //C
-				call hattr.addLife(killer,3*percent,0)
-				call hattr.addAttackSpeed(killer,0.07*percent,0)
-				call hattr.addAttackPhysical(killer,0.9*percent,0)
-			elseif(GetUnitAbilityLevel(killer,'A067') > 0)then //B
-				call hattr.addLife(killer,5*percent,0)
-				call hattr.addAttackSpeed(killer,0.10*percent,0)
-				call hattr.addAttackPhysical(killer,0.55*percent,0)
-				call hattr.addAttackMagic(killer,0.55*percent,0)
-			elseif(GetUnitAbilityLevel(killer,'A069') > 0)then //A
-				call hattr.addLife(killer,7*percent,0)
-				call hattr.addAttackSpeed(killer,0.13*percent,0)
-				call hattr.addAttackPhysical(killer,0.75*percent,0)
-				call hattr.addAttackMagic(killer,0.75*percent,0)
-			elseif(GetUnitAbilityLevel(killer,'A068') > 0)then //S
-				call hattr.addLife(killer,10*percent,0)
-				call hattr.addAttackSpeed(killer,0.16*percent,0)
-				call hattr.addAttackPhysical(killer,1.00*percent,0)
-				call hattr.addAttackMagic(killer,1.00*percent,0)
-			elseif(GetUnitAbilityLevel(killer,'A06A') > 0)then //SS
-				call hattr.addLife(killer,13*percent,0)
-				call hattr.addAttackSpeed(killer,0.20*percent,0)
-				call hattr.addAttackPhysical(killer,1.10*percent,0)
-				call hattr.addAttackMagic(killer,1.10*percent,0)
-			elseif(GetUnitAbilityLevel(killer,'A06B') > 0)then //SSS
-				call hattr.addLife(killer,16*percent,0)
-				call hattr.addAttackSpeed(killer,0.24*percent,0)
-				call hattr.addAttackPhysical(killer,1.25*percent,0)
-				call hattr.addAttackMagic(killer,1.25*percent,0)
+			// 等级升级
+			if(GetUnitAbilityLevel(killer,'A09A') > 0 and GetRandomInt(1,2) == 1)then // LV0
+				set percent = 1.00
+				call UnitRemoveAbility(killer,'A09A')
+				call UnitAddAbility(killer,'A03W')
+				call UnitMakeAbilityPermanent( killer, true, 'A03W' )
+			elseif(GetUnitAbilityLevel(killer,'A03W') > 0 and GetRandomInt(1,3) == 1)then // LV1
+				set percent = 2.00
+				call UnitRemoveAbility(killer,'A03W')
+				call UnitAddAbility(killer,'A044')
+				call UnitMakeAbilityPermanent( killer, true, 'A044' )
+			elseif(GetUnitAbilityLevel(killer,'A044') > 0 and GetRandomInt(1,4) == 1)then // LV2
+				set percent = 3.00
+				call UnitRemoveAbility(killer,'A044')
+				call UnitAddAbility(killer,'A07Z')
+				call UnitMakeAbilityPermanent( killer, true, 'A07Z' )
+			elseif(GetUnitAbilityLevel(killer,'A07Z') > 0 and GetRandomInt(1,5) == 1)then // LV3
+				set percent = 4.00
+				call UnitRemoveAbility(killer,'A07Z')
+				call UnitAddAbility(killer,'A088')
+				call UnitMakeAbilityPermanent( killer, true, 'A088' )
+			elseif(GetUnitAbilityLevel(killer,'A088') > 0 and GetRandomInt(1,6) == 1)then // LV4
+				set percent = 5.00
+				call UnitRemoveAbility(killer,'A088')
+				call UnitAddAbility(killer,'A08B')
+				call UnitMakeAbilityPermanent( killer, true, 'A08B' )
+			elseif(GetUnitAbilityLevel(killer,'A08B') > 0 and GetRandomInt(1,7) == 1)then // LV5
+				set percent = 6.00
+				call UnitRemoveAbility(killer,'A08B')
+				call UnitAddAbility(killer,'A08C')
+				call UnitMakeAbilityPermanent( killer, true, 'A08C' )
+			elseif(GetUnitAbilityLevel(killer,'A08C') > 0 and GetRandomInt(1,8) == 1)then // LV6
+				set percent = 7.00
+				call UnitRemoveAbility(killer,'A08C')
+				call UnitAddAbility(killer,'A08L')
+				call UnitMakeAbilityPermanent( killer, true, 'A08L' )
+			elseif(GetUnitAbilityLevel(killer,'A08L') > 0 and GetRandomInt(1,9) == 1)then // LV7
+				set percent = 8.00
+				call UnitRemoveAbility(killer,'A08L')
+				call UnitAddAbility(killer,'A08S')
+				call UnitMakeAbilityPermanent( killer, true, 'A08S' )
+			elseif(GetUnitAbilityLevel(killer,'A08S') > 0 and GetRandomInt(1,10) == 1)then // LV8
+				set percent = 9.00
+				call UnitRemoveAbility(killer,'A08S')
+				call UnitAddAbility(killer,'A090')
+				call UnitMakeAbilityPermanent( killer, true, 'A090' )
+			//elseif(GetUnitAbilityLevel(killer,'A090') > 0 and GetRandomInt(1,20) == 1)then // LV9
+			endif
+			if(percent > 0.00)then
+				if(GetUnitAbilityLevel(killer,'A03U') > 0)then //E
+					call hattr.addLife(killer,2*percent,0)
+					call hattr.addAttackPhysical(killer,0.8*percent,0)
+				elseif(GetUnitAbilityLevel(killer,'A064') > 0)then //D
+					call hattr.addLife(killer,4*percent,0)
+					call hattr.addAttackPhysical(killer,1.4*percent,0)
+				elseif(GetUnitAbilityLevel(killer,'A066') > 0)then //C
+					call hattr.addLife(killer,7*percent,0)
+					call hattr.addAttackSpeed(killer,0.33*percent,0)
+					call hattr.addAttackPhysical(killer,1.6*percent,0)
+				elseif(GetUnitAbilityLevel(killer,'A067') > 0)then //B
+					call hattr.addLife(killer,11*percent,0)
+					call hattr.addAttackSpeed(killer,0.67*percent,0)
+					call hattr.addAttackPhysical(killer,1.8*percent,0)
+					call hattr.addAttackMagic(killer,1.8*percent,0)
+				elseif(GetUnitAbilityLevel(killer,'A069') > 0)then //A
+					call hattr.addLife(killer,16*percent,0)
+					call hattr.addAttackSpeed(killer,1.00*percent,0)
+					call hattr.addAttackPhysical(killer,3.4*percent,0)
+					call hattr.addAttackMagic(killer,3.4*percent,0)
+				elseif(GetUnitAbilityLevel(killer,'A068') > 0)then //S
+					call hattr.addLife(killer,22*percent,0)
+					call hattr.addAttackSpeed(killer,1.33*percent,0)
+					call hattr.addAttackPhysical(killer,6.4*percent,0)
+					call hattr.addAttackMagic(killer,6.4*percent,0)
+				elseif(GetUnitAbilityLevel(killer,'A06A') > 0)then //SS
+					call hattr.addLife(killer,30*percent,0)
+					call hattr.addAttackSpeed(killer,1.67*percent,0)
+					call hattr.addAttackPhysical(killer,12.2*percent,0)
+					call hattr.addAttackMagic(killer,12.2*percent,0)
+				elseif(GetUnitAbilityLevel(killer,'A06B') > 0)then //SSS
+					call hattr.addLife(killer,40*percent,0)
+					call hattr.addAttackSpeed(killer,2.00*percent,0)
+					call hattr.addAttackPhysical(killer,24.0*percent,0)
+					call hattr.addAttackMagic(killer,24.0*percent,0)
+				endif
 			endif
 		endif
 		set u = null
@@ -628,7 +674,7 @@ struct hSet
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
 		set exp = g_wave * 3000
-		set gold = g_wave * 70 * player_current_qty
+		set gold = g_wave * 40 * player_current_qty
 		if(killer!=null)then
 			call haward.forUnit(killer,exp,0,0)
 		endif
@@ -668,9 +714,9 @@ struct hSet
 		set u = henemy.createUnit(last_boss_uid,loc)
 		call GroupAddUnit(g_gp_mon,u)
 		call TriggerRegisterUnitEvent( bossDeadTg, u, EVENT_UNIT_DEATH )
-		set bossPercent = g_wave * 5 + g_diff
-		set bossPercentLittle = g_wave * 4 + g_diff
-		set bossPercentTiny = g_wave * 3 + g_diff
+		set bossPercent = g_wave * 3 + g_diff
+		set bossPercentLittle = g_wave * 2 + g_diff
+		set bossPercentTiny = g_wave * 1 + g_diff
 		if(bossPercent > 80)then
 			set bossPercent = 80
 		endif
