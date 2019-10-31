@@ -681,10 +681,10 @@ struct hSet
 		call hitem.toXY(momentItems[2],1,GetUnitX(u),GetUnitY(u),90.00)
 		set i = 1
 		loop
-			exitwhen i > (15 + player_current_qty * 5)
+			exitwhen i > player_current_qty * 20
 				set hxy.x = GetUnitX(u)
         		set hxy.y = GetUnitY(u)
-				set hxy = hlogic.polarProjection(hxy,i*10,i*10)
+				set hxy = hlogic.polarProjection(hxy,i*20,i*15)
 				call hitem.toXY(momentItems[1],gold,hxy.x,hxy.y,60.00)
 				if(GetRandomInt(1,50) == 33)then
 					call hitem.toXY(momentItems[3],g_wave*1000,hxy.x,hxy.y,60.00)
