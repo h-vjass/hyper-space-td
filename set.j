@@ -7,6 +7,7 @@ struct hSet
 	private static integer currentChengqu = 0
     private static trigger heroDeadTg = null
     private static trigger enemyDeadTg = null
+	private static trigger enemyStopTg = null
     private static trigger bossDeadTg = null
     private static trigger destructableDeadTg = null
     private static trigger luckyDrawTg = null
@@ -610,6 +611,13 @@ struct hSet
 		set u = null
 		set killer = null
 	endmethod
+
+	private static method onEnemyStop takes nothing returns nothing
+		call hmsg.echo("onEnemyStop="+I2S(GetIssuedOrderId()))
+		if(GetIssuedOrderId() == String2OrderIdBJ("stop"))then
+			call IssuePointOrderByIdLoc( GetTriggerUnit(), 851983, Loc_Ring )
+		endif
+	endmethod
     
 	public static method createEnemy takes nothing returns nothing
 		local timer t = GetExpiredTimer()
@@ -646,6 +654,7 @@ struct hSet
 				set u = henemy.createUnitXY(g_mon[monRand],spaceDegX[j],spaceDegY[j])
 				call GroupAddUnit(g_gp_mon,u)
 				call TriggerRegisterUnitEvent( enemyDeadTg, u, EVENT_UNIT_DEATH )
+				call TriggerRegisterUnitEvent( enemyStopTg, u, EVENT_UNIT_ISSUED_ORDER )
 				call hattr.setLife(u,life,0)
 				call hattr.setMove(u,move,0)
 				call hattr.setAttackPhysical(u,attack,0)
@@ -938,9 +947,11 @@ struct hSet
         set heroDeadTg = CreateTrigger()
         set sommonDeadTg = CreateTrigger()
         set enemyDeadTg = CreateTrigger()
+		set enemyStopTg = CreateTrigger()
         set bossDeadTg = CreateTrigger()
         set sommonLevelupTg = CreateTrigger()
         call TriggerAddAction(enemyDeadTg,function thistype.onEnemyDead)
+		call TriggerAddAction(enemyStopTg,function thistype.onEnemyStop)
         call TriggerAddAction(bossDeadTg,function thistype.onBossDead)
         call TriggerAddAction(heroDeadTg,function thistype.onHeroDead)
         call TriggerAddAction(sommonDeadTg,function thistype.onSommonDead)

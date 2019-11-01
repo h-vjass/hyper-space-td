@@ -185,11 +185,11 @@ library Main initializer init needs hJass
 		set g_diff = bi
 		if(g_diff == 2)then
 			set g_boss_ready_time = 100
-			set g_game_mon_loop = 2.60
+			set g_game_mon_loop = 2.70
 			call hmsg.echo("选择了难度|cffffff80（"+g_diff_label[g_diff]+"）|r")
 		elseif(g_diff == 3)then
 			set g_boss_ready_time = 70
-			set g_game_mon_loop = 2.00
+			set g_game_mon_loop = 2.20
 			call hmsg.echo("选择了难度|cffff0000（"+g_diff_label[g_diff]+"）|r")
 		else
 			set g_boss_ready_time = 130

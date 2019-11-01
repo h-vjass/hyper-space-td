@@ -292,7 +292,7 @@ struct hGlobals
         if(triggerUID == 'o00E')then // C 血妖精
             set targetCount = 2
             set targetArr[1] = 'o00L' // B 牧师
-            set targetArr[2] = 'o00Z' //  B 龙鹰骑士
+            set targetArr[2] = 'o00Z' // B 龙鹰骑士
         endif
         if(triggerUID == 'o00S')then // C 邪恶苦力
             set targetCount = 2
@@ -358,6 +358,7 @@ struct hGlobals
         if(triggerUID == 'o019')then // B 巫师
             set targetCount = 2
             set targetArr[1] = 'o01A' // A 邪恶巫师
+            set targetArr[2] = 'o01B' // A 骷骨巫长
         endif
         if(triggerUID == 'o00V')then // B 邪恶兽人大兵
             set targetCount = 2
@@ -391,6 +392,10 @@ struct hGlobals
             set targetCount = 1
             set targetArr[1] = 'o021' // A 黑暗精灵
         endif
+        if(triggerUID == 'o023')then // B 熊战德鲁伊
+            set targetCount = 1
+            set targetArr[1] = 'o024' // A 猛熊德鲁伊
+        endif
         if(triggerUID == 'o020')then // B 精灵龙
             set targetCount = 1
             set targetArr[1] = 'o025' // A 奇美拉
@@ -414,6 +419,7 @@ struct hGlobals
     endmethod
 
     public static method initSummonAbility takes unit u,unit tplu returns nothing
+        local integer total = 0
         local integer uid = GetUnitTypeId(u)
 		if(uid == 'o008')then // 民兵
             call hattrEffect.addAttackPhysicalVal(u,2,0)
