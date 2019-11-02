@@ -634,9 +634,8 @@ struct hSet
 			if(g_mon_isrunning)then
 				if(hlogic.imod(g_wave+1,g_boss_mod) == 0 or g_wave+1 >= g_max_wave)then
 					call thistype.nextWave(g_boss_ready_time)
-					// call htime.setInterval(3.00,function thistype.checkGGPmon)
 				else
-					call thistype.nextWave(0)
+					call thistype.nextWave(10)
 				endif
 			endif
 			return
