@@ -17,7 +17,7 @@ real REBORN_SUMMON = 90
 integer g_diff = 1
 string array g_diff_label
 timer g_timer_wave = null
-integer g_temp_mon_limit = 360
+integer g_temp_mon_limit = 300
 integer g_max_wave = 100
 integer g_wave = 0
 integer g_first_wave = 0
@@ -28,7 +28,7 @@ boolean g_waving = false
 group g_crazy_boss = CreateGroup()
 
 real g_game_speed = 1.00 //
-real g_game_mon_loop = 2.00 // 每只怪出兵间隔
+real g_game_mon_loop = 4.00 // 每只怪出兵间隔
 integer g_token_count = 0
 integer g_building_count = 0
 integer g_hero_count = 0
@@ -70,7 +70,7 @@ real array g_summon_attackMagic
 integer g_summon_ability_count
 integer array g_summon_ability
 
-integer g_gp_max = 50
+integer g_gp_max = 25
 group g_gp_mon = CreateGroup()
 group g_gp_attack = CreateGroup()
 group g_gp_summon = CreateGroup()
@@ -496,7 +496,9 @@ struct hGlobals
         elseif(abid == 'A09K')then // B 熊战德鲁伊 - 咆哮
         elseif(abid == 'A053')then // B 远古树精 - 投掷
         elseif(abid == 'A03V')then // B 牧师 - 光导医疗
+            // 施法事件实现
         elseif(abid == 'A07K')then // B 巫师 - 邪术
+            // 施法事件实现
         endif
         if(abid == 'A04U')then // A 剑士 - 刃风式
             call hattr.addAttackHuntType(u,"wind",0)
@@ -505,6 +507,7 @@ struct hGlobals
             call hattrEffect.addWindVal(u,10,0)
             call hattrEffect.addWindDuring(u,5.0,0)
         elseif(abid == 'A03O')then // A 骑士 - 斩铁式
+            // 技能自带效果
         elseif(abid == 'A07X')then // A 飞行机器 - 机关枪
         elseif(abid == 'A07V')then // A 黑暗精灵 - 魅刃
         elseif(abid == 'A07T')then // A 幻界飞龙 - 蔽日

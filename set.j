@@ -505,7 +505,7 @@ struct hSet
 		endif
 		set exp = R2I(I2R(g_wave) * 16 * g_game_speed)
 		set expk = R2I(I2R(g_wave) * 30 * g_game_speed)
-		set gold = R2I(I2R(g_wave) * 1.4 * g_game_speed) * player_current_qty
+		set gold = R2I(I2R(g_wave) * 2.8 * g_game_speed) * player_current_qty
 		if(killer != null)then
 			call haward.forUnit(killer,expk,gold,0)
 			call haward.forGroup(killer,exp,0,0)
@@ -644,8 +644,8 @@ struct hSet
 			return
 		endif
 		call htime.setInteger(t,1,1+i)
-		set life = g_wave * (25 + g_diff * 18)
-		set move = 114 + g_wave * 3 + g_diff * 7
+		set life = g_wave * (50 + g_diff * 36)
+		set move = 125 + g_wave * 3 + g_diff * 7
 		set attack = g_wave * (3 + g_diff * 2)
 		set j = 1
 		loop
