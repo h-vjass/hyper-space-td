@@ -646,7 +646,7 @@ struct hSet
 		call htime.setInteger(t,1,1+i)
 		set life = g_wave * (50 + g_diff * 36)
 		set move = 125 + g_wave * 3 + g_diff * 7
-		set attack = g_wave * (3 + g_diff * 2)
+		set attack = g_wave * (4 + g_diff * 2)
 		set j = 1
 		loop
 			exitwhen j>spaceDegQty

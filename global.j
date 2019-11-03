@@ -476,8 +476,10 @@ struct hGlobals
             call hattrNatural.addGhostOppose(u,25.0,0)
             call hattrNatural.addDragonOppose(u,25.0,0)
         elseif(abid == 'A09H')then // B 灯提白牛 - 虚灵
+            call hattr.addAttackHuntType(u,"ghost",0)
             // 攻击事件实现
         elseif(abid == 'A091')then // B 飞龙骑士 - 毒标
+            call hattr.addAttackHuntType(u,"poison",0)
             call hattrEffect.setToxicVal(u,23,0)
             call hattrEffect.setToxicDuring(u,5,0)
         elseif(abid == 'A04W')then // B 精灵龙 - 魔焰
@@ -488,13 +490,31 @@ struct hGlobals
         elseif(abid == 'A08V')then // B 巨魔枪士 - 丧心病狂
             // 攻击事件实现
         elseif(abid == 'A089')then // B 狼骑 - 诱捕
+            call hattrEffect.addFetterOdds(u,5.0,0)
+            call hattrEffect.addFetterDuring(u,7,0)
         elseif(abid == 'A04Y')then // B 龙鹰骑士 - 缚足
+            call hattrEffect.addFetterOdds(u,35.0,0)
+            call hattrEffect.addFetterDuring(u,1.0,0)
         elseif(abid == 'A049')then // B 露娜 - 月刃
+            call hattrEffect.setBombOdds(u,40,0)
+            call hattrEffect.setBombRange(u,55,0)
+            call hattrEffect.setBombModel(u,"Objects\\Spawnmodels\\Critters\\Albatross\\CritterBloodAlbatross.mdl")
         elseif(abid == 'A055')then // B 树妖 - 绿枪
+            call hattr.addAttackHuntType(u,"wood",0)
+            call hattrNatural.addWood(u,40,0)
         elseif(abid == 'A04Q')then // B 铁枪手 - 扳机精通
+            call hattr.addAttackSpeed(u,25.0,0)
+            call hattr.addKnocking(u,500.0,0)
         elseif(abid == 'A09G')then // B 邪恶兽人大兵 - 狂斧
+            call hattr.addSplit(u,15.0,0)
         elseif(abid == 'A09K')then // B 熊战德鲁伊 - 咆哮
+            // 攻击事件实现
         elseif(abid == 'A053')then // B 远古树精 - 投掷
+            call hattr.addKnocking(u,400,0)
+            call hattrEffect.addFreezeVal(u,15,0)
+            call hattrEffect.addFreezeDuring(u,5,0)
+            call hattrEffect.addColdVal(u,10,0)
+            call hattrEffect.addColdDuring(u,5,0)
         elseif(abid == 'A03V')then // B 牧师 - 光导医疗
             // 施法事件实现
         elseif(abid == 'A07K')then // B 巫师 - 邪术
@@ -509,15 +529,36 @@ struct hGlobals
         elseif(abid == 'A03O')then // A 骑士 - 斩铁式
             // 技能自带效果
         elseif(abid == 'A07X')then // A 飞行机器 - 机关枪
+            // 攻击事件实现
         elseif(abid == 'A07V')then // A 黑暗精灵 - 魅刃
+            call hattr.addAttackHuntType(u,"dark",0)
+            call hattrNatural.addDark(u,35.0,0)
+            call hattrEffect.addDarkVal(u,5.0,0)
+            call hattrEffect.addDarkDuring(u,5.0,0)
         elseif(abid == 'A07T')then // A 幻界飞龙 - 蔽日
+            call hattrEffect.setBombOdds(u,145,0)
+            call hattrEffect.setBombRange(u,200,0)
+            call hattrEffect.setBombModel(u,"war3mapImported\\ShadowBurn.mdl")
         elseif(abid == 'A04S')then // A 巨魔蝙蝠骑手 - 火焰燃油
+            call hattr.addAttackHuntType(u,"fire",0)
+            call hattrNatural.addFire(u,25.0,0)
+        elseif(abid == 'A09M')then // A 科多骑手 - 吞噬
+            // 攻击事件实现
         elseif(abid == 'A059')then // A 骷骨巫长 - 蛊虫
+            call hattr.addAttackHuntType(u,"poison",0)
+            call hattrEffect.setChaosVal(u,5,0)
+            call hattrEffect.setChaosDuring(u,5,0)
+            call hattrEffect.setToxicVal(u,40,0)
+            call hattrEffect.setToxicDuring(u,5,0)
         elseif(abid == 'A09L')then // A 猛熊德鲁伊 - 猛熊之躯
+            call hattr.addLife(u,300,0)
+            call hattr.addLifeBack(u,25,0)
         elseif(abid == 'A09J')then // A 魔导师 - 感应
+            // 攻击事件实现
         elseif(abid == 'A08G')then // A 女巫 - 大焚火
         elseif(abid == 'A04P')then // A 迫击炮小队 - 黑色火药
-        elseif(abid == 'A09M')then // A 科多骑手 - 吞噬
+            call hattrEffect.setBurnVal(u,65,0)
+            call hattrEffect.setBurnDuring(u,3,0)
         elseif(abid == 'A058')then // A 奇美拉 - 龙息
         elseif(abid == 'A052')then // A 山岭巨人 - 嘲讽
         elseif(abid == 'A08D')then // A 狮鹫骑士 - 风暴战锤
@@ -545,7 +586,12 @@ struct hGlobals
         elseif(abid == 'A07U')then // S 邪恶科多骑手 - 邪殇
         elseif(abid == 'A04X')then // S 月之女祭司 - 强弓
         elseif(abid == 'A050')then // S 月之女祭司 - 威吓
+            call hattrEffect.addUnarmOdds(u,30.0,0)
+            call hattrEffect.addUnarmDuring(u,4.0,0)
         elseif(abid == 'A04Z')then // S 月之女祭司 - 月光
+            call hattrEffect.setBombOdds(u,100,0)
+            call hattrEffect.setBombRange(u,100,0)
+            call hattrEffect.setBombModel(u,"Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl")
         endif
     endmethod
 
@@ -556,18 +602,14 @@ struct hGlobals
         if(u != null)then
             loop
                 exitwhen (i < 1 or total >= 4)
-                    if(GetUnitAbilityLevel(u,g_summon_ability[i]) > 0)then
+                    if(GetUnitAbilityLevel(u,g_summon_ability[i]) <= 0)then
+                        if(GetUnitAbilityLevel(u,g_summon_ability[i]) > 0 or (tplu != null and GetUnitAbilityLevel(tplu,g_summon_ability[i]) > 0))then
+                            call thistype.setSummonAbility(u,g_summon_ability[i])
+                            set total = total + 1
+                        endif
+                    else
                         call thistype.setSummonAbility(u,g_summon_ability[i])
-                    endif
-                set i = i - 1
-            endloop
-        endif
-        set i = g_summon_ability_count
-        if(u != null and tplu != null and total < 4)then
-            loop
-                exitwhen (i < 1 or total >= 4)
-                    if(GetUnitAbilityLevel(u,g_summon_ability[i]) <= 0 and GetUnitAbilityLevel(tplu,g_summon_ability[i]) > 0)then
-                        call thistype.setSummonAbility(u,g_summon_ability[i])
+                        set total = total + 1
                     endif
                 set i = i - 1
             endloop
