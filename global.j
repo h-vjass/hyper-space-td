@@ -565,7 +565,7 @@ struct hGlobals
             call hattr.addAttackHuntType(u,"ice",0)
             call hattrEffect.addCorrosionVal(u,2,0)
             call hattrEffect.addCorrosionDuring(u,5,0)
-        elseif(abid == 'A052')then // A 山岭巨人 - 嘲讽
+        elseif(abid == 'A052')then // A 山岭巨人 - 大喊
         elseif(abid == 'A08D')then // A 狮鹫骑士 - 风暴战锤
         elseif(abid == 'A04R')then // A 坦克部队 - 烈性炮弹
         elseif(abid == 'A051')then // A 图腾战牛 - 抨击
