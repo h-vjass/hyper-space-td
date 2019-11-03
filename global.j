@@ -480,8 +480,8 @@ struct hGlobals
             // 攻击事件实现
         elseif(abid == 'A091')then // B 飞龙骑士 - 毒标
             call hattr.addAttackHuntType(u,"poison",0)
-            call hattrEffect.setToxicVal(u,23,0)
-            call hattrEffect.setToxicDuring(u,5,0)
+            call hattrEffect.addToxicVal(u,23,0)
+            call hattrEffect.addToxicDuring(u,5,0)
         elseif(abid == 'A04W')then // B 精灵龙 - 魔焰
             call hattr.addAttackHuntType(u,"light",0)
             call hattrEffect.addLightningChainOdds(u,20.0,0)
@@ -496,8 +496,8 @@ struct hGlobals
             call hattrEffect.addFetterOdds(u,35.0,0)
             call hattrEffect.addFetterDuring(u,1.0,0)
         elseif(abid == 'A049')then // B 露娜 - 月刃
-            call hattrEffect.setBombOdds(u,40,0)
-            call hattrEffect.setBombRange(u,55,0)
+            call hattrEffect.addBombOdds(u,40,0)
+            call hattrEffect.addBombRange(u,55,0)
             call hattrEffect.setBombModel(u,"Objects\\Spawnmodels\\Critters\\Albatross\\CritterBloodAlbatross.mdl")
         elseif(abid == 'A055')then // B 树妖 - 绿枪
             call hattr.addAttackHuntType(u,"wood",0)
@@ -536,8 +536,8 @@ struct hGlobals
             call hattrEffect.addDarkVal(u,5.0,0)
             call hattrEffect.addDarkDuring(u,5.0,0)
         elseif(abid == 'A07T')then // A 幻界飞龙 - 蔽日
-            call hattrEffect.setBombOdds(u,145,0)
-            call hattrEffect.setBombRange(u,200,0)
+            call hattrEffect.addBombOdds(u,145,0)
+            call hattrEffect.addBombRange(u,200,0)
             call hattrEffect.setBombModel(u,"war3mapImported\\ShadowBurn.mdl")
         elseif(abid == 'A04S')then // A 巨魔蝙蝠骑手 - 火焰燃油
             call hattr.addAttackHuntType(u,"fire",0)
@@ -546,20 +546,25 @@ struct hGlobals
             // 攻击事件实现
         elseif(abid == 'A059')then // A 骷骨巫长 - 蛊虫
             call hattr.addAttackHuntType(u,"poison",0)
-            call hattrEffect.setChaosVal(u,5,0)
-            call hattrEffect.setChaosDuring(u,5,0)
-            call hattrEffect.setToxicVal(u,40,0)
-            call hattrEffect.setToxicDuring(u,5,0)
+            call hattrEffect.addChaosVal(u,5,0)
+            call hattrEffect.addChaosDuring(u,5,0)
+            call hattrEffect.addToxicVal(u,40,0)
+            call hattrEffect.addToxicDuring(u,5,0)
         elseif(abid == 'A09L')then // A 猛熊德鲁伊 - 猛熊之躯
             call hattr.addLife(u,300,0)
             call hattr.addLifeBack(u,25,0)
         elseif(abid == 'A09J')then // A 魔导师 - 感应
             // 攻击事件实现
         elseif(abid == 'A08G')then // A 女巫 - 大焚火
+            call hattr.addAttackHuntType(u,"fire",0)
         elseif(abid == 'A04P')then // A 迫击炮小队 - 黑色火药
-            call hattrEffect.setBurnVal(u,65,0)
-            call hattrEffect.setBurnDuring(u,3,0)
+            call hattrEffect.addBurnVal(u,65,0)
+            call hattrEffect.addBurnDuring(u,3,0)
         elseif(abid == 'A058')then // A 奇美拉 - 龙息
+            call hattr.addAttackHuntType(u,"fire",0)
+            call hattr.addAttackHuntType(u,"ice",0)
+            call hattrEffect.addCorrosionVal(u,2,0)
+            call hattrEffect.addCorrosionDuring(u,5,0)
         elseif(abid == 'A052')then // A 山岭巨人 - 嘲讽
         elseif(abid == 'A08D')then // A 狮鹫骑士 - 风暴战锤
         elseif(abid == 'A04R')then // A 坦克部队 - 烈性炮弹
