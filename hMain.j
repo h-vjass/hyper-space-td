@@ -145,7 +145,7 @@ library Main initializer init needs hJass
 		local integer i = 0
 		if(g_leaderboard == null)then
 			set g_leaderboard = CreateLeaderboard()
-			call LeaderboardSetLabel(g_leaderboard, g_diff_label[g_diff])
+			call LeaderboardSetLabel(g_leaderboard, g_diff_label[g_diff]+"("+I2S(g_wave)+"波)")
 			call ForceSetLeaderboardBJ(g_leaderboard, GetPlayersAll())
 			set i = 1
 			loop
@@ -184,15 +184,15 @@ library Main initializer init needs hJass
 		local integer bi = LoadInteger(hash_player,GetHandleId(b),7)
 		set g_diff = bi
 		if(g_diff == 2)then
-			set g_boss_ready_time = 90
-			set g_game_mon_loop = g_game_mon_loop - 0.75
+			set g_boss_ready_time = 75
+			set g_game_mon_loop = g_game_mon_loop - 0.60
 			call hmsg.echo("选择了难度|cffffff80（"+g_diff_label[g_diff]+"）|r")
 		elseif(g_diff == 3)then
-			set g_boss_ready_time = 60
-			set g_game_mon_loop = g_game_mon_loop - 1.50
+			set g_boss_ready_time = 50
+			set g_game_mon_loop = g_game_mon_loop - 1.20
 			call hmsg.echo("选择了难度|cffff0000（"+g_diff_label[g_diff]+"）|r")
 		else
-			set g_boss_ready_time = 120
+			set g_boss_ready_time = 100
 			set g_game_mon_loop = g_game_mon_loop
 			call hmsg.echo("选择了难度|cff00ff00（"+g_diff_label[g_diff]+"）|r")
 		endif

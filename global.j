@@ -17,7 +17,7 @@ real REBORN_SUMMON = 90
 integer g_diff = 1
 string array g_diff_label
 timer g_timer_wave = null
-integer g_temp_mon_limit = 300
+integer g_temp_mon_limit = 340
 integer g_max_wave = 100
 integer g_wave = 0
 integer g_first_wave = 0
@@ -28,7 +28,7 @@ boolean g_waving = false
 group g_crazy_boss = CreateGroup()
 
 real g_game_speed = 1.00 //
-real g_game_mon_loop = 4.00 // 每只怪出兵间隔
+real g_game_mon_loop = 3.00 // 每只怪出兵间隔
 integer g_token_count = 0
 integer g_building_count = 0
 integer g_hero_count = 0
@@ -67,10 +67,10 @@ real array g_summon_manaback
 real array g_summon_defend
 real array g_summon_attackPhysical
 real array g_summon_attackMagic
-integer g_summon_ability_count
+integer g_summon_ability_count = 0
 integer array g_summon_ability
 
-integer g_gp_max = 25
+integer g_gp_max = 30
 group g_gp_mon = CreateGroup()
 group g_gp_attack = CreateGroup()
 group g_gp_summon = CreateGroup()
@@ -251,9 +251,17 @@ struct hGlobals
         call SaveStr(hash_unit,uid,0,glv)
     endmethod
 
-    public static method registerSummonAbility takes integer ablid returns nothing
+    public static method registerSummonAbility takes integer uid,integer ablid returns nothing
+        local integer i = 0
         set g_summon_ability_count = g_summon_ability_count + 1
-        set g_summon_ability[g_summon_count] = ablid
+        set g_summon_ability[g_summon_ability_count] = ablid
+        if(LoadBoolean(hash_unit,uid,110) == false)then
+            call SaveBoolean(hash_unit,uid,110,true)
+            call SaveInteger(hash_unit,uid,120,0)
+        endif
+        set i = LoadInteger(hash_unit,uid,120) // 这种兵有几个技能
+        call SaveInteger(hash_unit,uid,130+i,ablid)
+        call SaveInteger(hash_unit,uid,120,i+1)
     endmethod
 
     public static method getSummonTargetUid takes integer triggerUID returns integer
@@ -307,11 +315,11 @@ struct hGlobals
             set targetArr[2] = 'o014' // B 飞龙骑士
         endif
         if(triggerUID == 'o00R')then // C 兽人大兵
-            set targetCount = 3
+            set targetCount = 4
             set targetArr[1] = 'o00T' // B 狼骑
             set targetArr[2] = 'o019' // B 巫师
             set targetArr[3] = 'o00V' // B 邪恶兽人大兵
-            set targetArr[1] = 'o014' // B 飞龙骑士
+            set targetArr[4] = 'o014' // B 飞龙骑士
         endif
         if(triggerUID == 'o016')then // C 萨满牛祭司
             set targetCount = 1
@@ -426,9 +434,11 @@ struct hGlobals
     endmethod
 
     public static method setSummonAbility takes unit u,integer abid returns nothing
-        if(u == null)then
+        if(u == null or abid == 0)then
             return
         endif
+        call UnitAddAbility(u,abid)
+        call UnitMakeAbilityPermanent( u, true, abid)
         if(abid == 'A04K')then // N 地穴 - 尖针
             call hattr.addHuntRebound(u,35,0)
         elseif(abid == 'A056')then // C 民兵 - 勋章
@@ -498,7 +508,8 @@ struct hGlobals
             call hattrEffect.addFetterDuring(u,1.0,0)
         elseif(abid == 'A049')then // B 露娜 - 月刃
             call hattrEffect.addBombOdds(u,40,0)
-            call hattrEffect.addBombRange(u,55,0)
+            call hattrEffect.addBombVal(u,55,0)
+            call hattrEffect.addBombRange(u,150,0)
             call hattrEffect.setBombModel(u,"Objects\\Spawnmodels\\Critters\\Albatross\\CritterBloodAlbatross.mdl")
         elseif(abid == 'A055')then // B 树妖 - 绿枪
             call hattr.addAttackHuntType(u,"wood",0)
@@ -508,6 +519,7 @@ struct hGlobals
             call hattr.addKnocking(u,500.0,0)
         elseif(abid == 'A09G')then // B 邪恶兽人大兵 - 狂斧
             call hattr.addSplit(u,15.0,0)
+            call hattr.addSplitRange(u,200.0,0)
         elseif(abid == 'A09K')then // B 熊战德鲁伊 - 咆哮
             // 攻击事件实现
         elseif(abid == 'A053')then // B 远古树精 - 投掷
@@ -565,7 +577,7 @@ struct hGlobals
         elseif(abid == 'A052')then // A 山岭巨人 - 大喊
             // 攻击事件实现
         elseif(abid == 'A08D')then // A 狮鹫骑士 - 风暴战锤
-            call hattr.addAttackHuntType(u,"light",0)
+            call hattr.addAttackHuntType(u,"thunder",0)
             call hattrEffect.addLightningChainOdds(u,5.0,0)
             call hattrEffect.addLightningChainVal(u,180,0)
             call hattrEffect.addLightningChainQty(u,10,0)
@@ -660,26 +672,45 @@ struct hGlobals
             call hattrEffect.addUnarmOdds(u,20.0,0)
             call hattrEffect.addUnarmDuring(u,5.0,0)
         elseif(abid == 'A04Z')then // S 月之女祭司 - 月光
-            call hattrEffect.addBombOdds(u,500,0)
+            call hattrEffect.addBombVal(u,500,0)
             call hattrEffect.addBombOdds(u,100,0)
             call hattrEffect.addBombRange(u,50,0)
             call hattrEffect.setBombModel(u,"Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl")
         endif
     endmethod
 
-    public static method initSummonAbility takes unit u,unit tplu returns nothing
+    public static method initSummonAbility takes unit u,unit tplu1,unit tplu2 returns nothing
         local integer total = 0
         local integer i = 0
-        set i = g_summon_ability_count
+        local integer ki = 0
+        local integer uid = 0
         if(u != null)then
+            set uid = GetUnitTypeId(u)
+            set i = LoadInteger(hash_unit,uid,120)
+            if(i > 0)then
+                loop
+                    exitwhen i < 0
+                        set ki = LoadInteger(hash_unit,uid,130+i)
+                        if(GetUnitAbilityLevel(u,ki) <= 0)then
+                            call thistype.setSummonAbility(u,ki)
+                        endif
+                    set i = i - 1
+                endloop
+            endif
+            set i = g_summon_ability_count
             loop
                 exitwhen (i < 1 or total >= 4)
-                    if(GetUnitAbilityLevel(u,g_summon_ability[i]) <= 0)then
-                        if(GetUnitAbilityLevel(u,g_summon_ability[i]) > 0 or (tplu != null and GetUnitAbilityLevel(tplu,g_summon_ability[i]) > 0))then
-                            call thistype.setSummonAbility(u,g_summon_ability[i])
-                            set total = total + 1
-                        endif
-                    else
+                    if(GetUnitAbilityLevel(u,g_summon_ability[i]) > 0)then
+                        set total = total + 1
+                    endif
+                set i = i - 1
+            endloop
+        endif
+        if((tplu1 != null or tplu2 != null) and total < 4)then
+            set i = g_summon_ability_count
+            loop
+                exitwhen (i < 1 or total >= 4)
+                    if(GetUnitAbilityLevel(u,g_summon_ability[i]) <= 0 and (GetUnitAbilityLevel(tplu1,g_summon_ability[i]) > 0 or GetUnitAbilityLevel(tplu2,g_summon_ability[i]) > 0))then
                         call thistype.setSummonAbility(u,g_summon_ability[i])
                         set total = total + 1
                     endif
@@ -748,16 +779,20 @@ struct hGlobals
                 set y = GetUnitY(triggerUnit)
                 call GroupRemoveUnit(g_gp_summon, triggerUnit)
                 call GroupRemoveUnit(g_gp_summon, targetUnit)
-                call RemoveUnit(targetUnit)
-                call RemoveUnit(triggerUnit)
-                set targetUID = thistype.getSummonTargetUid(GetUnitTypeId(triggerUnit))
+                call ShowUnit(triggerUnit, false)
+                call ShowUnit(targetUnit, false)
+                set targetUID = thistype.getSummonTargetUid(triggerUID)
                 if(targetUID != 0)then
-                    set targetUnit = hunit.createUnitXY(p,targetUID, x, y)
-                    set ttg = hmsg.ttg2Unit(targetUnit,"成功连锁升级为 |cffffff80"+GetUnitName(targetUnit)+"|r",7,"",0,1.70,60.00)
+                    set u = hunit.createUnitXY(p,targetUID, x, y)
+                    set ttg = hmsg.ttg2Unit(u,GetUnitName(triggerUnit)+"成功连锁升级为 |cffffff80"+GetUnitName(u)+"|r",7,"",0,1.70,60.00)
                     call hmsg.style(ttg,"scale",0,0.1)
                     set ttg = null
-                    call thistype.initSummon(targetUnit)
+                    call thistype.initSummon(u)
+                    call thistype.initSummonAbility(u,triggerUnit,targetUnit)
+                    //
                 endif
+                call RemoveUnit(triggerUnit)
+                call RemoveUnit(targetUnit)
             endif
 		elseif(skillid == 'A08V')then // 丧病
 			call hunit.setUserData(triggerUnit,777,4.5)
@@ -810,8 +845,8 @@ struct hGlobals
         if(rand<=3)then
             // C 萨满牛祭司 - 净化
             if(GetUnitAbilityLevel(triggerUnit,'A09D') >= 1)then
-                call hattr.subMove(targetUnit,30,5)
-                call hattr.subAttackSpeed(targetUnit,15,5)
+                call hattr.subMove(targetUnit,50,5)
+                call hattr.subAttackSpeed(targetUnit,25,5)
                 call heffect.toUnit("Abilities\\Spells\\Orc\\Purge\\PurgeBuffTarget.mdl",targetUnit,"origin",1.00)
             endif
             // 山岭巨人/山岭巨人·战棍 嘲讽
@@ -995,7 +1030,6 @@ struct hGlobals
 				endif
 			set i = i+1
 		endloop
-        call thistype.initSummonAbility(u,null)
     endmethod
 
     private static method deadSummonCall takes nothing returns nothing
@@ -1011,6 +1045,7 @@ struct hGlobals
         call htime.delTimer(t)
         set u = hunit.createUnitXY(p,uid,x,y)
         call initSummon(u)
+        call thistype.initSummonAbility(u,tempu,null)
         call heffect.toUnit("Abilities\\Spells\\Other\\Awaken\\Awaken.mdl",u,"origin",0.80)
         call hitem.copy(tempu,u)
         call hunit.del(tempu,0)
@@ -1033,7 +1068,7 @@ struct hGlobals
         local unit tempu = null
         local unit deathShadow = null
         // 死亡时间计算
-        set rebornTime = 10.00
+        set rebornTime = 30.00
         if(GetUnitAbilityLevel(killer,'A09A') > 0)then // LV0
             set rebornTime = rebornTime + 1
         elseif(GetUnitAbilityLevel(killer,'A03W') > 0)then // LV1
@@ -1076,6 +1111,7 @@ struct hGlobals
             call SetUnitTimeScalePercent(tempu, 1000.0 / rebornTime)
         endif
         call hitem.copy(u,tempu)
+        call thistype.initSummonAbility(tempu,u,null)
         call GroupRemoveUnit(g_gp_summon, u)
         call hunit.del(u,0)
         set t = htime.setTimeout(rebornTime,function thistype.deadSummonCall)
@@ -1804,12 +1840,12 @@ struct hGlobals
             call hattrEffect.addSilentOdds(mon,15.0,0)
             call hattrEffect.addSilentDuring(mon,3.0,0)
         elseif(uid == 'n04B')then // 熊猫Panda
-            call hattrEffect.addAttackPhysicalVal(mon,g_wave*6.0,0)
-            call hattrEffect.addAttackPhysicalDuring(mon,15.0,0)
-            call hattrEffect.addAttackSpeedVal(mon,g_wave*1,0)
-            call hattrEffect.addAttackSpeedDuring(mon,15.0,0)
-            call hattrEffect.addKnockingVal(mon,g_wave*110,0)
-            call hattrEffect.addKnockingDuring(mon,15.0,0)
+            call hattrEffect.addAttackPhysicalVal(mon,g_wave*5.0,0)
+            call hattrEffect.addAttackPhysicalDuring(mon,10.0,0)
+            call hattrEffect.addAttackSpeedVal(mon,g_wave*0.5,0)
+            call hattrEffect.addAttackSpeedDuring(mon,10.0,0)
+            call hattrEffect.addKnockingVal(mon,g_wave*50,0)
+            call hattrEffect.addKnockingDuring(mon,7.0,0)
         elseif(uid == 'n04C')then // 沙蝎之王
             call hattr.addAttackHuntType(mon,"soil",0)
             call hattrNatural.addSoilOppose(mon,40.0,0)
@@ -1994,7 +2030,7 @@ struct hGlobals
 
     private static method gotoRectSpaceDeg takes unit u,integer lv, real x,real y, real x2,real y2 returns nothing
         local integer i = 0
-        if(IsUnitAlly(u, Player(10)) != true)then
+        if(IsUnitAlly(u, Player(10)) != true or IsUnitInGroup(u, g_gp_attack) == true)then
             set u = null
             return
         endif
@@ -2003,6 +2039,7 @@ struct hGlobals
             call SetUnitUserData(u,0)
             if(lv == 4)then
                 call IssuePointOrder( u, "attack", GetLocationX(Loc_Ring), GetLocationY(Loc_Ring) )
+                call GroupAddUnit(g_gp_attack,u)
             else
                 call SetUnitPosition(u, x2, y2)
             endif    
@@ -2253,14 +2290,14 @@ struct hGlobals
 
         // uid, gold, life, mana, manaback, defend, attackPhysical, attackMagic,attackSpeedBaseSpace
         
-        call thistype.registerSummon('o009',false,"N",1500,1000,    0,0,20,     0,0,0.00) // 帐篷
-        call thistype.registerSummon('o00A',true,"N",3000,3000,     0,0,30,     0,0,0.00) // 农场
-        call thistype.registerSummon('o00M',true,"N",3000,2000,     0,0,30,     80,0,0.00) // 地穴
-        call thistype.registerSummon('o01S',true,"N",3000,2000,     0,0,30,     0,0,0.00) // 月亮井
+        call thistype.registerSummon('o009',false,"N",1500,1000,    100,10,20,     0,0,0.00) // 帐篷
+        call thistype.registerSummon('o00A',true,"N",3000,3000,     100,10,30,     0,0,0.00) // 农场
+        call thistype.registerSummon('o00M',true,"N",3000,2000,     100,10,30,     80,0,1.00) // 地穴
+        call thistype.registerSummon('o01S',true,"N",3000,2000,     100,10,30,     0,0,0.00) // 月亮井
 
-        call thistype.registerSummon('o00B',false,"D",500,120,      0,0,0,      35,0,1.80) // 农民
-        call thistype.registerSummon('o00I',false,"D",500,160,      0,0,0,      50,0,2.30) // 苦力
-        call thistype.registerSummon('o00J',false,"D",500,140,      0,0,0,      10,15,1.95) // 小精灵
+        call thistype.registerSummon('o00B',false,"D",500,120,      100,3,0,      35,0,1.80) // 农民
+        call thistype.registerSummon('o00I',false,"D",500,160,      100,3,0,      50,0,2.30) // 苦力
+        call thistype.registerSummon('o00J',false,"D",500,140,      100,3,0,      10,15,1.95) // 小精灵
 
         call thistype.registerSummon('o008',false,"C",1000,260,     300,5,1,    70,0,1.80) // 民兵
         call thistype.registerSummon('o00E',false,"C",1000,240,     300,5,0,    30,40,1.90) // 血精灵
@@ -2268,6 +2305,7 @@ struct hGlobals
         call thistype.registerSummon('o00S',false,"C",1000,300,     300,5,1,    80,0,2.20) // 邪恶苦力
         call thistype.registerSummon('o00W',false,"C",1000,280,     300,5,0,    10,60,2.20) // 巨魔巫医
         call thistype.registerSummon('o016',false,"C",1000,290,     300,5,0,    40,35,2.20) // 萨满牛祭司
+        call thistype.registerSummon('o01F',false,"C",1000,340,     300,5,0,    60,0,2.10) // 树人
         call thistype.registerSummon('o01V',false,"C",1000,260,     300,5,0,    70,0,1.90) // 暗夜弓手
         call thistype.registerSummon('o01W',false,"C",1000,280,     300,5,0,    75,0,1.90) // 角鹰弓手
         call thistype.registerSummon('o022',false,"C",1000,270,     300,5,0,    25,50,2.10) // 德鲁伊
@@ -2282,15 +2320,15 @@ struct hGlobals
         call thistype.registerSummon('o00V',false,"B",2000,800,     400,6,2,    180,0,2.40) // 邪恶兽人大兵
         call thistype.registerSummon('o014',false,"B",2000,600,     400,6,0,    175,0,1.90) // 飞龙骑士
         call thistype.registerSummon('o019',false,"B",2000,660,     400,6,0,    35,135,2.30) // 巫师
-        call thistype.registerSummon('o020',false,"B",2000,500,     400,6,0,    70,70,2.00) // 精灵龙
-        call thistype.registerSummon('o01Z',false,"B",2000,540,     400,6,1,    105,0,2.20) // 露娜
+        call thistype.registerSummon('o020',false,"B",2000,500,     400,6,0,    55,60,2.00) // 精灵龙
+        call thistype.registerSummon('o01Z',false,"B",2000,540,     400,6,1,    90,0,2.20) // 露娜
         call thistype.registerSummon('o01U',false,"B",2000,560,     400,6,1,    130,0,2.10) // 树妖
         call thistype.registerSummon('o023',false,"B",2000,700,     400,6,3,    130,0,1.90) // 熊战德鲁伊
         call thistype.registerSummon('o01G',false,"B",2000,1000,    400,6,4,    190,0,2.90) // 远古树精
 
         call thistype.registerSummon('o00D',true,"A",4000,1500,     500,8,10,   300,0,1.80) // 剑士
         call thistype.registerSummon('o00N',true,"A",4000,1400,     500,8,6,    340,0,2.20) // 骑士
-        call thistype.registerSummon('o00X',true,"A",4000,1200,     500,8,4,    390,0,3.50) // 迫击炮小队
+        call thistype.registerSummon('o00X',true,"A",4000,1200,     500,8,4,    270,0,3.50) // 迫击炮小队
         call thistype.registerSummon('o00P',true,"A",4000,1100,     500,8,3,    20,280,1.80) // 女巫
         call thistype.registerSummon('o00O',true,"A",4000,1200,     500,8,3,    50,260,1.80) // 魔导师
         call thistype.registerSummon('o010',true,"A",4000,1300,     500,8,4,    285,30,1.80) // 狮鹫骑士
@@ -2305,86 +2343,87 @@ struct hGlobals
         call thistype.registerSummon('o01A',true,"A",4000,1300,     500,8,1,    335,0,2.00) // 邪恶巫师
         call thistype.registerSummon('o024',true,"A",4000,1500,     500,8,4,    325,0,2.10) // 猛熊德鲁伊
         call thistype.registerSummon('o025',true,"A",4000,1300,     500,8,2,    160,210,1.90) // 奇美拉
-        call thistype.registerSummon('o021',true,"A",4000,1300,     500,8,2,    160,210,1.90) // 黑暗精灵
+        call thistype.registerSummon('o021',true,"A",4000,1300,     500,8,2,    100,160,1.90) // 黑暗精灵
         call thistype.registerSummon('o01X',true,"A",4000,1400,     500,8,3,    380,0,2.50) // 山岭巨人
         call thistype.registerSummon('o01R',true,"A",4000,1800,     500,8,6,    200,180,2.80) // 秘迹古树
-        call thistype.registerSummon('o01J',true,"A",4000,2100,     500,8,6,    390,0,2.80) // 战争古树
+        call thistype.registerSummon('o01J',true,"A",4000,2100,     500,8,6,    340,0,2.80) // 战争古树
         call thistype.registerSummon('o01L',true,"A",4000,1900,     500,8,6,    0,380,2.80) // 智慧古树
-        call thistype.registerSummon('o01Q',true,"A",4000,2000,     500,8,6,    240,150,2.80) // 苍风古树
+        call thistype.registerSummon('o01Q',true,"A",4000,2000,     500,8,6,    140,170,2.80) // 苍风古树
 
         call thistype.registerSummon('o01Y',true,"S",8000,2800,     600,9,6,    800,0,2.30) // 山岭巨人·战棍
         call thistype.registerSummon('o01D',true,"S",8000,3200,     600,9,8,    780,0,1.90) // 邪恶科多骑手
-        call thistype.registerSummon('o00Q',true,"S",12500,2600,    600,9,7,    100,800,1.70) // 寒冰女巫
-        call thistype.registerSummon('o013',true,"S",14500,3800,    600,9,9,    530,570,1.60) // 火凤凰
-        call thistype.registerSummon('o01E',true,"S",15500,4500,    600,9,12,   1300,0,1.80) // 牛头人酋长
-        call thistype.registerSummon('o026',true,"S",17000,3500,    600,9,13,   1550,0,1.50) // 月之女祭司
+        call thistype.registerSummon('o00Q',true,"S",12500,2600,    600,9,7,    10,480,1.80) // 寒冰女巫
+        call thistype.registerSummon('o013',true,"S",14500,3800,    600,9,9,    330,370,1.60) // 火凤凰
+        call thistype.registerSummon('o01E',true,"S",15500,4500,    600,9,12,   1100,0,1.80) // 牛头人酋长
+        call thistype.registerSummon('o026',true,"S",17000,3500,    600,9,13,   1450,0,1.50) // 月之女祭司
 
 
-        call thistype.registerSummonAbility('A04K') // N 地穴 - 尖针
-        call thistype.registerSummonAbility('A056') // C 民兵 - 勋章
-        call thistype.registerSummonAbility('A04T') // C 血精灵 - 心灵之火
-        call thistype.registerSummonAbility('A09B') // C 邪恶苦力 - 奋力
-        call thistype.registerSummonAbility('A08A') // C 树人 - 本质
-        call thistype.registerSummonAbility('A09C') // C 兽人大兵 - 斧力
-        call thistype.registerSummonAbility('A09D') // C 萨满牛祭司 - 净化
-        call thistype.registerSummonAbility('A07O') // C 巨魔巫医 - 荼毒
-        call thistype.registerSummonAbility('A09E') // C 暗夜弓手 - 穿透
-        call thistype.registerSummonAbility('A09F') // C 角鹰弓手 - 俯视穿透
-        call thistype.registerSummonAbility('A054') // C 德鲁伊 - 荆棘
-        call thistype.registerSummonAbility('A04M') // B 步兵 - 铁壁
-        call thistype.registerSummonAbility('A09H') // B 灯提白牛 - 虚灵
-        call thistype.registerSummonAbility('A091') // B 飞龙骑士 - 毒标
-        call thistype.registerSummonAbility('A04W') // B 精灵龙 - 魔焰
-        call thistype.registerSummonAbility('A08V') // B 巨魔枪士 - 丧心病狂
-        call thistype.registerSummonAbility('A089') // B 狼骑 - 诱捕
-        call thistype.registerSummonAbility('A04Y') // B 龙鹰骑士 - 缚足
-        call thistype.registerSummonAbility('A049') // B 露娜 - 月刃
-        call thistype.registerSummonAbility('A055') // B 树妖 - 绿枪
-        call thistype.registerSummonAbility('A04Q') // B 铁枪手 - 扳机精通
-        call thistype.registerSummonAbility('A09G') // B 邪恶兽人大兵 - 狂斧
-        call thistype.registerSummonAbility('A09K') // B 熊战德鲁伊 - 咆哮
-        call thistype.registerSummonAbility('A053') // B 远古树精 - 投掷
-        call thistype.registerSummonAbility('A03V') // B 牧师 - 光导医疗
-        call thistype.registerSummonAbility('A07K') // B 巫师 - 邪术
-        call thistype.registerSummonAbility('A04U') // A 剑士 - 刃风式
-        call thistype.registerSummonAbility('A03O') // A 骑士 - 斩铁式
-        call thistype.registerSummonAbility('A07X') // A 飞行机器 - 机关枪
-        call thistype.registerSummonAbility('A07V') // A 黑暗精灵 - 魅刃
-        call thistype.registerSummonAbility('A07T') // A 幻界飞龙 - 蔽日
-        call thistype.registerSummonAbility('A04S') // A 巨魔蝙蝠骑手 - 火焰燃油
-        call thistype.registerSummonAbility('A059') // A 骷骨巫长 - 蛊虫
-        call thistype.registerSummonAbility('A09L') // A 猛熊德鲁伊 - 猛熊之躯
-        call thistype.registerSummonAbility('A09J') // A 魔导师 - 感应
-        call thistype.registerSummonAbility('A08G') // A 女巫 - 大焚火
-        call thistype.registerSummonAbility('A04P') // A 迫击炮小队 - 黑色火药
-        call thistype.registerSummonAbility('A09M') // A 科多骑手 - 吞噬
-        call thistype.registerSummonAbility('A058') // A 奇美拉 - 龙息
-        call thistype.registerSummonAbility('A052') // A 山岭巨人 - 嘲讽
-        call thistype.registerSummonAbility('A08D') // A 狮鹫骑士 - 风暴战锤
-        call thistype.registerSummonAbility('A04R') // A 坦克部队 - 烈性炮弹
-        call thistype.registerSummonAbility('A051') // A 图腾战牛 - 抨击
-        call thistype.registerSummonAbility('A09I') // A 邪恶狼骑 - 掠夺
-        call thistype.registerSummonAbility('A07J') // A 邪恶巫师 - 痛苦链
-        call thistype.registerSummonAbility('A04I') // A 苍风古树 - 烈风
-        call thistype.registerSummonAbility('A05A') // A 秘迹古树 - 秘沼
-        call thistype.registerSummonAbility('A08Z') // A 战争古树 - 林撼
-        call thistype.registerSummonAbility('A07Y') // A 智慧古树 - 通明
-        call thistype.registerSummonAbility('A03T') // S 寒冰女巫 - 冰心魂
-        call thistype.registerSummonAbility('A080') // S 寒冰女巫 - 暴风雪
-        call thistype.registerSummonAbility('A081') // S 寒冰女巫 - 千里冰封
-        call thistype.registerSummonAbility('A08M') // S 火凤凰 - 火鸟
-        call thistype.registerSummonAbility('A08N') // S 火凤凰 - 涅磐
-        call thistype.registerSummonAbility('A08O') // S 火凤凰 - 展翅
-        call thistype.registerSummonAbility('A065') // S 牛头人酋长 - 狂热
-        call thistype.registerSummonAbility('A04A') // S 牛头人酋长 - 粉碎
-        call thistype.registerSummonAbility('A08T') // S 牛头人酋长 - 心狂
-        call thistype.registerSummonAbility('A04B') // S 山岭巨人·战棍 - 过激
-        call thistype.registerSummonAbility('A04C') // S 山岭巨人·战棍 - 战棍
-        call thistype.registerSummonAbility('A03Y') // S 山岭巨人·战棍 - 大闹一番
-        call thistype.registerSummonAbility('A07U') // S 邪恶科多骑手 - 邪殇
-        call thistype.registerSummonAbility('A04X') // S 月之女祭司 - 强弓
-        call thistype.registerSummonAbility('A050') // S 月之女祭司 - 威吓
-        call thistype.registerSummonAbility('A04Z') // S 月之女祭司 - 月光
+        call thistype.registerSummonAbility('o00M','A04K') // N 地穴 - 尖针
+        call thistype.registerSummonAbility('o01S','A07S') // N 月亮井 - 治疗之泉 
+        call thistype.registerSummonAbility('o008','A056') // C 民兵 - 勋章
+        call thistype.registerSummonAbility('o00E','A04T') // C 血精灵 - 心灵之火
+        call thistype.registerSummonAbility('o00S','A09B') // C 邪恶苦力 - 奋力
+        call thistype.registerSummonAbility('o01F','A08A') // C 树人 - 本质
+        call thistype.registerSummonAbility('o00R','A09C') // C 兽人大兵 - 斧力
+        call thistype.registerSummonAbility('o016','A09D') // C 萨满牛祭司 - 净化
+        call thistype.registerSummonAbility('o00W','A07O') // C 巨魔巫医 - 荼毒
+        call thistype.registerSummonAbility('o01V','A09E') // C 暗夜弓手 - 穿透
+        call thistype.registerSummonAbility('o01W','A09F') // C 角鹰弓手 - 俯视穿透
+        call thistype.registerSummonAbility('o022','A054') // C 德鲁伊 - 荆棘
+        call thistype.registerSummonAbility('o00C','A04M') // B 步兵 - 铁壁
+        call thistype.registerSummonAbility('o017','A09H') // B 灯提白牛 - 虚灵
+        call thistype.registerSummonAbility('o014','A091') // B 飞龙骑士 - 毒标
+        call thistype.registerSummonAbility('o020','A04W') // B 精灵龙 - 魔焰
+        call thistype.registerSummonAbility('o00G','A08V') // B 巨魔枪士 - 丧心病狂
+        call thistype.registerSummonAbility('o00T','A089') // B 狼骑 - 诱捕
+        call thistype.registerSummonAbility('o00Z','A04Y') // B 龙鹰骑士 - 缚足
+        call thistype.registerSummonAbility('o01Z','A049') // B 露娜 - 月刃
+        call thistype.registerSummonAbility('o01U','A055') // B 树妖 - 绿枪
+        call thistype.registerSummonAbility('o00K','A04Q') // B 铁枪手 - 扳机精通
+        call thistype.registerSummonAbility('o00V','A09G') // B 邪恶兽人大兵 - 狂斧
+        call thistype.registerSummonAbility('o023','A09K') // B 熊战德鲁伊 - 咆哮
+        call thistype.registerSummonAbility('o01G','A053') // B 远古树精 - 投掷
+        call thistype.registerSummonAbility('o00L','A03V') // B 牧师 - 光导医疗
+        call thistype.registerSummonAbility('o019','A07K') // B 巫师 - 邪术
+        call thistype.registerSummonAbility('o00D','A04U') // A 剑士 - 刃风式
+        call thistype.registerSummonAbility('o00N','A03O') // A 骑士 - 斩铁式
+        call thistype.registerSummonAbility('o00Y','A07X') // A 飞行机器 - 机关枪
+        call thistype.registerSummonAbility('o021','A07V') // A 黑暗精灵 - 魅刃
+        call thistype.registerSummonAbility('o015','A07T') // A 幻界飞龙 - 蔽日
+        call thistype.registerSummonAbility('o01H','A04S') // A 巨魔蝙蝠骑手 - 火焰燃油
+        call thistype.registerSummonAbility('o01B','A059') // A 骷骨巫长 - 蛊虫
+        call thistype.registerSummonAbility('o024','A09L') // A 猛熊德鲁伊 - 猛熊之躯
+        call thistype.registerSummonAbility('o00O','A09J') // A 魔导师 - 感应
+        call thistype.registerSummonAbility('o00P','A08G') // A 女巫 - 大焚火
+        call thistype.registerSummonAbility('o00X','A04P') // A 迫击炮小队 - 黑色火药
+        call thistype.registerSummonAbility('o01C','A09M') // A 科多骑手 - 吞噬
+        call thistype.registerSummonAbility('o025','A058') // A 奇美拉 - 龙息
+        call thistype.registerSummonAbility('o01X','A052') // A 山岭巨人 - 嘲讽
+        call thistype.registerSummonAbility('o010','A08D') // A 狮鹫骑士 - 风暴战锤
+        call thistype.registerSummonAbility('o012','A04R') // A 坦克部队 - 烈性炮弹
+        call thistype.registerSummonAbility('o018','A051') // A 图腾战牛 - 抨击
+        call thistype.registerSummonAbility('o00U','A09I') // A 邪恶狼骑 - 掠夺
+        call thistype.registerSummonAbility('o01A','A07J') // A 邪恶巫师 - 痛苦链
+        call thistype.registerSummonAbility('o01Q','A04I') // A 苍风古树 - 烈风
+        call thistype.registerSummonAbility('o01R','A05A') // A 秘迹古树 - 秘沼
+        call thistype.registerSummonAbility('o01J','A08Z') // A 战争古树 - 林撼
+        call thistype.registerSummonAbility('o01L','A07Y') // A 智慧古树 - 通明
+        call thistype.registerSummonAbility('o00Q','A03T') // S 寒冰女巫 - 冰心魂
+        call thistype.registerSummonAbility('o00Q','A080') // S 寒冰女巫 - 暴风雪
+        call thistype.registerSummonAbility('o00Q','A081') // S 寒冰女巫 - 千里冰封
+        call thistype.registerSummonAbility('o013','A08M') // S 火凤凰 - 火鸟
+        call thistype.registerSummonAbility('o013','A08N') // S 火凤凰 - 涅磐
+        call thistype.registerSummonAbility('o013','A08O') // S 火凤凰 - 展翅
+        call thistype.registerSummonAbility('o01E','A065') // S 牛头人酋长 - 狂热
+        call thistype.registerSummonAbility('o01E','A04A') // S 牛头人酋长 - 粉碎
+        call thistype.registerSummonAbility('o01E','A08T') // S 牛头人酋长 - 心狂
+        call thistype.registerSummonAbility('o01Y','A04B') // S 山岭巨人·战棍 - 过激
+        call thistype.registerSummonAbility('o01Y','A04C') // S 山岭巨人·战棍 - 战棍
+        call thistype.registerSummonAbility('o01Y','A03Y') // S 山岭巨人·战棍 - 大闹一番
+        call thistype.registerSummonAbility('o01D','A07U') // S 邪恶科多骑手 - 邪殇
+        call thistype.registerSummonAbility('o026','A04X') // S 月之女祭司 - 强弓
+        call thistype.registerSummonAbility('o026','A050') // S 月之女祭司 - 威吓
+        call thistype.registerSummonAbility('o026','A04Z') // S 月之女祭司 - 月光
         
 
         // 瞬时物品

@@ -53,7 +53,7 @@ struct hSet
             set bean.huntEff = "Objects\\Spawnmodels\\Human\\HumanBlood\\BloodElfSpellThiefBlood.mdl"
             set bean.huntKind = "attack"
             set bean.huntType = "physicalwind"
-            call hskill.shuttleToUnit(triggerUnit,hevent.getTargetUnit(),300,20,30,5,50,null,"attack",'A06K',bean)
+            call hskill.shuttleToUnit(triggerUnit,hevent.getTargetUnit(),700,20,30,5,50,null,"attack",'A06K',bean)
             call bean.destroy()
 		endif
 		if(skillid == 'A05M')then // 赤血 - 狂暴
@@ -612,13 +612,6 @@ struct hSet
 		set killer = null
 	endmethod
 
-	private static method onEnemyStop takes nothing returns nothing
-		call hmsg.echo("onEnemyStop="+I2S(GetIssuedOrderId()))
-		if(GetIssuedOrderId() == String2OrderIdBJ("stop"))then
-			call IssuePointOrderByIdLoc( GetTriggerUnit(), 851983, Loc_Ring )
-		endif
-	endmethod
-    
 	public static method createEnemy takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		local integer i = htime.getInteger(t,1)
@@ -644,7 +637,7 @@ struct hSet
 			return
 		endif
 		call htime.setInteger(t,1,1+i)
-		set life = g_wave * (50 + g_diff * 36)
+		set life = g_wave * 75 * g_diff
 		set move = 125 + g_wave * 3 + g_diff * 7
 		set attack = g_wave * (4 + g_diff * 2)
 		set j = 1
@@ -653,7 +646,6 @@ struct hSet
 				set u = henemy.createUnitXY(g_mon[monRand],spaceDegX[j],spaceDegY[j])
 				call GroupAddUnit(g_gp_mon,u)
 				call TriggerRegisterUnitEvent( enemyDeadTg, u, EVENT_UNIT_DEATH )
-				call TriggerRegisterUnitEvent( enemyStopTg, u, EVENT_UNIT_ISSUED_ORDER )
 				call hattr.setLife(u,life,0)
 				call hattr.setMove(u,move,0)
 				call hattr.setAttackPhysical(u,attack,0)
@@ -682,7 +674,7 @@ struct hSet
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
 		set exp = g_wave * 3000
-		set gold = g_wave * 40 * player_current_qty
+		set gold = g_wave * 30 * player_current_qty
 		if(killer!=null)then
 			call haward.forUnit(killer,exp,0,0)
 		endif
@@ -692,7 +684,7 @@ struct hSet
 			exitwhen i > player_current_qty * 20
 				set hxy.x = GetUnitX(u)
         		set hxy.y = GetUnitY(u)
-				set hxy = hlogic.polarProjection(hxy,i*20,i*15)
+				set hxy = hlogic.polarProjection(hxy,i*25,i*20)
 				call hitem.toXY(momentItems[1],gold,hxy.x,hxy.y,60.00)
 				if(GetRandomInt(1,50) == 33)then
 					call hitem.toXY(momentItems[3],g_wave*1000,hxy.x,hxy.y,60.00)
@@ -734,7 +726,7 @@ struct hSet
 		if(bossPercentTiny > 50)then
 			set bossPercentTiny = 50
 		endif
-        call hattr.setLife(u, g_wave * (8500+450*g_diff) ,0)
+        call hattr.setLife(u, g_wave * (7500+2500*g_diff) ,0)
 		call hattr.setLifeBack(u, g_wave* 2 + g_diff * 5 ,0)
 		call hattr.addMana(u,1000*g_diff,0)
         call hattr.addManaBack(u,30*g_diff,0)
@@ -788,7 +780,8 @@ struct hSet
 		set t = htime.setInterval(g_game_mon_loop,function thistype.createEnemy)
 		call htime.setInteger(t,1,0)
 		if (hlogic.imod(g_wave,g_boss_mod) == 0) then
-			set t = htime.setTimeout(g_game_mon_loop*0.6*(g_gp_max / g_game_speed),function thistype.createBoss)
+			set t = htime.setTimeout(g_game_mon_loop*0.5*(g_gp_max / g_game_speed),function thistype.createBoss)
+			call hmedia.bgm(gg_snd_dangerComing)
 		endif
 		if(g_wave == 1)then
 			call hmedia.bgm(musicBattle)
@@ -836,7 +829,7 @@ struct hSet
 			//
 			if (hlogic.imod(g_wave,g_boss_mod) == 0) then
 				call hmark.display(null,"war3mapImported\\warning.blp",1.0,5.0,100.0,100.0)
-				call hmedia.bgm(gg_snd_dangerComing)
+				call hmedia.bgmStop()
 				call htime.setDialog(g_timer_wave, "第"+I2S(g_wave)+"波※BOSS")
 				call hmsg.echo("时空炸裂！！小心！|cffff8080BOSS|r 要来了～")
 			else
@@ -938,6 +931,7 @@ struct hSet
 	endmethod
 	private static method onConstructFinish takes nothing returns nothing
 		call hGlobals.initSummon(GetTriggerUnit())
+		call hGlobals.initSummonAbility(GetTriggerUnit(),null,null)
 	endmethod
 
     public static method setInit takes nothing returns nothing
@@ -946,11 +940,9 @@ struct hSet
         set heroDeadTg = CreateTrigger()
         set sommonDeadTg = CreateTrigger()
         set enemyDeadTg = CreateTrigger()
-		set enemyStopTg = CreateTrigger()
         set bossDeadTg = CreateTrigger()
         set sommonLevelupTg = CreateTrigger()
         call TriggerAddAction(enemyDeadTg,function thistype.onEnemyDead)
-		call TriggerAddAction(enemyStopTg,function thistype.onEnemyStop)
         call TriggerAddAction(bossDeadTg,function thistype.onBossDead)
         call TriggerAddAction(heroDeadTg,function thistype.onHeroDead)
         call TriggerAddAction(sommonDeadTg,function thistype.onSommonDead)
