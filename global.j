@@ -499,7 +499,7 @@ struct hGlobals
             call hattrEffect.addLightningChainQty(u,1,0)
             call hattrEffect.setLightningChainModel(u,lightningCode_molizhiyan)
         elseif(abid == 'A08V')then // B 巨魔枪士 - 丧心病狂
-            // 攻击事件实现
+            // 攻击事件实现\施法事件实现
         elseif(abid == 'A089')then // B 狼骑 - 诱捕
             call hattrEffect.addFetterOdds(u,5.0,0)
             call hattrEffect.addFetterDuring(u,7,0)
@@ -527,8 +527,10 @@ struct hGlobals
             call hattrEffect.addKnockingDuring(u,30,0)
         elseif(abid == 'A03V')then // B 牧师 - 光导医疗
             // 施法事件实现
+            call IssueImmediateOrder(u, "healon")
         elseif(abid == 'A07K')then // B 巫师 - 邪术
             // 施法事件实现
+            call IssueImmediateOrder(u, "bloodluston")
         endif
         if(abid == 'A04U')then // A 剑士 - 刃风式
             call hattr.addAttackHuntType(u,"wind",0)
@@ -619,7 +621,7 @@ struct hGlobals
         endif
         if(abid == 'A03T')then // S 寒冰女巫 - 冰心魂
             call hattr.addAttackHuntType(u,"ice",0)
-            call hattrEffect.addFreezeVal(u,30,0)
+            call hattrEffect.addFreezeVal(u,35,0)
             call hattrEffect.addFreezeDuring(u,4,0)
             call hattrEffect.addColdVal(u,10,0)
             call hattrEffect.addColdDuring(u,4,0)
@@ -640,10 +642,8 @@ struct hGlobals
         elseif(abid == 'A065')then // S 牛头人酋长 - 燃方
             // 技能自带效果
         elseif(abid == 'A04A')then // S 牛头人酋长 - 粉碎
-            call hattrEffect.addCrackFlyVal(u,600,0)
-            call hattrEffect.addCrackFlyOdds(u,25,0)
-            call hattrEffect.addCrackFlyHigh(u,200,0)
-            call hattrEffect.addCrackFlyDistance(u,100,0)
+            call hattrEffect.addCorrosionVal(u,5,0)
+            call hattrEffect.addCorrosionDuring(u,7,0)
         elseif(abid == 'A08T')then // S 牛头人酋长 - 狂野
             call hattr.addHemophagia(u,10,0)
             call hattr.addKnocking(u,3000,0)
@@ -794,25 +794,17 @@ struct hGlobals
                 call RemoveUnit(triggerUnit)
                 call RemoveUnit(targetUnit)
             endif
-		elseif(skillid == 'A08V')then // 丧病
+		elseif(skillid == 'A08V')then // B 巨魔枪士 - 丧心病狂
 			call hunit.setUserData(triggerUnit,777,4.5)
 			call hattr.addHuntReboundOppose(triggerUnit,100,4.5)
 			call hattr.addUnarmOppose(triggerUnit,100,4.5)
-		elseif(skillid == 'A03V' and targetUnit != null)then // 治疗
-			call hattr.addLifeBack(targetUnit,20 + I2R(GetHeroLevel(triggerUnit)) * 0.10,3.00)
-			if(GetUnitAbilityLevel(triggerUnit,'A04T') >= 1)then // 心灵之火
-				call hattr.addAttackSpeed(targetUnit,4.0,3.00)
-			endif
-		elseif(skillid == 'A07J' and targetUnit != null)then // 治疗＃远距离
-			call hattr.addLifeBack(targetUnit,40 + I2R(GetHeroLevel(triggerUnit)) * 0.15,3.00)
-			if(GetUnitAbilityLevel(triggerUnit,'A04T') >= 1)then // 心灵之火
-				call hattr.addAttackSpeed(targetUnit,4.0,3.00)
-			endif
-        elseif(skillid == 'A07K' and targetUnit != null)then // 邪术
-			call hattr.addLifeBack(targetUnit,I2R(GetHeroLevel(triggerUnit)) * 0.5,20.00)
-            call hattr.addAttackSpeed(targetUnit,45.0,20.00)
-        elseif(skillid == 'A03Y')then // 山岭巨人·战棍 大闹一番
-            call hattr.addHuntAmplitude(triggerUnit,I2R(GetUnitLevel(triggerUnit)) * 1, 10)
+		elseif(skillid == 'A03V' and targetUnit != null)then // B 牧师 - 光导医疗
+			call hattr.addLifeBack(targetUnit,70,5.00)
+        elseif(skillid == 'A07K' and targetUnit != null)then // B 巫师 - 邪术
+			call hattr.addLifeBack(targetUnit,20,20)
+            call hattr.addAttackSpeed(targetUnit,45,20)
+        elseif(skillid == 'A03Y')then // S 山岭巨人·战棍 大闹一番
+            call hattr.addHuntAmplitude(triggerUnit,30, 10)
 			call hattrEffect.setSwimOdds(triggerUnit,50,10)
             call hattrEffect.setSwimDuring(triggerUnit,0.5,10)
         endif
@@ -836,37 +828,139 @@ struct hGlobals
         local group g = null
         local unit u = null
         local hAttrHuntBean bean
+        local real percent = 0.00
         if(triggerUnit == null or targetUnit == null)then
             set triggerUnit = null
             set targetUnit = null
             return
         endif
+        // glv
+		if(triggerUnit != null)then
+			// 等级升级
+			if(GetUnitAbilityLevel(triggerUnit,'A09A') > 0 and GetRandomInt(1,5) == 1)then // LV0
+				set percent = 1.00
+				call UnitRemoveAbility(triggerUnit,'A09A')
+				call UnitAddAbility(triggerUnit,'A03W')
+				call UnitMakeAbilityPermanent( triggerUnit, true, 'A03W' )
+			elseif(GetUnitAbilityLevel(triggerUnit,'A03W') > 0 and GetRandomInt(1,7) == 1)then // LV1
+				set percent = 2.00
+				call UnitRemoveAbility(triggerUnit,'A03W')
+				call UnitAddAbility(triggerUnit,'A044')
+				call UnitMakeAbilityPermanent( triggerUnit, true, 'A044' )
+			elseif(GetUnitAbilityLevel(triggerUnit,'A044') > 0 and GetRandomInt(1,9) == 1)then // LV2
+				set percent = 3.00
+				call UnitRemoveAbility(triggerUnit,'A044')
+				call UnitAddAbility(triggerUnit,'A07Z')
+				call UnitMakeAbilityPermanent( triggerUnit, true, 'A07Z' )
+			elseif(GetUnitAbilityLevel(triggerUnit,'A07Z') > 0 and GetRandomInt(1,11) == 1)then // LV3
+				set percent = 4.00
+				call UnitRemoveAbility(triggerUnit,'A07Z')
+				call UnitAddAbility(triggerUnit,'A088')
+				call UnitMakeAbilityPermanent( triggerUnit, true, 'A088' )
+			elseif(GetUnitAbilityLevel(triggerUnit,'A088') > 0 and GetRandomInt(1,13) == 1)then // LV4
+				set percent = 5.00
+				call UnitRemoveAbility(triggerUnit,'A088')
+				call UnitAddAbility(triggerUnit,'A08B')
+				call UnitMakeAbilityPermanent( triggerUnit, true, 'A08B' )
+			elseif(GetUnitAbilityLevel(triggerUnit,'A08B') > 0 and GetRandomInt(1,15) == 1)then // LV5
+				set percent = 6.00
+				call UnitRemoveAbility(triggerUnit,'A08B')
+				call UnitAddAbility(triggerUnit,'A08C')
+				call UnitMakeAbilityPermanent( triggerUnit, true, 'A08C' )
+			elseif(GetUnitAbilityLevel(triggerUnit,'A08C') > 0 and GetRandomInt(1,20) == 1)then // LV6
+				set percent = 7.00
+				call UnitRemoveAbility(triggerUnit,'A08C')
+				call UnitAddAbility(triggerUnit,'A08L')
+				call UnitMakeAbilityPermanent( triggerUnit, true, 'A08L' )
+			elseif(GetUnitAbilityLevel(triggerUnit,'A08L') > 0 and GetRandomInt(1,30) == 1)then // LV7
+				set percent = 8.00
+				call UnitRemoveAbility(triggerUnit,'A08L')
+				call UnitAddAbility(triggerUnit,'A08S')
+				call UnitMakeAbilityPermanent( triggerUnit, true, 'A08S' )
+			elseif(GetUnitAbilityLevel(triggerUnit,'A08S') > 0 and GetRandomInt(1,40) == 1)then // LV8
+				set percent = 9.00
+				call UnitRemoveAbility(triggerUnit,'A08S')
+				call UnitAddAbility(triggerUnit,'A090')
+				call UnitMakeAbilityPermanent( triggerUnit, true, 'A090' )
+			//elseif(GetUnitAbilityLevel(triggerUnit,'A090') > 0 and GetRandomInt(1,20) == 1)then // LV9
+			endif
+			if(percent > 0.00)then
+				if(GetUnitAbilityLevel(triggerUnit,'A03U') > 0)then //E
+					call hattr.addLife(triggerUnit,2*percent,0)
+					call hattr.addAttackPhysical(triggerUnit,0.8*percent,0)
+				elseif(GetUnitAbilityLevel(triggerUnit,'A064') > 0)then //D
+					call hattr.addLife(triggerUnit,4*percent,0)
+					call hattr.addAttackPhysical(triggerUnit,1.4*percent,0)
+				elseif(GetUnitAbilityLevel(triggerUnit,'A066') > 0)then //C
+					call hattr.addLife(triggerUnit,7*percent,0)
+					call hattr.addAttackSpeed(triggerUnit,0.33*percent,0)
+					call hattr.addAttackPhysical(triggerUnit,1.6*percent,0)
+				elseif(GetUnitAbilityLevel(triggerUnit,'A067') > 0)then //B
+					call hattr.addLife(triggerUnit,11*percent,0)
+					call hattr.addAttackSpeed(triggerUnit,0.67*percent,0)
+					call hattr.addAttackPhysical(triggerUnit,1.8*percent,0)
+					call hattr.addAttackMagic(triggerUnit,1.8*percent,0)
+				elseif(GetUnitAbilityLevel(triggerUnit,'A069') > 0)then //A
+					call hattr.addLife(triggerUnit,16*percent,0)
+					call hattr.addAttackSpeed(triggerUnit,1.00*percent,0)
+					call hattr.addAttackPhysical(triggerUnit,3.4*percent,0)
+					call hattr.addAttackMagic(triggerUnit,3.4*percent,0)
+				elseif(GetUnitAbilityLevel(triggerUnit,'A068') > 0)then //S
+					call hattr.addLife(triggerUnit,22*percent,0)
+					call hattr.addAttackSpeed(triggerUnit,1.33*percent,0)
+					call hattr.addAttackPhysical(triggerUnit,6.4*percent,0)
+					call hattr.addAttackMagic(triggerUnit,6.4*percent,0)
+				elseif(GetUnitAbilityLevel(triggerUnit,'A06A') > 0)then //SS
+					call hattr.addLife(triggerUnit,30*percent,0)
+					call hattr.addAttackSpeed(triggerUnit,1.67*percent,0)
+					call hattr.addAttackPhysical(triggerUnit,12.2*percent,0)
+					call hattr.addAttackMagic(triggerUnit,12.2*percent,0)
+				elseif(GetUnitAbilityLevel(triggerUnit,'A06B') > 0)then //SSS
+					call hattr.addLife(triggerUnit,40*percent,0)
+					call hattr.addAttackSpeed(triggerUnit,2.00*percent,0)
+					call hattr.addAttackPhysical(triggerUnit,24.0*percent,0)
+					call hattr.addAttackMagic(triggerUnit,24.0*percent,0)
+				endif
+			endif
+		endif
         // 1/10几率
         if(rand<=3)then
-            // C 萨满牛祭司 - 净化
+            // A 飞行机器 - 机关枪
             if(GetUnitAbilityLevel(triggerUnit,'A09D') >= 1)then
-                call hattr.subMove(targetUnit,50,5)
-                call hattr.subAttackSpeed(targetUnit,25,5)
-                call heffect.toUnit("Abilities\\Spells\\Orc\\Purge\\PurgeBuffTarget.mdl",targetUnit,"origin",1.00)
+                call hattr.addAttackSpeed(triggerUnit,100,3)
+                call hattr.addKnocking(triggerUnit,50,5)
+                call heffect.toUnit("Abilities\\Spells\\Other\\BreathOfFire\\BreathOfFireDamage.mdl",triggerUnit,"weapon",3.00)
             endif
-            // 山岭巨人/山岭巨人·战棍 嘲讽
-            if(uid == 'H00E' or uid == 'H00L')then
-                call heffect.toUnit("Abilities\\Spells\\NightElf\\Taunt\\TauntCaster.mdl",triggerUnit,"origin",1.00)
-                call hattrEffect.addCrackFlyOdds(triggerUnit,50.0,4.00)
-                call hattr.addToughness(triggerUnit,50.0,0)
+            // A 邪恶狼骑 - 掠夺
+            if(GetUnitAbilityLevel(triggerUnit,'A09I') >= 1)then
+                call haward.forUnit(triggerUnit,0,g_wave * 4,0)
+            endif
+        endif
+        // 1/9几率
+        if(rand<=3)then
+            // A 魔导师 - 感应
+            if(GetUnitAbilityLevel(triggerUnit,'A09J') >= 1)then
+                call heffect.toUnit("war3mapImported\\StaticRemnant.mdl",targetUnit,"origin",1.00)
                 set filter = hFilter.create()
                 call filter.isAlive(true)
                 call filter.isEnemy(true,triggerUnit)
-                call filter.isBuilding(false)
                 set g = hgroup.createByUnit(triggerUnit,300.0,function hFilter.get )
                 call filter.destroy()
+                set bean = hAttrHuntBean.create()
+                set bean.damage = 225
+                set bean.fromUnit = triggerUnit
+                set bean.huntEff = "Abilities\\Spells\\Orc\\Purge\\PurgeBuffTarget.mdl"
+                set bean.huntKind = "skill"
+                set bean.huntType = "thunder"
                 loop
                     exitwhen(IsUnitGroupEmptyBJ(g) == true)
                         set u = FirstOfGroup(g)
                         call GroupRemoveUnit(g,u)
-                        call IssueTargetOrder(u, "attack", triggerUnit)
+                        set bean.toUnit = u
+                        call hattrHunt.huntUnit(bean)
                         set u = null
                 endloop
+                call bean.destroy()
                 call GroupClear(g)
                 call DestroyGroup(g)
                 set g = null
@@ -874,72 +968,143 @@ struct hGlobals
         endif
         // 1/6几率
         if(rand<=5)then
-            if(GetUnitAbilityLevel(triggerUnit,'A08V') >= 1)then // 狂战猎手 - 丧病
+            if(GetUnitAbilityLevel(triggerUnit,'A08V') >= 1)then // B 巨魔枪士 - 丧心病狂
                 call IssueImmediateOrder( triggerUnit, "avatar" )
-            elseif(uid == 'H00L' and GetUnitAbilityLevel(triggerUnit,'A03Y') >= 1)then // 山岭巨人·战棍 - 大闹一番
+            elseif(GetUnitAbilityLevel(triggerUnit,'A03Y') >= 1)then // S 山岭巨人·战棍 - 大闹一番
                 call IssueImmediateOrder( triggerUnit, "whirlwind" )
-            elseif(uid == 'H00V' and GetUnitAbilityLevel(triggerUnit,'A080') >= 1)then // 冰骨之龙 - 暴风雪
+            elseif(GetUnitAbilityLevel(triggerUnit,'A080') >= 1)then // S 寒冰女巫 - 暴风雪
                 call IssuePointOrder( triggerUnit, "blizzard",GetUnitX(targetUnit),GetUnitY(targetUnit))
-            elseif(uid == 'H00Z' and GetUnitAbilityLevel(triggerUnit,'A08G') >= 1)then // 炽焰之龙 - 大焚火
+            elseif(GetUnitAbilityLevel(triggerUnit,'A08G') >= 1)then // A 女巫 - 大焚火
                 call IssuePointOrder( triggerUnit, "breathoffire",GetUnitX(targetUnit),GetUnitY(targetUnit))
+            endif
+        endif
+        // 1/5几率
+        if(rand<=6)then
+            // C 萨满牛祭司 - 净化
+            if(GetUnitAbilityLevel(triggerUnit,'A09D') >= 1)then
+                call hattr.subMove(targetUnit,50,5)
+                call hattr.subAttackSpeed(targetUnit,25,5)
+                call heffect.toUnit("Abilities\\Spells\\Orc\\Purge\\PurgeBuffTarget.mdl",targetUnit,"origin",1.00)
+            endif
+            // B 灯提白牛 - 虚灵
+            if(GetUnitAbilityLevel(triggerUnit,'A09H') >= 1)then
+                call heffect.toUnit("ReplaceableTextures\\CommandButtonsDisabled\\Dispersion.mdl",triggerUnit,"origin",1.00)
+                set filter = hFilter.create()
+                call filter.isAlive(true)
+                call filter.isAlly(true,triggerUnit)
+                set g = hgroup.createByUnit(triggerUnit,600.0,function hFilter.get )
+                call filter.destroy()
+                loop
+                    exitwhen(IsUnitGroupEmptyBJ(g) == true)
+                        set u = FirstOfGroup(g)
+                        call GroupRemoveUnit(g,u)
+                        call hattr.addAvoid(u,25,10)
+                        call heffect.toUnit("Abilities\\Spells\\Items\\AIvi\\AIviTarget.mdl",u,"origin",1.00)
+                        set u = null
+                endloop
+                call GroupClear(g)
+                call DestroyGroup(g)
+                set g = null
+            endif
+            // A 山岭巨人 - 大喊
+            if(GetUnitAbilityLevel(triggerUnit,'A052') >= 1)then
+                call heffect.toUnit("Abilities\\Spells\\NightElf\\Taunt\\TauntCaster.mdl",triggerUnit,"origin",1.00)
+                set filter = hFilter.create()
+                call filter.isAlive(true)
+                call filter.isAlly(true,triggerUnit)
+                set g = hgroup.createByUnit(triggerUnit,300.0,function hFilter.get )
+                call filter.destroy()
+                loop
+                    exitwhen(IsUnitGroupEmptyBJ(g) == true)
+                        set u = FirstOfGroup(g)
+                        call GroupRemoveUnit(g,u)
+                        call hattr.addAttackHuntType(u,"soil",10)
+                        call hattr.addAim(u,10,10)
+                        call hattrEffect.addTortuaVal(u,100,10)
+                        call hattrEffect.addTortuaDuring(u,4,10)
+                        set u = null
+                endloop
+                call GroupClear(g)
+                call DestroyGroup(g)
+                set g = null
+            endif
+            // A 智慧古树 - 通明
+            if(GetUnitAbilityLevel(triggerUnit,'A07Y') >= 1)then
+                call heffect.toUnit("war3mapImported\\Energy Spark.mdl",triggerUnit,"origin",1.00)
+                set filter = hFilter.create()
+                call filter.isAlive(true)
+                call filter.isAlly(true,triggerUnit)
+                set g = hgroup.createByUnit(triggerUnit,1000.0,function hFilter.get )
+                call filter.destroy()
+                loop
+                    exitwhen(IsUnitGroupEmptyBJ(g) == true)
+                        set u = FirstOfGroup(g)
+                        call GroupRemoveUnit(g,u)
+                        call hattr.addViolence(u,500,10)
+                        call heffect.toUnit("Abilities\\Spells\\Items\\AIim\\AIimTarget.mdl",u,"origin",1.00)
+                        set u = null
+                endloop
+                call GroupClear(g)
+                call DestroyGroup(g)
+                set g = null
+            endif
+        endif
+        // 1/2几率
+        if(rand<=15)then
+            // A 科多骑手 - 吞噬
+            if(GetUnitAbilityLevel(triggerUnit,'A09M') >= 1)then
+                call hattr.addAttackPhysical(triggerUnit,25,10)
+                call hattr.subMove(targetUnit,50,5)
+                call heffect.toUnit("Abilities\\Spells\\Orc\\Devour\\DevourEffectArt.mdl",targetUnit,"origin",1.00)
             endif
         endif
         // 100%触发
         if(GetUnitAbilityLevel(triggerUnit,'A08V') >= 1 and hunit.getUserData(triggerUnit) == 777)then
+            // B 巨魔枪士 - 丧心病狂
             call hattr.subLifeBack(triggerUnit,30,4.5)
             call hattr.addAttackSpeed(triggerUnit,70,4.5)
             call hattr.addAttackPhysical(triggerUnit,10,4.5)
             call heffect.toUnit("war3mapImported\\BloodElementalMissile.mdl",triggerUnit,"origin",1.00)
         endif
-        if(uid == 'H00F')then // 参天树精
-            if(GetUnitAbilityLevel(triggerUnit,'A053') >= 1)then
-                call hattr.subMove(targetUnit,10,5)
-                call hattr.subAttackSpeed(targetUnit,15,5)
+        // S 寒冰女巫 - 千里冰封
+        if(GetUnitAbilityLevel(triggerUnit,'A081') >= 1)then
+            set i = GetUnitUserData(triggerUnit)
+            if(i<0)then
+                set i = 0
             endif
-        elseif(uid == 'H00V')then // 冰骨之龙
-            if(GetUnitAbilityLevel(triggerUnit,'A07Y') >= 1)then
-                call hattrNatural.subIceOppose(targetUnit,5.0,5)
-                call hattrNatural.subGhostOppose(targetUnit,5.0,5)
+            if(i>=10)then
+                call heffect.toUnit("war3mapImported\\Enchantment.mdl",triggerUnit,"origin",1.00)
+                call hattrEffect.addBombVal(triggerUnit,300,3)
+                call SetUnitUserData(triggerUnit,0)
+            else
+                call SetUnitUserData(triggerUnit,i+1)
             endif
-            if(GetUnitAbilityLevel(triggerUnit,'A081') >= 1)then
-                set i = GetUnitUserData(triggerUnit)
-                if(i<0)then
-                    set i = 0
-                endif
-                if(i>=10)then
-                    call heffect.toUnit("war3mapImported\\Enchantment.mdl",triggerUnit,"origin",1.00)
-                    call hattrEffect.addBombVal(triggerUnit,I2R(GetUnitLevel(triggerUnit))*8,3)
-                    call SetUnitUserData(triggerUnit,0)
-                else
-                    call SetUnitUserData(triggerUnit,i+1)
-                endif
+        endif
+        // S 火凤凰 - 展翅
+        if(GetUnitAbilityLevel(triggerUnit,'A08O') >= 1)then
+            set i = GetUnitUserData(triggerUnit)
+            if(i<0)then
+                set i = 0
             endif
-        elseif(uid == 'H010' or uid == 'H011')then // 火凤凰 - 展翅
-            if(GetUnitAbilityLevel(triggerUnit,'A08O') >= 1)then
-                set i = GetUnitUserData(triggerUnit)
-                if(i<0)then
-                    set i = 0
-                endif
-                if(i>=10)then
-                    set u = hunit.createUnitXYFacing(GetOwningPlayer(triggerUnit),'n050',GetUnitX(triggerUnit),GetUnitY(triggerUnit),hlogic.getDegBetweenUnit(triggerUnit,targetUnit))
-                    call SetUnitVertexColor( u, 255, 255, 255, 150 )
-                    call SetUnitAnimation( u, "spell" )
-                    call hunit.del(u,0.7)
-                    set hxy.x = GetUnitX(triggerUnit)
-                    set hxy.y = GetUnitY(triggerUnit)
-                    set hxy = hlogic.polarProjection(hxy,750,hlogic.getDegBetweenUnit(u,targetUnit))
-                    set loc = Location(hxy.x,hxy.y)
-                    set bean = hAttrHuntBean.create()
-                    set bean.damage = 20 * GetUnitLevel(triggerUnit)
-                    set bean.fromUnit = triggerUnit
-                    set bean.huntKind = "skill"
-                    set bean.huntType = "realfire"
-                    call hskill.leap(u,loc,20,null,150,false,bean)
-                    call bean.destroy()
-                    call SetUnitUserData(triggerUnit,0)
-                else
-                    call SetUnitUserData(triggerUnit,i+1)
-                endif
+            if(i>=10)then
+                set u = hunit.createUnitXYFacing(GetOwningPlayer(triggerUnit),'n050',GetUnitX(triggerUnit),GetUnitY(triggerUnit),hlogic.getDegBetweenUnit(triggerUnit,targetUnit))
+                call SetUnitVertexColor( u, 255, 255, 255, 150 )
+                call SetUnitAnimation( u, "spell" )
+                call hunit.del(u,0.7)
+                set hxy.x = GetUnitX(triggerUnit)
+                set hxy.y = GetUnitY(triggerUnit)
+                set hxy = hlogic.polarProjection(hxy,800,hlogic.getDegBetweenUnit(u,targetUnit))
+                set loc = Location(hxy.x,hxy.y)
+                set bean = hAttrHuntBean.create()
+                set bean.damage = 500
+                set bean.fromUnit = triggerUnit
+                set bean.huntKind = "skill"
+                set bean.huntType = "realfire"
+                call hskill.leap(u,loc,20,null,150,false,bean)
+                call bean.destroy()
+                call SetUnitUserData(triggerUnit,0)
+            else
+                call SetUnitUserData(triggerUnit,i+1)
             endif
         endif
         set triggerUnit = null
@@ -1068,26 +1233,35 @@ struct hGlobals
         local unit tempu = null
         local unit deathShadow = null
         // 死亡时间计算
-        set rebornTime = 30.00
-        if(GetUnitAbilityLevel(killer,'A09A') > 0)then // LV0
+        set rebornTime = 10.00
+        if(GetUnitAbilityLevel(u,'A09A') > 0)then // LV0
             set rebornTime = rebornTime + 1
-        elseif(GetUnitAbilityLevel(killer,'A03W') > 0)then // LV1
+        elseif(GetUnitAbilityLevel(u,'A03W') > 0)then // LV1
             set rebornTime = rebornTime + 2
-        elseif(GetUnitAbilityLevel(killer,'A044') > 0)then // LV2
+        elseif(GetUnitAbilityLevel(u,'A044') > 0)then // LV2
             set rebornTime = rebornTime + 3
-        elseif(GetUnitAbilityLevel(killer,'A07Z') > 0)then // LV3
+        elseif(GetUnitAbilityLevel(u,'A07Z') > 0)then // LV3
             set rebornTime = rebornTime + 4
-        elseif(GetUnitAbilityLevel(killer,'A088') > 0)then // LV4
+        elseif(GetUnitAbilityLevel(u,'A088') > 0)then // LV4
             set rebornTime = rebornTime + 5
-        elseif(GetUnitAbilityLevel(killer,'A08B') > 0)then // LV5
+        elseif(GetUnitAbilityLevel(u,'A08B') > 0)then // LV5
             set rebornTime = rebornTime + 6
-        elseif(GetUnitAbilityLevel(killer,'A08C') > 0)then // LV6
+        elseif(GetUnitAbilityLevel(u,'A08C') > 0)then // LV6
             set rebornTime = rebornTime + 7
-        elseif(GetUnitAbilityLevel(killer,'A08L') > 0)then // LV7
+        elseif(GetUnitAbilityLevel(u,'A08L') > 0)then // LV7
             set rebornTime = rebornTime + 8
-        elseif(GetUnitAbilityLevel(killer,'A08S') > 0)then // LV8
+        elseif(GetUnitAbilityLevel(u,'A08S') > 0)then // LV8
             set rebornTime = rebornTime + 9
-        elseif(GetUnitAbilityLevel(killer,'A090') > 0)then // LV9
+        elseif(GetUnitAbilityLevel(u,'A090') > 0)then // LV9
+            set rebornTime = rebornTime + 10
+        endif
+        if("SSS" == LoadStr(hash_unit,uid,0))then
+            set rebornTime = rebornTime + 40
+        elseif("SS" == LoadStr(hash_unit,uid,0))then
+            set rebornTime = rebornTime + 30
+        elseif("S" == LoadStr(hash_unit,uid,0))then
+            set rebornTime = rebornTime + 20
+        elseif("A" == LoadStr(hash_unit,uid,0))then
             set rebornTime = rebornTime + 10
         endif
         // 假死亡
