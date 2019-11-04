@@ -487,6 +487,7 @@ struct hGlobals
             call hattrEffect.addLightningChainOdds(u,20.0,0)
             call hattrEffect.addLightningChainVal(u,100,0)
             call hattrEffect.addLightningChainQty(u,1,0)
+            call hattrEffect.setLightningChainModel(u,lightningCode_molizhiyan)
         elseif(abid == 'A08V')then // B 巨魔枪士 - 丧心病狂
             // 攻击事件实现
         elseif(abid == 'A089')then // B 狼骑 - 诱捕
@@ -510,11 +511,8 @@ struct hGlobals
         elseif(abid == 'A09K')then // B 熊战德鲁伊 - 咆哮
             // 攻击事件实现
         elseif(abid == 'A053')then // B 远古树精 - 投掷
-            call hattr.addKnocking(u,400,0)
-            call hattrEffect.addFreezeVal(u,15,0)
-            call hattrEffect.addFreezeDuring(u,5,0)
-            call hattrEffect.addColdVal(u,10,0)
-            call hattrEffect.addColdDuring(u,5,0)
+            call hattrEffect.addKnockingVal(u,100,0)
+            call hattrEffect.addKnockingDuring(u,30,0)
         elseif(abid == 'A03V')then // B 牧师 - 光导医疗
             // 施法事件实现
         elseif(abid == 'A07K')then // B 巫师 - 邪术
@@ -522,10 +520,8 @@ struct hGlobals
         endif
         if(abid == 'A04U')then // A 剑士 - 刃风式
             call hattr.addAttackHuntType(u,"wind",0)
-            call hattrEffect.addAttackSpeedVal(u,10,0)
-            call hattrEffect.addAttackSpeedDuring(u,5.0,0)
-            call hattrEffect.addWindVal(u,10,0)
-            call hattrEffect.addWindDuring(u,5.0,0)
+            call hattrEffect.addAttackSpeedVal(u,14,0)
+            call hattrEffect.addAttackSpeedDuring(u,6,0)
         elseif(abid == 'A03O')then // A 骑士 - 斩铁式
             // 技能自带效果
         elseif(abid == 'A07X')then // A 飞行机器 - 机关枪
@@ -536,7 +532,8 @@ struct hGlobals
             call hattrEffect.addDarkVal(u,5.0,0)
             call hattrEffect.addDarkDuring(u,5.0,0)
         elseif(abid == 'A07T')then // A 幻界飞龙 - 蔽日
-            call hattrEffect.addBombOdds(u,145,0)
+            call hattrEffect.addBombOdds(u,80,0)
+            call hattrEffect.addBombVal(u,145,0)
             call hattrEffect.addBombRange(u,200,0)
             call hattrEffect.setBombModel(u,"war3mapImported\\ShadowBurn.mdl")
         elseif(abid == 'A04S')then // A 巨魔蝙蝠骑手 - 火焰燃油
@@ -558,44 +555,114 @@ struct hGlobals
         elseif(abid == 'A08G')then // A 女巫 - 大焚火
             call hattr.addAttackHuntType(u,"fire",0)
         elseif(abid == 'A04P')then // A 迫击炮小队 - 黑色火药
-            call hattrEffect.addBurnVal(u,65,0)
-            call hattrEffect.addBurnDuring(u,3,0)
+            call hattrEffect.addBurnVal(u,25,0)
+            call hattrEffect.addBurnDuring(u,10,0)
         elseif(abid == 'A058')then // A 奇美拉 - 龙息
             call hattr.addAttackHuntType(u,"fire",0)
             call hattr.addAttackHuntType(u,"ice",0)
             call hattrEffect.addCorrosionVal(u,2,0)
             call hattrEffect.addCorrosionDuring(u,5,0)
         elseif(abid == 'A052')then // A 山岭巨人 - 大喊
+            // 攻击事件实现
         elseif(abid == 'A08D')then // A 狮鹫骑士 - 风暴战锤
+            call hattr.addAttackHuntType(u,"light",0)
+            call hattrEffect.addLightningChainOdds(u,5.0,0)
+            call hattrEffect.addLightningChainVal(u,180,0)
+            call hattrEffect.addLightningChainQty(u,10,0)
+            call hattrEffect.setLightningChainModel(u,lightningCode_shandianlian_ci)
         elseif(abid == 'A04R')then // A 坦克部队 - 烈性炮弹
+            call hattr.addAttackHuntType(u,"fire",0)
+            call hattrEffect.addBurnVal(u,54,0)
+            call hattrEffect.addBurnDuring(u,3,0)
+            call hattrEffect.addBombOdds(u,100,0)
+            call hattrEffect.addBombRange(u,260,0)
+            call hattrEffect.addBombVal(u,100,0)
+            call hattrEffect.setBombModel(u,"war3mapImported\\NewGroundEX.mdl")
         elseif(abid == 'A051')then // A 图腾战牛 - 抨击
+            call hattrEffect.addSwimOdds(u,25,0)
+            call hattrEffect.addSwimDuring(u,1.0,0)
         elseif(abid == 'A09I')then // A 邪恶狼骑 - 掠夺
+            // 攻击事件实现
         elseif(abid == 'A07J')then // A 邪恶巫师 - 痛苦链
+            call hattrEffect.addLightningChainOdds(u,13.0,0)
+            call hattrEffect.addLightningChainVal(u,245,0)
+            call hattrEffect.addLightningChainQty(u,3,0)
+            call hattrEffect.setLightningChainModel(u,lightningCode_siwangzhizhi)
         elseif(abid == 'A04I')then // A 苍风古树 - 烈风
+            call hattr.addAttackHuntType(u,"wind",0)
+            call hattrEffect.addWindVal(u,10,0)
+            call hattrEffect.addWindDuring(u,10.0,0)
         elseif(abid == 'A05A')then // A 秘迹古树 - 秘沼
+            call hattr.addAttackHuntType(u,"water",0)
+            call hattrEffect.addChaosVal(u,12,0)
+            call hattrEffect.addChaosDuring(u,5,0)
+            call hattrEffect.addTwineVal(u,15,0)
+            call hattrEffect.addTwineDuring(u,5,0)
         elseif(abid == 'A08Z')then // A 战争古树 - 林撼
+            call hattr.addAttackHuntType(u,"wood",0)
+            call hattrEffect.addSwimOdds(u,10,0)
+            call hattrEffect.addSwimDuring(u,2.0,0)
         elseif(abid == 'A07Y')then // A 智慧古树 - 通明
+            // 攻击事件实现
         endif
         if(abid == 'A03T')then // S 寒冰女巫 - 冰心魂
+            call hattr.addAttackHuntType(u,"ice",0)
+            call hattrEffect.addFreezeVal(u,30,0)
+            call hattrEffect.addFreezeDuring(u,4,0)
+            call hattrEffect.addColdVal(u,10,0)
+            call hattrEffect.addColdDuring(u,4,0)
         elseif(abid == 'A080')then // S 寒冰女巫 - 暴风雪
+            // 施法事件实现
         elseif(abid == 'A081')then // S 寒冰女巫 - 千里冰封
+            // 施法事件实现
+            call hattrEffect.addBombRange(u,100,0)
+            call hattrEffect.setBombModel(u,"Abilities\\Spells\\Undead\\FrostNova\\FrostNovaTarget.mdl")
         elseif(abid == 'A08M')then // S 火凤凰 - 火鸟
+            call hattr.addAttackHuntType(u,"fire",0)
+            call hattrNatural.addFireOppose(u,100,0)
+            call hattrNatural.subWaterOppose(u,50,0)
         elseif(abid == 'A08N')then // S 火凤凰 - 涅磐
+            // 重生系统实现
         elseif(abid == 'A08O')then // S 火凤凰 - 展翅
-        elseif(abid == 'A065')then // S 牛头人酋长 - 狂热
+            // 攻击事件实现
+        elseif(abid == 'A065')then // S 牛头人酋长 - 燃方
+            // 技能自带效果
         elseif(abid == 'A04A')then // S 牛头人酋长 - 粉碎
-        elseif(abid == 'A08T')then // S 牛头人酋长 - 心狂
+            call hattrEffect.addCrackFlyVal(u,600,0)
+            call hattrEffect.addCrackFlyOdds(u,25,0)
+            call hattrEffect.addCrackFlyHigh(u,200,0)
+            call hattrEffect.addCrackFlyDistance(u,100,0)
+        elseif(abid == 'A08T')then // S 牛头人酋长 - 狂野
+            call hattr.addHemophagia(u,10,0)
+            call hattr.addKnocking(u,3000,0)
+            call hattrEffect.addSwimOdds(u,10,0)
+            call hattrEffect.addSwimDuring(u,1.0,0)
         elseif(abid == 'A04B')then // S 山岭巨人·战棍 - 过激
+            call hattrEffect.addAttackSpeedVal(u,5,0)
+            call hattrEffect.addAttackSpeedDuring(u,30,0)
+            call hattrEffect.addKnockingVal(u,150,0)
+            call hattrEffect.addKnockingDuring(u,30,0)
         elseif(abid == 'A04C')then // S 山岭巨人·战棍 - 战棍
+            call hattr.addAttackHuntType(u,"soil",0)
+            call hattrNatural.addSoilOppose(u,75.0,0)
+            call hattrEffect.setCrackFlyVal(u,300,0)
+            call hattrEffect.setCrackFlyOdds(u,20,0)
+            call hattrEffect.setCrackFlyHigh(u,250,0)
+            call hattrEffect.setCrackFlyDistance(u,200,0)
         elseif(abid == 'A03Y')then // S 山岭巨人·战棍 - 大闹一番
+            // 施法事件实现
         elseif(abid == 'A07U')then // S 邪恶科多骑手 - 邪殇
+            call hattrNatural.addGhost(u,300.0,0)
         elseif(abid == 'A04X')then // S 月之女祭司 - 强弓
+            call hattrEffect.addAttackSpeedVal(u,40,0)
+            call hattrEffect.addAttackSpeedDuring(u,3,0)
         elseif(abid == 'A050')then // S 月之女祭司 - 威吓
-            call hattrEffect.addUnarmOdds(u,30.0,0)
-            call hattrEffect.addUnarmDuring(u,4.0,0)
+            call hattrEffect.addUnarmOdds(u,20.0,0)
+            call hattrEffect.addUnarmDuring(u,5.0,0)
         elseif(abid == 'A04Z')then // S 月之女祭司 - 月光
-            call hattrEffect.setBombOdds(u,100,0)
-            call hattrEffect.setBombRange(u,100,0)
+            call hattrEffect.addBombOdds(u,500,0)
+            call hattrEffect.addBombOdds(u,100,0)
+            call hattrEffect.addBombRange(u,50,0)
             call hattrEffect.setBombModel(u,"Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl")
         endif
     endmethod
