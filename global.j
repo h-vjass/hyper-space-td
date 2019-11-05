@@ -303,8 +303,6 @@ struct hGlobals
             set targetCount = 2
             set targetArr[1] = 'o00K' // B 铁枪手
             set targetArr[2] = 'o00C' // B 步兵
-            set targetArr[1] = 'o020'
-            set targetArr[2] = 'o020'
         endif
         if(triggerUID == 'o00E')then // C 血妖精
             set targetCount = 2
@@ -444,10 +442,10 @@ struct hGlobals
         if(abid == 'A04K')then // N 地穴 - 尖针
             call hattr.addHuntRebound(u,35,0)
         elseif(abid == 'A056')then // C 民兵 - 勋章
-            call hattrEffect.addAttackPhysicalVal(u,2,0)
+            call hattrEffect.addAttackPhysicalVal(u,6,0)
             call hattrEffect.addAttackPhysicalDuring(u,7,0)
         elseif(abid == 'A04T')then // C 血精灵 - 心灵之火
-            call hattrEffect.addAttackMagicVal(u,4,0)
+            call hattrEffect.addAttackMagicVal(u,8,0)
             call hattrEffect.addAttackMagicDuring(u,5,0)
         elseif(abid == 'A09B')then // C 邪恶苦力 - 奋力
             call hattr.addKnocking(u,300,0)
@@ -459,19 +457,20 @@ struct hGlobals
         elseif(abid == 'A09D')then // C 萨满牛祭司 - 净化
             // 攻击事件实现
         elseif(abid == 'A07O')then // C 巨魔巫医 - 荼毒
-            call hattrEffect.setToxicVal(u,13,0)
-            call hattrEffect.setToxicDuring(u,4,0)
+            call hattrEffect.addToxicVal(u,33,0)
+            call hattrEffect.addToxicDuring(u,4,0)
         elseif(abid == 'A09E')then // C 暗夜弓手 - 穿透
-            call hattrEffect.addKnockingVal(u,2,0)
+            call hattrEffect.addKnockingVal(u,70,0)
             call hattrEffect.addKnockingDuring(u,10,0)
         elseif(abid == 'A09F')then // C 角鹰弓手 - 俯视穿透
-            call hattrEffect.addCorrosionVal(u,1,0)
+            call hattrEffect.addCorrosionVal(u,2,0)
             call hattrEffect.addCorrosionDuring(u,6,0)
         elseif(abid == 'A054')then // C 德鲁伊 - 荆棘
             call hattrEffect.addTwineVal(u,10,0)
             call hattrEffect.addTwineDuring(u,3,0)
         endif
         if(abid == 'A04M')then // B 步兵 - 铁壁
+            call hattr.addDefend(u,10.0,0)
             call hattr.addPunishOppose(u,20.0,0)
             call hattr.addSwimOppose(u,20.0,0)
             call hattrNatural.addFireOppose(u,25.0,0)
@@ -492,32 +491,32 @@ struct hGlobals
             // 攻击事件实现
         elseif(abid == 'A091')then // B 飞龙骑士 - 毒标
             call hattr.addAttackHuntType(u,"poison",0)
-            call hattrEffect.addToxicVal(u,23,0)
+            call hattrEffect.addToxicVal(u,47,0)
             call hattrEffect.addToxicDuring(u,5,0)
         elseif(abid == 'A04W')then // B 精灵龙 - 魔焰
             call hattr.addAttackHuntType(u,"light",0)
-            call hattrEffect.addLightningChainOdds(u,20.0,0)
-            call hattrEffect.addLightningChainVal(u,100,0)
+            call hattrEffect.addLightningChainOdds(u,33.0,0)
+            call hattrEffect.addLightningChainVal(u,120,0)
             call hattrEffect.addLightningChainQty(u,1,0)
             call hattrEffect.setLightningChainModel(u,lightningCode_molizhiyan)
         elseif(abid == 'A08V')then // B 巨魔枪士 - 丧心病狂
             // 攻击事件实现\施法事件实现
         elseif(abid == 'A089')then // B 狼骑 - 诱捕
-            call hattrEffect.addFetterOdds(u,5.0,0)
+            call hattrEffect.addFetterOdds(u,8.0,0)
             call hattrEffect.addFetterDuring(u,7,0)
         elseif(abid == 'A04Y')then // B 龙鹰骑士 - 缚足
-            call hattrEffect.addFetterOdds(u,35.0,0)
+            call hattrEffect.addFetterOdds(u,45.0,0)
             call hattrEffect.addFetterDuring(u,1.0,0)
         elseif(abid == 'A049')then // B 露娜 - 月刃
             call hattrEffect.addBombOdds(u,40,0)
-            call hattrEffect.addBombVal(u,55,0)
-            call hattrEffect.addBombRange(u,150,0)
+            call hattrEffect.addBombVal(u,65,0)
+            call hattrEffect.addBombRange(u,50,0)
             call hattrEffect.setBombModel(u,"Objects\\Spawnmodels\\Critters\\Albatross\\CritterBloodAlbatross.mdl")
         elseif(abid == 'A055')then // B 树妖 - 绿枪
             call hattr.addAttackHuntType(u,"wood",0)
             call hattrNatural.addWood(u,40,0)
         elseif(abid == 'A04Q')then // B 铁枪手 - 扳机精通
-            call hattr.addAttackSpeed(u,25.0,0)
+            call hattr.addAttackSpeed(u,35.0,0)
             call hattr.addKnocking(u,500.0,0)
         elseif(abid == 'A09G')then // B 邪恶兽人大兵 - 狂斧
             call hattr.addSplit(u,15.0,0)
@@ -525,7 +524,7 @@ struct hGlobals
         elseif(abid == 'A09K')then // B 熊战德鲁伊 - 咆哮
             // 攻击事件实现
         elseif(abid == 'A053')then // B 远古树精 - 投掷
-            call hattrEffect.addKnockingVal(u,100,0)
+            call hattrEffect.addKnockingVal(u,120,0)
             call hattrEffect.addKnockingDuring(u,30,0)
         elseif(abid == 'A03V')then // B 牧师 - 光导医疗
             // 施法事件实现
@@ -537,19 +536,17 @@ struct hGlobals
         if(abid == 'A04U')then // A 剑士 - 刃风式
             call hattr.addAttackHuntType(u,"wind",0)
             call hattrEffect.addAttackSpeedVal(u,14,0)
-            call hattrEffect.addAttackSpeedDuring(u,6,0)
+            call hattrEffect.addAttackSpeedDuring(u,8,0)
         elseif(abid == 'A03O')then // A 骑士 - 斩铁式
             // 技能自带效果
         elseif(abid == 'A07X')then // A 飞行机器 - 机关枪
             // 攻击事件实现
         elseif(abid == 'A07V')then // A 黑暗精灵 - 魅刃
             call hattr.addAttackHuntType(u,"dark",0)
-            call hattrNatural.addDark(u,35.0,0)
-            call hattrEffect.addDarkVal(u,5.0,0)
             call hattrEffect.addDarkDuring(u,5.0,0)
         elseif(abid == 'A07T')then // A 幻界飞龙 - 蔽日
             call hattrEffect.addBombOdds(u,80,0)
-            call hattrEffect.addBombVal(u,145,0)
+            call hattrEffect.addBombVal(u,175,0)
             call hattrEffect.addBombRange(u,200,0)
             call hattrEffect.setBombModel(u,"war3mapImported\\ShadowBurn.mdl")
         elseif(abid == 'A04S')then // A 巨魔蝙蝠骑手 - 火焰燃油
@@ -559,65 +556,65 @@ struct hGlobals
             // 攻击事件实现
         elseif(abid == 'A059')then // A 骷骨巫长 - 蛊虫
             call hattr.addAttackHuntType(u,"poison",0)
-            call hattrEffect.addChaosVal(u,5,0)
-            call hattrEffect.addChaosDuring(u,5,0)
-            call hattrEffect.addToxicVal(u,40,0)
-            call hattrEffect.addToxicDuring(u,5,0)
+            call hattrEffect.addChaosVal(u,10,0)
+            call hattrEffect.addChaosDuring(u,6,0)
+            call hattrEffect.addToxicVal(u,86,0)
+            call hattrEffect.addToxicDuring(u,6,0)
         elseif(abid == 'A09L')then // A 猛熊德鲁伊 - 猛熊之躯
-            call hattr.addLife(u,300,0)
-            call hattr.addLifeBack(u,25,0)
+            call hattr.addLife(u,1800,0)
+            call hattr.addLifeBack(u,40,0)
         elseif(abid == 'A09J')then // A 魔导师 - 感应
             // 攻击事件实现
         elseif(abid == 'A08G')then // A 女巫 - 大焚火
             call hattr.addAttackHuntType(u,"fire",0)
         elseif(abid == 'A04P')then // A 迫击炮小队 - 黑色火药
-            call hattrEffect.addBurnVal(u,25,0)
-            call hattrEffect.addBurnDuring(u,10,0)
+            call hattrEffect.addBurnVal(u,60,0)
+            call hattrEffect.addBurnDuring(u,20,0)
         elseif(abid == 'A058')then // A 奇美拉 - 龙息
             call hattr.addAttackHuntType(u,"fire",0)
             call hattr.addAttackHuntType(u,"ice",0)
-            call hattrEffect.addCorrosionVal(u,4,0)
+            call hattrEffect.addCorrosionVal(u,16,0)
             call hattrEffect.addCorrosionDuring(u,5,0)
         elseif(abid == 'A052')then // A 山岭巨人 - 大喊
             // 攻击事件实现
         elseif(abid == 'A08D')then // A 狮鹫骑士 - 风暴战锤
             call hattr.addAttackHuntType(u,"thunder",0)
-            call hattrEffect.addLightningChainOdds(u,5.0,0)
-            call hattrEffect.addLightningChainVal(u,180,0)
-            call hattrEffect.addLightningChainQty(u,10,0)
+            call hattrEffect.addLightningChainOdds(u,10.0,0)
+            call hattrEffect.addLightningChainVal(u,280,0)
+            call hattrEffect.addLightningChainQty(u,5,0)
             call hattrEffect.setLightningChainModel(u,lightningCode_shandianlian_ci)
         elseif(abid == 'A04R')then // A 坦克部队 - 烈性炮弹
             call hattr.addAttackHuntType(u,"fire",0)
-            call hattrEffect.addBurnVal(u,54,0)
+            call hattrEffect.addBurnVal(u,135,0)
             call hattrEffect.addBurnDuring(u,3,0)
-            call hattrEffect.addBombOdds(u,100,0)
-            call hattrEffect.addBombRange(u,260,0)
-            call hattrEffect.addBombVal(u,100,0)
+            call hattrEffect.addBombVal(u,200,0)
+            call hattrEffect.addBombOdds(u,50,0)
+            call hattrEffect.addBombRange(u,300,0)
             call hattrEffect.setBombModel(u,"war3mapImported\\NewGroundEX.mdl")
         elseif(abid == 'A051')then // A 图腾战牛 - 抨击
-            call hattrEffect.addSwimOdds(u,25,0)
+            call hattrEffect.addSwimOdds(u,35,0)
             call hattrEffect.addSwimDuring(u,1.0,0)
         elseif(abid == 'A09I')then // A 邪恶狼骑 - 掠夺
             // 攻击事件实现
         elseif(abid == 'A07J')then // A 邪恶巫师 - 痛苦链
             call hattrEffect.addLightningChainOdds(u,13.0,0)
-            call hattrEffect.addLightningChainVal(u,245,0)
+            call hattrEffect.addLightningChainVal(u,345,0)
             call hattrEffect.addLightningChainQty(u,3,0)
             call hattrEffect.setLightningChainModel(u,lightningCode_siwangzhizhi)
         elseif(abid == 'A04I')then // A 苍风古树 - 烈风
             call hattr.addAttackHuntType(u,"wind",0)
             call hattrEffect.addWindVal(u,10,0)
-            call hattrEffect.addWindDuring(u,10.0,0)
+            call hattrEffect.addWindDuring(u,60.0,0)
         elseif(abid == 'A05A')then // A 秘迹古树 - 秘沼
             call hattr.addAttackHuntType(u,"water",0)
             call hattrEffect.addChaosVal(u,12,0)
             call hattrEffect.addChaosDuring(u,5,0)
-            call hattrEffect.addTwineVal(u,15,0)
+            call hattrEffect.addTwineVal(u,25,0)
             call hattrEffect.addTwineDuring(u,5,0)
         elseif(abid == 'A08Z')then // A 战争古树 - 林撼
             call hattr.addAttackHuntType(u,"wood",0)
-            call hattrEffect.addSwimOdds(u,10,0)
-            call hattrEffect.addSwimDuring(u,2.0,0)
+            call hattrEffect.addSwimOdds(u,45,0)
+            call hattrEffect.addSwimDuring(u,1.0,0)
         elseif(abid == 'A07Y')then // A 智慧古树 - 通明
             // 攻击事件实现
         endif
@@ -649,7 +646,7 @@ struct hGlobals
         elseif(abid == 'A08T')then // S 牛头人酋长 - 狂野
             call hattr.addHemophagia(u,10,0)
             call hattr.addKnocking(u,3000,0)
-            call hattrEffect.addSwimOdds(u,10,0)
+            call hattrEffect.addSwimOdds(u,60,0)
             call hattrEffect.addSwimDuring(u,1.0,0)
         elseif(abid == 'A04B')then // S 山岭巨人·战棍 - 过激
             call hattrEffect.addAttackSpeedVal(u,5,0)
@@ -673,7 +670,7 @@ struct hGlobals
         elseif(abid == 'A050')then // S 月之女祭司 - 威吓
             call hattrEffect.addUnarmOdds(u,20.0,0)
             call hattrEffect.addUnarmDuring(u,5.0,0)
-        elseif(abid == 'A04Z')then // S 月之女祭司 - 月光
+        elseif(abid == 'A04Z')then // S 月之女祭司 - 星落
             call hattrEffect.addBombVal(u,500,0)
             call hattrEffect.addBombOdds(u,100,0)
             call hattrEffect.addBombRange(u,50,0)
@@ -805,7 +802,7 @@ struct hGlobals
 		elseif(skillid == 'A03V' and targetUnit != null)then // B 牧师 - 光导医疗
 			call hattr.addLifeBack(targetUnit,70,5.00)
         elseif(skillid == 'A07K' and targetUnit != null)then // B 巫师 - 邪术
-			call hattr.addLifeBack(targetUnit,20,20)
+			call hattr.addLifeBack(targetUnit,30,20)
             call hattr.addAttackSpeed(targetUnit,45,20)
         elseif(skillid == 'A03Y')then // S 山岭巨人·战棍 大闹一番
             call hattr.addHuntAmplitude(triggerUnit,30, 10)
@@ -841,48 +838,48 @@ struct hGlobals
         // glv
 		if(triggerUnit != null)then
 			// 等级升级
-			if(GetUnitAbilityLevel(triggerUnit,'A09A') > 0 and GetRandomInt(1,5) == 1)then // LV0
+			if(GetUnitAbilityLevel(triggerUnit,'A09A') > 0 and GetRandomInt(1,3) == 1)then // LV0
 				set percent = 1.00
 				call UnitRemoveAbility(triggerUnit,'A09A')
 				call UnitAddAbility(triggerUnit,'A03W')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A03W' )
-			elseif(GetUnitAbilityLevel(triggerUnit,'A03W') > 0 and GetRandomInt(1,7) == 1)then // LV1
+			elseif(GetUnitAbilityLevel(triggerUnit,'A03W') > 0 and GetRandomInt(1,4) == 1)then // LV1
 				set percent = 2.00
 				call UnitRemoveAbility(triggerUnit,'A03W')
 				call UnitAddAbility(triggerUnit,'A044')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A044' )
-			elseif(GetUnitAbilityLevel(triggerUnit,'A044') > 0 and GetRandomInt(1,9) == 1)then // LV2
-				set percent = 3.00
+			elseif(GetUnitAbilityLevel(triggerUnit,'A044') > 0 and GetRandomInt(1,5) == 1)then // LV2
+				set percent = 2.50
 				call UnitRemoveAbility(triggerUnit,'A044')
 				call UnitAddAbility(triggerUnit,'A07Z')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A07Z' )
-			elseif(GetUnitAbilityLevel(triggerUnit,'A07Z') > 0 and GetRandomInt(1,11) == 1)then // LV3
-				set percent = 4.00
+			elseif(GetUnitAbilityLevel(triggerUnit,'A07Z') > 0 and GetRandomInt(1,8) == 1)then // LV3
+				set percent = 5.00
 				call UnitRemoveAbility(triggerUnit,'A07Z')
 				call UnitAddAbility(triggerUnit,'A088')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A088' )
-			elseif(GetUnitAbilityLevel(triggerUnit,'A088') > 0 and GetRandomInt(1,13) == 1)then // LV4
-				set percent = 5.00
+			elseif(GetUnitAbilityLevel(triggerUnit,'A088') > 0 and GetRandomInt(1,10) == 1)then // LV4
+				set percent = 6.50
 				call UnitRemoveAbility(triggerUnit,'A088')
 				call UnitAddAbility(triggerUnit,'A08B')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A08B' )
-			elseif(GetUnitAbilityLevel(triggerUnit,'A08B') > 0 and GetRandomInt(1,15) == 1)then // LV5
-				set percent = 6.00
+			elseif(GetUnitAbilityLevel(triggerUnit,'A08B') > 0 and GetRandomInt(1,12) == 1)then // LV5
+				set percent = 8.00
 				call UnitRemoveAbility(triggerUnit,'A08B')
 				call UnitAddAbility(triggerUnit,'A08C')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A08C' )
-			elseif(GetUnitAbilityLevel(triggerUnit,'A08C') > 0 and GetRandomInt(1,20) == 1)then // LV6
-				set percent = 7.00
+			elseif(GetUnitAbilityLevel(triggerUnit,'A08C') > 0 and GetRandomInt(1,14) == 1)then // LV6
+				set percent = 10.00
 				call UnitRemoveAbility(triggerUnit,'A08C')
 				call UnitAddAbility(triggerUnit,'A08L')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A08L' )
-			elseif(GetUnitAbilityLevel(triggerUnit,'A08L') > 0 and GetRandomInt(1,30) == 1)then // LV7
-				set percent = 8.00
+			elseif(GetUnitAbilityLevel(triggerUnit,'A08L') > 0 and GetRandomInt(1,16) == 1)then // LV7
+				set percent = 12.00
 				call UnitRemoveAbility(triggerUnit,'A08L')
 				call UnitAddAbility(triggerUnit,'A08S')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A08S' )
-			elseif(GetUnitAbilityLevel(triggerUnit,'A08S') > 0 and GetRandomInt(1,40) == 1)then // LV8
-				set percent = 9.00
+			elseif(GetUnitAbilityLevel(triggerUnit,'A08S') > 0 and GetRandomInt(1,20) == 1)then // LV8
+				set percent = 15.00
 				call UnitRemoveAbility(triggerUnit,'A08S')
 				call UnitAddAbility(triggerUnit,'A090')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A090' )
@@ -931,8 +928,8 @@ struct hGlobals
         if(rand<=3)then
             // A 飞行机器 - 机关枪
             if(GetUnitAbilityLevel(triggerUnit,'A09D') >= 1)then
-                call hattr.addAttackSpeed(triggerUnit,100,3)
-                call hattr.addKnocking(triggerUnit,50,5)
+                call hattr.addAttackSpeed(triggerUnit,150,3)
+                call hattr.addKnocking(triggerUnit,2000,5)
                 call heffect.toUnit("Abilities\\Spells\\Other\\BreathOfFire\\BreathOfFireDamage.mdl",triggerUnit,"weapon",3.00)
             endif
             // A 邪恶狼骑 - 掠夺
@@ -951,7 +948,7 @@ struct hGlobals
                 set g = hgroup.createByUnit(triggerUnit,300.0,function hFilter.get )
                 call filter.destroy()
                 set bean = hAttrHuntBean.create()
-                set bean.damage = 225
+                set bean.damage = 325
                 set bean.fromUnit = triggerUnit
                 set bean.huntEff = "Abilities\\Spells\\Orc\\Purge\\PurgeBuffTarget.mdl"
                 set bean.huntKind = "skill"
@@ -986,8 +983,8 @@ struct hGlobals
         if(rand<=6)then
             // C 萨满牛祭司 - 净化
             if(GetUnitAbilityLevel(triggerUnit,'A09D') >= 1)then
-                call hattr.subMove(targetUnit,50,5)
-                call hattr.subAttackSpeed(targetUnit,25,5)
+                call hattr.subMove(targetUnit,70,5)
+                call hattr.subAttackSpeed(targetUnit,45,5)
                 call heffect.toUnit("Abilities\\Spells\\Orc\\Purge\\PurgeBuffTarget.mdl",targetUnit,"origin",1.00)
             endif
             // B 灯提白牛 - 虚灵
@@ -996,14 +993,37 @@ struct hGlobals
                 set filter = hFilter.create()
                 call filter.isAlive(true)
                 call filter.isAlly(true,triggerUnit)
+                call filter.isOwnerPlayer(false,players[12] )
                 set g = hgroup.createByUnit(triggerUnit,600.0,function hFilter.get )
                 call filter.destroy()
                 loop
                     exitwhen(IsUnitGroupEmptyBJ(g) == true)
                         set u = FirstOfGroup(g)
                         call GroupRemoveUnit(g,u)
-                        call hattr.addAvoid(u,25,10)
+                        call hattr.addAvoid(u,12,10)
                         call heffect.toUnit("Abilities\\Spells\\Items\\AIvi\\AIviTarget.mdl",u,"origin",1.00)
+                        set u = null
+                endloop
+                call GroupClear(g)
+                call DestroyGroup(g)
+                set g = null
+            endif
+            //  B 熊战德鲁伊 - 咆哮
+            if(GetUnitAbilityLevel(triggerUnit,'A09K') >= 1)then
+                call heffect.toUnit("Abilities\\Spells\\NightElf\\BattleRoar\\RoarCaster.mdl",triggerUnit,"origin",1.00)
+                set filter = hFilter.create()
+                call filter.isAlive(true)
+                call filter.isAlly(true,triggerUnit)
+                call filter.isOwnerPlayer(false,players[12] )
+                set g = hgroup.createByUnit(triggerUnit,600.0,function hFilter.get )
+                call filter.destroy()
+                loop
+                    exitwhen(IsUnitGroupEmptyBJ(g) == true)
+                        set u = FirstOfGroup(g)
+                        call GroupRemoveUnit(g,u)
+                        call hattr.addAttackPhysical(u,35,10)
+                        call hattr.addAttackSpeed(u,5,10)
+                        call heffect.toUnit("Abilities\\Spells\\Items\\AIsm\\AIsmTarget.mdl",u,"origin",1.00)
                         set u = null
                 endloop
                 call GroupClear(g)
@@ -1016,16 +1036,17 @@ struct hGlobals
                 set filter = hFilter.create()
                 call filter.isAlive(true)
                 call filter.isAlly(true,triggerUnit)
+                call filter.isOwnerPlayer(false,players[12] )
                 set g = hgroup.createByUnit(triggerUnit,300.0,function hFilter.get )
                 call filter.destroy()
                 loop
                     exitwhen(IsUnitGroupEmptyBJ(g) == true)
                         set u = FirstOfGroup(g)
                         call GroupRemoveUnit(g,u)
-                        call hattr.addAttackHuntType(u,"soil",10)
-                        call hattr.addAim(u,10,10)
-                        call hattrEffect.addTortuaVal(u,100,10)
-                        call hattrEffect.addTortuaDuring(u,4,10)
+                        call hattr.addAttackHuntType(u,"soil",20)
+                        call hattr.addAim(u,20,20)
+                        call hattrEffect.addTortuaVal(u,250,20)
+                        call hattrEffect.addTortuaDuring(u,10,20)
                         set u = null
                 endloop
                 call GroupClear(g)
@@ -1038,6 +1059,7 @@ struct hGlobals
                 set filter = hFilter.create()
                 call filter.isAlive(true)
                 call filter.isAlly(true,triggerUnit)
+                call filter.isOwnerPlayer(false,players[12] )
                 set g = hgroup.createByUnit(triggerUnit,1000.0,function hFilter.get )
                 call filter.destroy()
                 loop
@@ -1078,7 +1100,7 @@ struct hGlobals
             endif
             if(i>=10)then
                 call heffect.toUnit("war3mapImported\\Enchantment.mdl",triggerUnit,"origin",1.00)
-                call hattrEffect.addBombVal(triggerUnit,300,3)
+                call hattrEffect.addBombVal(triggerUnit,700,3)
                 call SetUnitUserData(triggerUnit,0)
             else
                 call SetUnitUserData(triggerUnit,i+1)
@@ -1100,7 +1122,7 @@ struct hGlobals
                 set hxy = hlogic.polarProjection(hxy,800,hlogic.getDegBetweenUnit(u,targetUnit))
                 set loc = Location(hxy.x,hxy.y)
                 set bean = hAttrHuntBean.create()
-                set bean.damage = 500
+                set bean.damage = 1000
                 set bean.fromUnit = triggerUnit
                 set bean.huntKind = "skill"
                 set bean.huntType = "realfire"
@@ -1329,260 +1351,98 @@ struct hGlobals
     public static method registerItem1 takes nothing returns nothing
         local hItemBean hitembean
         call htime.delTimer(GetExpiredTimer())
-        set hitembean = hItemBean.create() // 恶魔的紫色血浆
-		set hitembean.item_id = 'I00Y'
-        set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 1
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-		set hitembean = hItemBean.create() // 坚固的盾牌 [ 500 G ]
-		set hitembean.item_id = 'I00B'
-        set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 500
-		set hitembean.defend = 4
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-		set hitembean = hItemBean.create() // 可爱的玩偶 [ 50 G ]
-		set hitembean.item_id = 'I00F'
-        set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 50
-		set hitembean.attackMagic = 40
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-		set hitembean = hItemBean.create() // 空瓶 [ 10 G ]
-		set hitembean.item_id = 'I00D'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 10
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 破烂的短剑 [ 150 G ]
-		set hitembean.item_id = 'I000'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 150
-        set hitembean.attackPhysical = 30
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 水 [ 1000 G ]
-		set hitembean.item_id = 'I00J'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 1000
-        set hitembean.water = 5
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 铁铲 [ 300 G ]
-		set hitembean.item_id = 'I00E'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 300
-        set hitembean.attackPhysical = 45
-        set hitembean.attackSpeed = -5
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 铁锹 [ 400 G ]
-		set hitembean.item_id = 'I00I'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 400
-        set hitembean.attackPhysical = 60
-        set hitembean.attackSpeed = -3
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 鲜血色的钥匙
-		set hitembean.item_id = 'I00G'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 小美的头环 [ 200 G ]
-		set hitembean.item_id = 'I00L'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 200
-		set hitembean.defend = 1
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 小柔的红宝石
-		set hitembean.item_id = 'I00W'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 50
-		set hitembean.resistance = 10
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 锈迹的铁圈木盾 [ 250 G ]
-		set hitembean.item_id = 'I002'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 250
-		set hitembean.defend = 2
-		set hitembean.punish = 300
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 侵蚀的铁圈木盾 [ 1000 G ]
-		set hitembean.item_id = 'I00X'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 1000
-        set hitembean.defend = 6
-        set hitembean.punish = 500
-        set hitembean.corrosionVal = 2
-        set hitembean.corrosionDuring = 10
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 银色的钥匙
-		set hitembean.item_id = 'I00K'
-		set hitembean.item_type = HITEM_TYPE_CONSUME
-		set hitembean.item_overlay = 1
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        call hitem.onUse('I00K', function thistype.itemUseAction)
-        set hitembean = hItemBean.create() // 装满井水的瓶子
-		set hitembean.item_id = 'I00H'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 1
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        call hitem.onUse('I00H', function thistype.itemUseAction)
-        set hitembean = hItemBean.create() // 诅咒玩偶 [ 20 G ]
-		set hitembean.item_id = 'I00C'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-        set hitembean.item_gold = 20
-		set hitembean.attackMagic = 20
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 铁制之爪 [ 2500 G ]
-		set hitembean.item_id = 'I00Z'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-        set hitembean.item_gold = 2500
-		set hitembean.attackPhysical = 50
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 恶魔之爪 [ 5000 G ]
-		set hitembean.item_id = 'I011'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-        set hitembean.item_gold = 5000
-		set hitembean.attackPhysical = 325
-        set hitembean.corrosionVal = 3
-        set hitembean.corrosionDuring = 5
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 加速手套 [ 3000 G ]
-		set hitembean.item_id = 'I010'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-        set hitembean.item_gold = 3000
-		set hitembean.attackSpeed = 5
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 恢复指环 [ 2000 G ]
-		set hitembean.item_id = 'I013'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-        set hitembean.item_gold = 2000
-		set hitembean.lifeBack = 1.5
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 魔法指环 [ 1000 G ]
-		set hitembean.item_id = 'I014'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-        set hitembean.item_gold = 1000
-		set hitembean.manaBack = 1.0
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 生命护身符 [ 5000 G ]
-		set hitembean.item_id = 'I016'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-        set hitembean.item_gold = 5000
-		set hitembean.life = 500
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 魔法护身符 [ 4000 G ]
-		set hitembean.item_id = 'I017'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-        set hitembean.item_gold = 4000
-		set hitembean.mana = 300
-        set hitembean.attackMagic = 90
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 速度之靴 [ 1000 G ]
-		set hitembean.item_id = 'I012'
-		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-        set hitembean.item_gold = 1000
-		set hitembean.move = 20
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 铁皮树枝 [ 2000 G ]
+        //--------------------
+        set hitembean = hItemBean.create() // E 铁皮树枝
 		set hitembean.item_id = 'I018'
 		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-        set hitembean.item_gold = 1250
-		set hitembean.attackPhysical = 9
-		set hitembean.attackMagic = 9
-		set hitembean.knocking = 5
-		set hitembean.violence = 5
-        set hitembean.str = 2
-		set hitembean.agi = 2
-		set hitembean.int = 2
-		set hitembean.avoid = 0.3
+		set hitembean.item_overlay = 1
+		set hitembean.attackPhysical = 25
+		set hitembean.attackMagic = 25
+		set hitembean.knocking = 50
+		set hitembean.violence = 50
+		set hitembean.avoid = 3
 		call hitem.format(hitembean)
 		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 优越之戒 [ 5000 G ]
-		set hitembean.item_id = 'I015'
+        //--------------------
+        set hitembean = hItemBean.create() // E 铁锹
+		set hitembean.item_id = 'I00I'
 		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-        set hitembean.item_gold = 5000
-		set hitembean.str = 9
-		set hitembean.agi = 6
-		set hitembean.int = 3
+		set hitembean.item_overlay = 1
+		set hitembean.attackPhysical = 70
+		set hitembean.attackSpeed = -3
 		call hitem.format(hitembean)
 		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 神秘腰带 [ 5000 G ]
-		set hitembean.item_id = 'I019'
+        //--------------------
+        set hitembean = hItemBean.create() // E 铁铲
+		set hitembean.item_id = 'I00E'
 		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-        set hitembean.item_gold = 5000
-		set hitembean.resistance = 5
+		set hitembean.item_overlay = 1
+		set hitembean.attackPhysical = 105
+		set hitembean.attackSpeed = -5
 		call hitem.format(hitembean)
 		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 精红球 [ 7000 G ]
-		set hitembean.item_id = 'I01A'
+        //--------------------
+        set hitembean = hItemBean.create() // E 锈迹的铁圈木盾
+		set hitembean.item_id = 'I002'
 		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-        set hitembean.item_gold = 7000
-		set hitembean.resistance = 30
+		set hitembean.item_overlay = 1
+		set hitembean.defend = 3
 		call hitem.format(hitembean)
 		call hitembean.destroy()
-		// 合成
-        call hitemMix.newFormula('I00X',1) // 侵蚀的铁圈木盾 [ 100 G ]
-		call hitemMix.addFlag('I00X','I002',1) // 锈迹的铁圈木盾 [ 50 G ]
-        call hitemMix.addFlag('I00X','I00Y',1) // 恶魔的紫色血浆
-		call hitemMix.newFormula('I00K',1) // 银色的钥匙
-		call hitemMix.addFlag('I00K','I00G',1)
-		call hitemMix.addFlag('I00K','I00J',1) // 水
-		call hitemMix.newFormula('I00H',1) // 装满井水的瓶子
-		call hitemMix.addFlag('I00H','I00D',1)
-        call hitemMix.addFlag('I00H','I00J',1) // 水
-        call hitemMix.newFormula('I011',1) // 恶魔之爪 [ 1000 G ]
-		call hitemMix.addFlag('I011','I00Z',1) // 铁制之爪 [ 1000 G ]
-        call hitemMix.addFlag('I011','I00Y',1) // 恶魔的紫色血浆
-        call hitemMix.newFormula('I01A',1) // 精红球 [ 7000 G ]
-		call hitemMix.addFlag('I01A','I019',1) // 神秘腰带 [ 6500 G ]
-        call hitemMix.addFlag('I01A','I00W',1) // 小柔的红宝石
+        //--------------------
+        set hitembean = hItemBean.create() // E 银色的钥匙
+		set hitembean.item_id = 'I00K'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.aim = 5
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // E 鲜血色的钥匙
+		set hitembean.item_id = 'I00G'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.hemophagia = 5
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // E 瓶装水
+		set hitembean.item_id = 'I00D'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.water = 1
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // D 可爱的玩偶
+		set hitembean.item_id = 'I00F'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.attackMagic = 180
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // D 诅咒的玩偶
+		set hitembean.item_id = 'I00C'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.attackPhysical = 180
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() //  D 优秀望远镜
+		set hitembean.item_id = 'I01K'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.sight = 500
+		call hitem.format(hitembean)
+		call hitembean.destroy()
     endmethod
 
     public static method registerItem2 takes nothing returns nothing
+    endmethod
+
+    public static method registerItem3 takes nothing returns nothing
         local hItemBean hitembean
         call htime.delTimer(GetExpiredTimer())
         set hitembean = hItemBean.create() // 恶魔的灵魂 [ 200000G ]
@@ -1701,13 +1561,9 @@ struct hGlobals
 		set hitembean.dark = 15
 		call hitem.format(hitembean)
 		call hitembean.destroy()
-		// 合成
-        call hitemMix.newFormula('I01G',1) // 恶魔的灵魂 [ 100000 G ]
-		call hitemMix.addFlag('I01G','I01I',1) // 无用的水晶球 [ 100000 G ]
-        call hitemMix.addFlag('I01G','I00Y',1) // 恶魔的紫色血浆
     endmethod
 
-    public static method registerItem3 takes nothing returns nothing
+    public static method registerItem4 takes nothing returns nothing
         local hItemBean hitembean
         call htime.delTimer(GetExpiredTimer())
         set hitembean = hItemBean.create() // 刺虫之壳 [ 30L ]
@@ -2316,6 +2172,7 @@ struct hGlobals
         call htime.setTimeout(0.70,function thistype.registerItem1)
         call htime.setTimeout(0.75,function thistype.registerItem2)
         call htime.setTimeout(0.80,function thistype.registerItem3)
+        call htime.setTimeout(0.85,function thistype.registerItem4)
 
         call thistype.registerToken()
         call thistype.registerBuilding()
@@ -2472,71 +2329,71 @@ struct hGlobals
         // uid, gold, life, mana, manaback, defend, attackPhysical, attackMagic,attackSpeedBaseSpace
         
         call thistype.registerSummon('o009',false,"N",1500,1000,    100,10,20,     0,0,0.00) // 帐篷
-        call thistype.registerSummon('o00A',true,"N",3000,3000,     100,10,30,     0,0,0.00) // 农场
-        call thistype.registerSummon('o00M',true,"N",3000,2000,     100,10,30,     80,0,1.00) // 地穴
-        call thistype.registerSummon('o01S',true,"N",3000,2000,     100,10,30,     0,0,0.00) // 月亮井
+        call thistype.registerSummon('o00A',true,"N",3000,4000,     100,10,30,     0,0,0.00) // 农场
+        call thistype.registerSummon('o00M',true,"N",3000,3000,     100,10,30,     80,0,1.00) // 地穴
+        call thistype.registerSummon('o01S',true,"N",3000,3000,     100,10,30,     0,0,0.00) // 月亮井
 
-        call thistype.registerSummon('o00B',false,"D",500,120,      100,3,0,      35,0,1.80) // 农民
-        call thistype.registerSummon('o00I',false,"D",500,160,      100,3,0,      50,0,2.30) // 苦力
-        call thistype.registerSummon('o00J',false,"D",500,140,      100,3,0,      10,15,1.95) // 小精灵
+        call thistype.registerSummon('o00B',false,"D",500,200,      100,3,0,      45,0,1.80) // 农民
+        call thistype.registerSummon('o00I',false,"D",500,260,      100,3,0,      60,0,2.30) // 苦力
+        call thistype.registerSummon('o00J',false,"D",500,180,      100,3,0,      20,20,1.95) // 小精灵
 
-        call thistype.registerSummon('o008',false,"C",1000,260,     300,5,1,    70,0,1.80) // 民兵
-        call thistype.registerSummon('o00E',false,"C",1000,240,     300,5,0,    30,40,1.90) // 血精灵
-        call thistype.registerSummon('o00R',false,"C",1000,320,     300,5,1,    90,0,2.30) // 兽人大兵
-        call thistype.registerSummon('o00S',false,"C",1000,300,     300,5,1,    80,0,2.20) // 邪恶苦力
-        call thistype.registerSummon('o00W',false,"C",1000,280,     300,5,0,    10,60,2.20) // 巨魔巫医
-        call thistype.registerSummon('o016',false,"C",1000,290,     300,5,0,    40,35,2.20) // 萨满牛祭司
-        call thistype.registerSummon('o01F',false,"C",1000,340,     300,5,0,    60,0,2.10) // 树人
-        call thistype.registerSummon('o01V',false,"C",1000,260,     300,5,0,    70,0,1.90) // 暗夜弓手
-        call thistype.registerSummon('o01W',false,"C",1000,280,     300,5,0,    75,0,1.90) // 角鹰弓手
-        call thistype.registerSummon('o022',false,"C",1000,270,     300,5,0,    25,50,2.10) // 德鲁伊
+        call thistype.registerSummon('o008',false,"C",1000,400,     300,5,1,    100,0,1.80) // 民兵
+        call thistype.registerSummon('o00E',false,"C",1000,380,     300,5,0,    50,60,1.90) // 血精灵
+        call thistype.registerSummon('o00R',false,"C",1000,500,     300,5,1,    130,0,2.30) // 兽人大兵
+        call thistype.registerSummon('o00S',false,"C",1000,480,     300,5,1,    120,0,2.20) // 邪恶苦力
+        call thistype.registerSummon('o00W',false,"C",1000,420,     300,5,0,    0,95,2.20) // 巨魔巫医
+        call thistype.registerSummon('o016',false,"C",1000,440,     300,5,0,    15,90,2.20) // 萨满牛祭司
+        call thistype.registerSummon('o01F',false,"C",1000,600,     300,5,0,    95,0,2.10) // 树人
+        call thistype.registerSummon('o01V',false,"C",1000,360,     300,5,0,    100,0,1.90) // 暗夜弓手
+        call thistype.registerSummon('o01W',false,"C",1000,360,     300,5,0,    110,0,1.90) // 角鹰弓手
+        call thistype.registerSummon('o022',false,"C",1000,360,     300,5,0,    35,70,2.10) // 德鲁伊
 
-        call thistype.registerSummon('o00C',false,"B",2000,700,     400,6,8,    140,0,1.80) // 步兵
-        call thistype.registerSummon('o00L',false,"B",2000,520,     400,6,2,    130,0,1.90) // 牧师
-        call thistype.registerSummon('o00K',false,"B",2000,600,     400,6,2,    135,0,1.70) // 铁抢手
-        call thistype.registerSummon('o00Z',false,"B",2000,550,     400,6,1,    155,0,1.90) // 龙鹰骑士
-        call thistype.registerSummon('o017',false,"B",2000,740,     400,6,1,    180,0,2.20) // 灯提白牛
-        call thistype.registerSummon('o00T',false,"B",2000,680,     400,6,1,    170,0,2.10) // 狼骑
-        call thistype.registerSummon('o00G',false,"B",2000,700,     400,6,0,    150,0,2.40) // 巨魔枪士
-        call thistype.registerSummon('o00V',false,"B",2000,800,     400,6,2,    180,0,2.40) // 邪恶兽人大兵
-        call thistype.registerSummon('o014',false,"B",2000,600,     400,6,0,    175,0,1.90) // 飞龙骑士
-        call thistype.registerSummon('o019',false,"B",2000,660,     400,6,0,    35,135,2.30) // 巫师
-        call thistype.registerSummon('o020',false,"B",2000,500,     400,6,0,    55,60,2.00) // 精灵龙
-        call thistype.registerSummon('o01Z',false,"B",2000,540,     400,6,1,    90,0,2.20) // 露娜
-        call thistype.registerSummon('o01U',false,"B",2000,560,     400,6,1,    130,0,2.10) // 树妖
-        call thistype.registerSummon('o023',false,"B",2000,700,     400,6,3,    130,0,1.90) // 熊战德鲁伊
-        call thistype.registerSummon('o01G',false,"B",2000,1000,    400,6,4,    190,0,2.90) // 远古树精
+        call thistype.registerSummon('o00C',false,"B",2000,1300,     400,6,3,    190,0,1.80) // 步兵
+        call thistype.registerSummon('o00L',false,"B",2000,700,     400,6,2,    180,0,1.90) // 牧师
+        call thistype.registerSummon('o00K',false,"B",2000,900,     400,6,2,    200,0,1.70) // 铁抢手
+        call thistype.registerSummon('o00Z',false,"B",2000,1000,     400,6,1,    210,0,1.90) // 龙鹰骑士
+        call thistype.registerSummon('o017',false,"B",2000,1400,     400,6,1,    240,0,2.20) // 灯提白牛
+        call thistype.registerSummon('o00T',false,"B",2000,1300,     400,6,1,    230,0,2.10) // 狼骑
+        call thistype.registerSummon('o00G',false,"B",2000,1100,     400,6,0,    225,0,2.40) // 巨魔枪士
+        call thistype.registerSummon('o00V',false,"B",2000,1350,     400,6,2,    260,0,2.40) // 邪恶兽人大兵
+        call thistype.registerSummon('o014',false,"B",2000,1000,     400,6,0,    210,0,1.90) // 飞龙骑士
+        call thistype.registerSummon('o019',false,"B",2000,900,     400,6,0,    0,220,2.30) // 巫师
+        call thistype.registerSummon('o020',false,"B",2000,700,     400,6,0,    70,100,2.00) // 精灵龙
+        call thistype.registerSummon('o01Z',false,"B",2000,860,     400,6,1,    140,0,2.20) // 露娜
+        call thistype.registerSummon('o01U',false,"B",2000,1200,     400,6,1,    225,0,2.10) // 树妖
+        call thistype.registerSummon('o023',false,"B",2000,1500,     400,6,3,    250,0,1.90) // 熊战德鲁伊
+        call thistype.registerSummon('o01G',false,"B",2000,2000,    400,6,4,    300,0,2.90) // 远古树精
 
-        call thistype.registerSummon('o00D',true,"A",4000,1500,     500,8,10,   300,0,1.80) // 剑士
-        call thistype.registerSummon('o00N',true,"A",4000,1400,     500,8,6,    340,0,2.20) // 骑士
-        call thistype.registerSummon('o00X',true,"A",4000,1200,     500,8,4,    270,0,3.50) // 迫击炮小队
-        call thistype.registerSummon('o00P',true,"A",4000,1100,     500,8,3,    20,280,1.80) // 女巫
-        call thistype.registerSummon('o00O',true,"A",4000,1200,     500,8,3,    50,260,1.80) // 魔导师
-        call thistype.registerSummon('o010',true,"A",4000,1300,     500,8,4,    285,30,1.80) // 狮鹫骑士
-        call thistype.registerSummon('o00Y',true,"A",4000,1300,     500,8,4,    280,30,1.80) // 飞行机器
-        call thistype.registerSummon('o012',true,"A",4000,1600,     500,8,6,    425,0,3.50) // 坦克部队
-        call thistype.registerSummon('o015',true,"A",4000,1200,     500,8,2,    350,0,1.80) // 幻界飞龙
-        call thistype.registerSummon('o01H',true,"A",4000,1300,     500,8,2,    360,0,1.90) // 巨魔蝙蝠骑手
-        call thistype.registerSummon('o01C',false,"A",4000,1600,    500,8,4,    370,0,2.00) // 科多骑手
-        call thistype.registerSummon('o01B',true,"A",4000,1200,     500,8,2,    325,0,2.00) // 骷骨巫长
-        call thistype.registerSummon('o018',true,"A",4000,1500,     500,8,5,    380,0,2.40) // 图腾战牛
-        call thistype.registerSummon('o00U',true,"A",4000,1300,     500,8,3,    335,0,1.80) // 邪恶狼骑
-        call thistype.registerSummon('o01A',true,"A",4000,1300,     500,8,1,    335,0,2.00) // 邪恶巫师
-        call thistype.registerSummon('o024',true,"A",4000,1500,     500,8,4,    325,0,2.10) // 猛熊德鲁伊
-        call thistype.registerSummon('o025',true,"A",4000,1300,     500,8,2,    160,220,1.90) // 奇美拉
-        call thistype.registerSummon('o021',true,"A",4000,1300,     500,8,2,    100,160,1.90) // 黑暗精灵
-        call thistype.registerSummon('o01X',true,"A",4000,1400,     500,8,3,    380,0,2.50) // 山岭巨人
-        call thistype.registerSummon('o01R',true,"A",4000,1800,     500,8,6,    200,180,2.80) // 秘迹古树
-        call thistype.registerSummon('o01J',true,"A",4000,2100,     500,8,6,    340,0,2.80) // 战争古树
-        call thistype.registerSummon('o01L',true,"A",4000,1900,     500,8,6,    0,380,2.80) // 智慧古树
-        call thistype.registerSummon('o01Q',true,"A",4000,2000,     500,8,6,    140,170,2.80) // 苍风古树
+        call thistype.registerSummon('o00D',true,"A",4000,2500,     500,8,7,   460,0,1.80) // 剑士
+        call thistype.registerSummon('o00N',true,"A",4000,2400,     500,8,6,    490,0,2.20) // 骑士
+        call thistype.registerSummon('o00X',true,"A",4000,2100,     500,8,4,    770,0,3.50) // 迫击炮小队
+        call thistype.registerSummon('o00P',true,"A",4000,1700,     500,8,3,    0,490,1.80) // 女巫
+        call thistype.registerSummon('o00O',true,"A",4000,1900,     500,8,3,    110,400,1.80) // 魔导师
+        call thistype.registerSummon('o010',true,"A",4000,2200,     500,8,4,    500,30,1.80) // 狮鹫骑士
+        call thistype.registerSummon('o00Y',true,"A",4000,2000,     500,8,4,    480,0,1.80) // 飞行机器
+        call thistype.registerSummon('o012',true,"A",4000,2500,     500,8,6,    800,0,3.50) // 坦克部队
+        call thistype.registerSummon('o015',true,"A",4000,1800,     500,8,2,    470,0,1.80) // 幻界飞龙
+        call thistype.registerSummon('o01H',true,"A",4000,2050,     500,8,2,    490,0,1.90) // 巨魔蝙蝠骑手
+        call thistype.registerSummon('o01C',false,"A",4000,2700,    500,8,4,    540,0,2.00) // 科多骑手
+        call thistype.registerSummon('o01B',true,"A",4000,2200,     500,8,2,    465,0,2.00) // 骷骨巫长
+        call thistype.registerSummon('o018',true,"A",4000,3000,     500,8,5,    580,0,2.40) // 图腾战牛
+        call thistype.registerSummon('o00U',true,"A",4000,2300,     500,8,3,    555,0,1.80) // 邪恶狼骑
+        call thistype.registerSummon('o01A',true,"A",4000,2100,     500,8,1,    0,600,2.00) // 邪恶巫师
+        call thistype.registerSummon('o024',true,"A",4000,2500,     500,8,4,    625,0,2.10) // 猛熊德鲁伊
+        call thistype.registerSummon('o025',true,"A",4000,1900,     500,8,2,    260,320,1.90) // 奇美拉
+        call thistype.registerSummon('o021',true,"A",4000,1600,     500,8,2,    200,270,1.90) // 黑暗精灵
+        call thistype.registerSummon('o01X',true,"A",4000,2900,     500,8,3,    680,0,2.50) // 山岭巨人
+        call thistype.registerSummon('o01R',true,"A",4000,2600,     500,8,6,    300,380,2.80) // 秘迹古树
+        call thistype.registerSummon('o01J',true,"A",4000,2700,     500,8,6,    680,0,2.80) // 战争古树
+        call thistype.registerSummon('o01L',true,"A",4000,2500,     500,8,6,    0,700,2.80) // 智慧古树
+        call thistype.registerSummon('o01Q',true,"A",4000,2600,     500,8,6,    340,270,2.80) // 苍风古树
 
-        call thistype.registerSummon('o01Y',true,"S",8000,2800,     600,9,6,    800,0,2.30) // 山岭巨人·战棍
-        call thistype.registerSummon('o01D',true,"S",8000,3200,     600,9,8,    780,0,1.90) // 邪恶科多骑手
-        call thistype.registerSummon('o00Q',true,"S",12500,2600,    600,9,7,    10,480,1.80) // 寒冰女巫
-        call thistype.registerSummon('o013',true,"S",14500,3800,    600,9,9,    330,370,1.60) // 火凤凰
-        call thistype.registerSummon('o01E',true,"S",15500,4500,    600,9,12,   1100,0,1.80) // 牛头人酋长
-        call thistype.registerSummon('o026',true,"S",17000,3500,    600,9,13,   1450,0,1.50) // 月之女祭司
+        call thistype.registerSummon('o01Y',true,"S",8000,3800,     600,9,10,    1300,0,2.30) // 山岭巨人·战棍
+        call thistype.registerSummon('o01D',true,"S",8000,4200,     600,9,12,    1280,0,1.90) // 邪恶科多骑手
+        call thistype.registerSummon('o00Q',true,"S",12500,3000,    600,9,8,    0,780,1.80) // 寒冰女巫
+        call thistype.registerSummon('o013',true,"S",15000,5000,    600,9,14,    730,670,1.60) // 火凤凰
+        call thistype.registerSummon('o01E',true,"S",16500,6500,    600,9,18,   2000,0,1.80) // 牛头人酋长
+        call thistype.registerSummon('o026',true,"S",18000,7000,    600,9,16,   2350,0,1.50) // 月之女祭司
 
 
         call thistype.registerSummonAbility('o00M','A04K') // N 地穴 - 尖针
@@ -2604,7 +2461,7 @@ struct hGlobals
         call thistype.registerSummonAbility('o01D','A07U') // S 邪恶科多骑手 - 邪殇
         call thistype.registerSummonAbility('o026','A04X') // S 月之女祭司 - 强弓
         call thistype.registerSummonAbility('o026','A050') // S 月之女祭司 - 威吓
-        call thistype.registerSummonAbility('o026','A04Z') // S 月之女祭司 - 月光
+        call thistype.registerSummonAbility('o026','A04Z') // S 月之女祭司 - 星落
         
 
         // 瞬时物品

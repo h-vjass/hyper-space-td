@@ -547,9 +547,9 @@ struct hSet
 			return
 		endif
 		call htime.setInteger(t,1,1+i)
-		set life = g_wave * 80 * g_diff
-		set move = 120 + g_wave * 3 + g_diff * 7
-		set attack = g_wave * (3 + g_diff * 2)
+		set life = g_wave * (110 + g_diff * 20)
+		set move = 120 + g_wave * 3 + g_diff * 6
+		set attack = g_wave * (4 + g_diff)
 		set j = 1
 		loop
 			exitwhen j>spaceDegQty
@@ -626,22 +626,22 @@ struct hSet
 		call hattr.addMana(u,1000*g_diff,0)
         call hattr.addManaBack(u,30*g_diff,0)
         call hattr.setDefend(u, (g_wave+g_diff)*4 ,0)
-		call hattr.addResistance(u,g_wave*0.5,0)
-		call hattr.setMove(u, 160 + g_wave*5 + g_diff*8 ,0)
+		call hattr.addResistance(u,g_wave*0.4,0)
+		call hattr.setMove(u, 150 + g_wave*5 + g_diff*8 ,0)
         call hattr.setAttackPhysical(u, 40 + g_wave*(11 + g_diff*2)  ,0)
 		call hattr.setAttackMagic(u, 60 + g_wave*(12 + g_diff*2)  ,0)
         call hattr.setAttackSpeed(u, g_wave * 3 + g_diff * 4 ,0)
-        call hattr.setAim(u,g_wave*0.7,0)
+        call hattr.setAim(u,g_wave*0.6,0)
         call hattr.setAvoid(u,g_wave*0.4,0)
-		call hattr.setInvincible(u,g_wave*0.2,0)
+		call hattr.setInvincible(u,g_wave*0.1,0)
         call hattr.setSwimOppose(u,g_wave*0.4,0)
         call hattr.setSilentOppose(u,g_wave*0.3,0)
         call hattr.setUnarmOppose(u,g_wave*0.3,0)
-        call hattr.setFetterOppose(u,g_wave*0.2,0)
-        call hattr.setBombOppose(u,g_wave*0.15,0)
+        call hattr.setFetterOppose(u,g_wave*0.15,0)
+        call hattr.setBombOppose(u,g_wave*0.35,0)
         call hattr.setCrackFlyOppose(u,g_wave*0.5,0)
-        call hattr.setKnockingOppose(u, g_wave * 30 + g_diff * 450,0)
-        call hattr.setViolenceOppose(u, g_wave * 40 + g_diff * 480,0)
+        call hattr.setKnockingOppose(u, g_wave * 20 + g_diff * 350,0)
+        call hattr.setViolenceOppose(u, g_wave * 30 + g_diff * 380,0)
 		call hattrEffect.addCrackFlyOdds(u,10+g_wave*0.5+g_diff*3,0)
 		call hattrEffect.addCrackFlyVal(u,g_wave*(30 + g_diff),0)
 		call hattrEffect.addCrackFlyHigh(u,100+g_wave*(4 + g_diff),0)
