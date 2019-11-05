@@ -502,9 +502,9 @@ struct hSet
 		if(g_gp_attack != null and IsUnitInGroup(u, g_gp_attack) == true)then
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
-		set exp = R2I(I2R(g_wave) * 16 * g_game_speed)
-		set expk = R2I(I2R(g_wave) * 30 * g_game_speed)
-		set gold = R2I(I2R(g_wave) * 2.8 * g_game_speed) * player_current_qty
+		set exp = R2I(I2R(g_wave) * (16+g_diff*2) * g_game_speed)
+		set expk = R2I(I2R(g_wave) * (30+g_diff) * g_game_speed)
+		set gold = R2I(I2R(g_wave) * 2.8 * g_game_speed) * player_current_qty + g_diff * 2
 		if(killer != null)then
 			call haward.forUnit(killer,expk,gold,0)
 			call haward.forGroup(killer,exp,0,0)
@@ -547,9 +547,9 @@ struct hSet
 			return
 		endif
 		call htime.setInteger(t,1,1+i)
-		set life = g_wave * 100 * g_diff
-		set move = 125 + g_wave * 3 + g_diff * 7
-		set attack = g_wave * (4 + g_diff * 2)
+		set life = g_wave * 80 * g_diff
+		set move = 120 + g_wave * 3 + g_diff * 7
+		set attack = g_wave * (3 + g_diff * 2)
 		set j = 1
 		loop
 			exitwhen j>spaceDegQty
@@ -583,8 +583,8 @@ struct hSet
 		if(g_gp_attack != null and IsUnitInGroup(u, g_gp_attack) == true)then
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
-		set exp = g_wave * 3000
-		set gold = g_wave * 30 * player_current_qty
+		set exp = g_wave * 2800 + 200 * g_diff
+		set gold = g_wave * (30+g_diff) * player_current_qty
 		if(killer!=null)then
 			call haward.forUnit(killer,exp,0,0)
 		endif
@@ -621,16 +621,16 @@ struct hSet
 		set u = henemy.createUnit(last_boss_uid,loc)
 		call GroupAddUnit(g_gp_mon,u)
 		call TriggerRegisterUnitEvent( bossDeadTg, u, EVENT_UNIT_DEATH )
-        call hattr.setLife(u, g_wave * (7500+2500*g_diff) ,0)
+        call hattr.setLife(u, g_wave * (6400+2300*g_diff) ,0)
 		call hattr.setLifeBack(u, g_wave* 2 + g_diff * 5 ,0)
 		call hattr.addMana(u,1000*g_diff,0)
         call hattr.addManaBack(u,30*g_diff,0)
-        call hattr.setDefend(u, (g_wave+g_diff)*5 ,0)
+        call hattr.setDefend(u, (g_wave+g_diff)*4 ,0)
 		call hattr.addResistance(u,g_wave*0.5,0)
-		call hattr.setMove(u, 160 + g_wave*5 + g_diff*10 ,0)
-        call hattr.setAttackPhysical(u, 40 + g_wave*(12 + g_diff*2)  ,0)
-		call hattr.setAttackMagic(u, 60 + g_wave*(13 + g_diff*2)  ,0)
-        call hattr.setAttackSpeed(u, g_wave * 3 + g_diff * 6 ,0)
+		call hattr.setMove(u, 160 + g_wave*5 + g_diff*8 ,0)
+        call hattr.setAttackPhysical(u, 40 + g_wave*(11 + g_diff*2)  ,0)
+		call hattr.setAttackMagic(u, 60 + g_wave*(12 + g_diff*2)  ,0)
+        call hattr.setAttackSpeed(u, g_wave * 3 + g_diff * 4 ,0)
         call hattr.setAim(u,g_wave*0.7,0)
         call hattr.setAvoid(u,g_wave*0.4,0)
 		call hattr.setInvincible(u,g_wave*0.2,0)
@@ -640,8 +640,8 @@ struct hSet
         call hattr.setFetterOppose(u,g_wave*0.2,0)
         call hattr.setBombOppose(u,g_wave*0.15,0)
         call hattr.setCrackFlyOppose(u,g_wave*0.5,0)
-        call hattr.setKnockingOppose(u, g_wave * 30 + g_diff * 500,0)
-        call hattr.setViolenceOppose(u, g_wave * 40 + g_diff * 550,0)
+        call hattr.setKnockingOppose(u, g_wave * 30 + g_diff * 450,0)
+        call hattr.setViolenceOppose(u, g_wave * 40 + g_diff * 480,0)
 		call hattrEffect.addCrackFlyOdds(u,10+g_wave*0.5+g_diff*3,0)
 		call hattrEffect.addCrackFlyVal(u,g_wave*(30 + g_diff),0)
 		call hattrEffect.addCrackFlyHigh(u,100+g_wave*(4 + g_diff),0)
@@ -650,7 +650,11 @@ struct hSet
 		//警告
 		call PingMinimapLocForForceEx( GetPlayersAll(),loc,3, bj_MINIMAPPINGSTYLE_FLASHY, 100, 0, 0 )
 		call RemoveLocation(loc)
-		call hmedia.bgm(gg_snd_eddyliu_menu_bgm)
+		if(g_wave >= 100)then
+			call hmedia.bgm(gg_snd_boss_last)
+		else
+			call hmedia.bgm(gg_snd_boss)
+		endif
 		call hmedia.soundPlay(gg_snd_audio_buyaohuang)
 		call hmsg.echo("|cffffff80"+GetUnitName(u)+"|r现身！！|cffffff80注意防范！|r")
 		set t = null

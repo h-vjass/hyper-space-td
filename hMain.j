@@ -145,7 +145,6 @@ library Main initializer init needs hJass
 		local integer i = 0
 		if(g_leaderboard == null)then
 			set g_leaderboard = CreateLeaderboard()
-			call LeaderboardSetLabel(g_leaderboard, g_diff_label[g_diff]+"("+I2S(g_wave)+"波)")
 			call ForceSetLeaderboardBJ(g_leaderboard, GetPlayersAll())
 			set i = 1
 			loop
@@ -156,6 +155,7 @@ library Main initializer init needs hJass
 			call LeaderboardDisplay(g_leaderboard, true)
 		endif
 		if(g_leaderboard != null)then
+			call LeaderboardSetLabel(g_leaderboard, g_diff_label[g_diff]+"("+I2S(g_wave)+"波)")
 			set i = 1
 			loop
 				exitwhen i>player_max_qty
@@ -183,19 +183,9 @@ library Main initializer init needs hJass
 		local button b = GetClickedButton()
 		local integer bi = LoadInteger(hash_player,GetHandleId(b),7)
 		set g_diff = bi
-		if(g_diff == 2)then
-			set g_boss_ready_time = 75
-			set g_game_mon_loop = g_game_mon_loop - 0.60
-			call hmsg.echo("选择了难度|cffffff80（"+g_diff_label[g_diff]+"）|r")
-		elseif(g_diff == 3)then
-			set g_boss_ready_time = 50
-			set g_game_mon_loop = g_game_mon_loop - 1.20
-			call hmsg.echo("选择了难度|cffff0000（"+g_diff_label[g_diff]+"）|r")
-		else
-			set g_boss_ready_time = 100
-			set g_game_mon_loop = g_game_mon_loop
-			call hmsg.echo("选择了难度|cff00ff00（"+g_diff_label[g_diff]+"）|r")
-		endif
+		set g_boss_ready_time = 115 - 15 * g_diff
+		set g_game_mon_loop = g_game_mon_loop - 0.40 * g_diff
+		call hmsg.echo("选择了难度（"+g_diff_label[g_diff]+"）")
 		call FlushChildHashtable(hash_player, GetHandleId(b))
 		call DialogClear( d )
 		call DialogDestroy( d )
@@ -254,12 +244,13 @@ library Main initializer init needs hJass
 		// 选难度
 		set d = DialogCreate()
 		call DialogSetMessage( d, "选择难度" )
-		set b = DialogAddButton(d,"简单",0)
-		call SaveInteger(hash_player,GetHandleId(b),7,1)
-		set b = DialogAddButton(d,"困难",0)
-		call SaveInteger(hash_player,GetHandleId(b),7,2)
-		set b = DialogAddButton(d,"地狱",0)
-		call SaveInteger(hash_player,GetHandleId(b),7,3)
+		set i = 1
+		loop
+			exitwhen(i>4)
+				set b = DialogAddButton(d,g_diff_label[i],0)
+				call SaveInteger(hash_player,GetHandleId(b),7,i)
+			set i=i+1
+		endloop
 		set dtg = CreateTrigger()
 		call TriggerAddAction(dtg, function difcSelectDialog)
 		call TriggerRegisterDialogEvent( dtg , d )

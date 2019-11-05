@@ -303,6 +303,8 @@ struct hGlobals
             set targetCount = 2
             set targetArr[1] = 'o00K' // B 铁枪手
             set targetArr[2] = 'o00C' // B 步兵
+            set targetArr[1] = 'o020'
+            set targetArr[2] = 'o020'
         endif
         if(triggerUID == 'o00E')then // C 血妖精
             set targetCount = 2
@@ -574,7 +576,7 @@ struct hGlobals
         elseif(abid == 'A058')then // A 奇美拉 - 龙息
             call hattr.addAttackHuntType(u,"fire",0)
             call hattr.addAttackHuntType(u,"ice",0)
-            call hattrEffect.addCorrosionVal(u,2,0)
+            call hattrEffect.addCorrosionVal(u,4,0)
             call hattrEffect.addCorrosionDuring(u,5,0)
         elseif(abid == 'A052')then // A 山岭巨人 - 大喊
             // 攻击事件实现
@@ -789,6 +791,8 @@ struct hGlobals
                     set ttg = null
                     call thistype.initSummon(u)
                     call thistype.initSummonAbility(u,triggerUnit,targetUnit)
+                    call hitem.copy(triggerUnit,u)
+                    call hitem.copy(targetUnit,u)
                     //
                 endif
                 call RemoveUnit(triggerUnit)
@@ -1263,6 +1267,8 @@ struct hGlobals
             set rebornTime = rebornTime + 20
         elseif("A" == LoadStr(hash_unit,uid,0))then
             set rebornTime = rebornTime + 10
+        elseif("N" == LoadStr(hash_unit,uid,0))then
+            set rebornTime = rebornTime + 25
         endif
         // 假死亡
 		if(hgroup.isIn(u,sk_group_fusuzhiguang) == true)then
@@ -2276,9 +2282,10 @@ struct hGlobals
         local integer i = 0
         local trigger tg = null
 
-        set g_diff_label[1] = "简单"
-        set g_diff_label[2] = "普通"
-        set g_diff_label[3] = "地狱"
+        set g_diff_label[1] = "|cff00ff00简单|r"
+        set g_diff_label[2] = "|cffffff80普通|r"
+        set g_diff_label[3] = "|cffff6600困难|r"
+        set g_diff_label[4] = "|cffff0000地狱|r"
 
         // 设置玩家组
         set i = 1
@@ -2516,7 +2523,7 @@ struct hGlobals
         call thistype.registerSummon('o00U',true,"A",4000,1300,     500,8,3,    335,0,1.80) // 邪恶狼骑
         call thistype.registerSummon('o01A',true,"A",4000,1300,     500,8,1,    335,0,2.00) // 邪恶巫师
         call thistype.registerSummon('o024',true,"A",4000,1500,     500,8,4,    325,0,2.10) // 猛熊德鲁伊
-        call thistype.registerSummon('o025',true,"A",4000,1300,     500,8,2,    160,210,1.90) // 奇美拉
+        call thistype.registerSummon('o025',true,"A",4000,1300,     500,8,2,    160,220,1.90) // 奇美拉
         call thistype.registerSummon('o021',true,"A",4000,1300,     500,8,2,    100,160,1.90) // 黑暗精灵
         call thistype.registerSummon('o01X',true,"A",4000,1400,     500,8,3,    380,0,2.50) // 山岭巨人
         call thistype.registerSummon('o01R',true,"A",4000,1800,     500,8,6,    200,180,2.80) // 秘迹古树
