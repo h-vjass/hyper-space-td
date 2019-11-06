@@ -1348,6 +1348,29 @@ struct hGlobals
         set txt = null
     endmethod
 
+    //
+    public static method registerItem0 takes nothing returns nothing
+        local hItemBean hitembean
+        call htime.delTimer(GetExpiredTimer())
+        //--------------------
+        set hitembean = hItemBean.create() // N 时空之轮碎片
+		set hitembean.item_id = 'I001'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 99
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // SSS 时空之轮精粹
+		set hitembean.item_id = 'I00H'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // mix
+        call hitemMix.newFormula('I00H',1) // 时空之轮精粹
+		call hitemMix.addFlag('I00H','I001',99) // 时空之轮碎片
+    endmethod
+
     //[商店]杂货
     public static method registerItem1 takes nothing returns nothing
         local hItemBean hitembean
@@ -1445,15 +1468,99 @@ struct hGlobals
         local hItemBean hitembean
         call htime.delTimer(GetExpiredTimer())
         //--------------------
-        set hitembean = hItemBean.create() // E 铁皮树枝
-		set hitembean.item_id = 'I018'
+        set hitembean = hItemBean.create() // D 破烂的短剑
+		set hitembean.item_id = 'I000'
 		set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-		set hitembean.attackPhysical = 25
-		set hitembean.attackMagic = 25
-		set hitembean.knocking = 50
-		set hitembean.violence = 50
-		set hitembean.avoid = 3
+		set hitembean.attackPhysical = 250
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // D 平凡之靴
+		set hitembean.item_id = 'I012'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.avoid = 7
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // D 侵蚀的铁圈木盾
+		set hitembean.item_id = 'I00X'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.defend = 4
+        set hitembean.toughness = 30
+        set hitembean.corrosionVal = 2
+        set hitembean.corrosionDuring = 10
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // D 无用的水晶球
+		set hitembean.item_id = 'I01I'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // C 生命护身符
+		set hitembean.item_id = 'I016'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.life = 1200
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // C 魔法护身符
+		set hitembean.item_id = 'I017'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.mana = 500
+        set hitembean.resistance = 15
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // C 恢复指环
+		set hitembean.item_id = 'I013'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.lifeBack = 50
+        set hitembean.toughness = 50
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // C 魔法指环
+		set hitembean.item_id = 'I014'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.fireOppose = 5
+        set hitembean.soilOppose = 5
+        set hitembean.waterOppose = 5
+        set hitembean.iceOppose = 5
+        set hitembean.windOppose = 5
+        set hitembean.lightOppose = 5
+        set hitembean.darkOppose = 5
+        set hitembean.woodOppose = 5
+        set hitembean.thunderOppose = 5
+        set hitembean.poisonOppose = 5
+        set hitembean.ghostOppose = 5
+        set hitembean.metalOppose = 5
+        set hitembean.dragonOppose = 5
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // C 小美头环
+		set hitembean.item_id = 'I00L'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.huntAmplitude = 6
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // C 全知全能之书
+		set hitembean.item_id = 'I01J'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.expRatio = 45
 		call hitem.format(hitembean)
 		call hitembean.destroy()
     endmethod
@@ -2185,6 +2292,7 @@ struct hGlobals
         call thistype.registerHero('H00S',HERO_TYPE_AGI,"ReplaceableTextures\\CommandButtons\\BTNBansheeRanger.blp",2.00) // t10 黑游
         call thistype.registerHero('H00R',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNHeroAlchemist.blp",2.00) // t20 炼金
 
+        call htime.setTimeout(0.65,function thistype.registerItem0)
         call htime.setTimeout(0.70,function thistype.registerItem1)
         call htime.setTimeout(0.75,function thistype.registerItem2)
         call htime.setTimeout(0.80,function thistype.registerItem3)
