@@ -1348,6 +1348,7 @@ struct hGlobals
         set txt = null
     endmethod
 
+    //[商店]杂货
     public static method registerItem1 takes nothing returns nothing
         local hItemBean hitembean
         call htime.delTimer(GetExpiredTimer())
@@ -1439,7 +1440,22 @@ struct hGlobals
 		call hitembean.destroy()
     endmethod
 
+    //[商店]营地
     public static method registerItem2 takes nothing returns nothing
+        local hItemBean hitembean
+        call htime.delTimer(GetExpiredTimer())
+        //--------------------
+        set hitembean = hItemBean.create() // E 铁皮树枝
+		set hitembean.item_id = 'I018'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.attackPhysical = 25
+		set hitembean.attackMagic = 25
+		set hitembean.knocking = 50
+		set hitembean.violence = 50
+		set hitembean.avoid = 3
+		call hitem.format(hitembean)
+		call hitembean.destroy()
     endmethod
 
     public static method registerItem3 takes nothing returns nothing
