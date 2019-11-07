@@ -1306,6 +1306,9 @@ struct hGlobals
         if(GetUnitAbilityLevel(u,'A08N') >= 1)then // 火凤凰 - 涅磐
             set rebornTime = rebornTime * 0.5
         endif
+        if(his.ownItem(u,'I00H'))then // 拥有 SSS 时空之轮精粹
+            set rebornTime = rebornTime * 0.5
+        endif
         set tempu = hunit.createUnitXYFacing(p,u_dead_timering[GetUnitFoodUsed(u)],x,y,270)
         call SetUnitVertexColor(tempu, 255, 255, 255, 200)
         call hunit.shadow(uid,x+15,y+15,270,50,0,75,120,rebornTime)
@@ -1565,198 +1568,328 @@ struct hGlobals
 		call hitembean.destroy()
     endmethod
 
+    //[商店]磨坊
     public static method registerItem3 takes nothing returns nothing
         local hItemBean hitembean
         call htime.delTimer(GetExpiredTimer())
-        set hitembean = hItemBean.create() // 恶魔的灵魂 [ 200000G ]
-		set hitembean.item_id = 'I01G'
+        set hitembean = hItemBean.create() // B 水
+		set hitembean.item_id = 'I00J'
         set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-        set hitembean.item_gold = 200000
-        set hitembean.bluntVal = 25
-        set hitembean.bluntDuring = 3.00
-        set hitembean.muggleVal = 25
-        set hitembean.muggleDuring = 3.00
-        set hitembean.tortuaVal = 25
-        set hitembean.tortuaDuring = 3.00
-        set hitembean.silentOdds = 10
-        set hitembean.silentDuring = 1.00
-        set hitembean.unarmOdds = 10
-        set hitembean.unarmDuring = 1.00
-        set hitembean.fetterOdds = 15
-        set hitembean.fetterDuring = 1.00
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 无用的水晶球 [ 200000G ]
-		set hitembean.item_id = 'I01I'
-        set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 200000
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 全知全能之书 [ 23300 G ]
-		set hitembean.item_id = 'I01J'
-        set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 23300
-		set hitembean.expRatio = 15
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 令人清醒的钻石 [ 100000G ]
-		set hitembean.item_id = 'I01L'
-        set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 100000
-		set hitembean.swimOppose = 100
-		set hitembean.goldRatio = 3
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 优秀望远镜 [ 10000 G ]
-		set hitembean.item_id = 'I01K'
-        set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 10000
-		set hitembean.sight = 200
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-		set hitembean = hItemBean.create() // 毒液根 [ 100000G ]
-		set hitembean.item_id = 'I01C'
-        set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 100000
-		set hitembean.poison = 15
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-		set hitembean = hItemBean.create() // 毒液根
-		set hitembean.item_id = 'I01R'
-        set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 0
-		set hitembean.poison = 15
-		call hitem.format(hitembean)
-		call hitembean.destroy()
-		set hitembean = hItemBean.create() // 寒霜玉 [ 100000G ]
-		set hitembean.item_id = 'I01E'
-        set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 100000
+		set hitembean.item_overlay = 1
 		set hitembean.water = 10
-		set hitembean.ice = 10
-        call hitem.format(hitembean)
-		call hitembean.destroy()
-		set hitembean = hItemBean.create() // 烈焰珠 [ 100000G ]
-		set hitembean.item_id = 'I01D'
-        set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 100000
-		set hitembean.fire = 15
 		call hitem.format(hitembean)
 		call hitembean.destroy()
-		set hitembean = hItemBean.create() // 烈焰珠 [ 捡的 ]
-		set hitembean.item_id = 'I01M'
+        // --------------------------------------
+        set hitembean = hItemBean.create() // B 铁制之爪
+		set hitembean.item_id = 'I00Z'
         set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.fire = 15
+		set hitembean.item_overlay = 1
+		set hitembean.attackPhysical = 450
 		call hitem.format(hitembean)
 		call hitembean.destroy()
-		set hitembean = hItemBean.create() // 灵光爆 [ 100000G ]
-		set hitembean.item_id = 'I01H'
+        // --------------------------------------
+        set hitembean = hItemBean.create() // B 优越之戒
+		set hitembean.item_id = 'I015'
         set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 100000
-		set hitembean.light = 12
-		set hitembean.resistance = 10
+		set hitembean.item_overlay = 1
+        set hitembean.defend = 5
+        set hitembean.life = 500
+		set hitembean.knockingOppose = 20
 		call hitem.format(hitembean)
 		call hitembean.destroy()
-		set hitembean = hItemBean.create() // 闪电球 [ 100000 G ]
-		set hitembean.item_id = 'I01B'
+        // --------------------------------------
+        set hitembean = hItemBean.create() // B 神秘腰带
+		set hitembean.item_id = 'I019'
         set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 100000
-		set hitembean.thunder = 15
+		set hitembean.item_overlay = 1
+        set hitembean.resistance = 35
+		set hitembean.violence = 600
 		call hitem.format(hitembean)
 		call hitembean.destroy()
-		set hitembean = hItemBean.create() // 影子球 [ 100000 G ]
-		set hitembean.item_id = 'I01F'
+        // --------------------------------------
+        set hitembean = hItemBean.create() // B 加速手套
+		set hitembean.item_id = 'I010'
         set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_gold = 100000
-		set hitembean.dark = 15
+		set hitembean.item_overlay = 1
+        set hitembean.attackSpeed = 35
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // B 小柔的红宝石
+		set hitembean.item_id = 'I00W'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+        set hitembean.hemophagia = 50
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // B 闪避护符
+		set hitembean.item_id = 'I029'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+        set hitembean.avoid = 30
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // B 专注护符
+		set hitembean.item_id = 'I02A'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+        set hitembean.aim = 40
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // B 吸血面具
+		set hitembean.item_id = 'I02B'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+        set hitembean.hemophagia = 20
+        set hitembean.hemophagiaSkill = 20
 		call hitem.format(hitembean)
 		call hitembean.destroy()
     endmethod
 
+    //[商店]铁铺
     public static method registerItem4 takes nothing returns nothing
         local hItemBean hitembean
         call htime.delTimer(GetExpiredTimer())
-        set hitembean = hItemBean.create() // 刺虫之壳 [ 30L ]
-		set hitembean.item_id = 'I01O'
+        set hitembean = hItemBean.create() // A 坚固的盾牌
+		set hitembean.item_id = 'I00B'
         set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_lumber = 30
-		set hitembean.huntRebound = 30
-		set hitembean.toughness = 100
-		set hitembean.punish = 1000
+		set hitembean.item_overlay = 1
+		set hitembean.defend = 25
+        set hitembean.toughness = 200
 		call hitem.format(hitembean)
 		call hitembean.destroy()
-		set hitembean = hItemBean.create() // 蓄风的叶子 [ 30L ]
-		set hitembean.item_id = 'I01P'
+        // --------------------------------------
+        set hitembean = hItemBean.create() // A 清醒的钻石
+		set hitembean.item_id = 'I01L'
         set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_lumber = 30
-		set hitembean.wind = 30
-		set hitembean.attackPhysical = 1000
-		set hitembean.avoid = 3
+		set hitembean.item_overlay = 1
+		set hitembean.swimOppose = 30
+		set hitembean.crackFlyOppose = 30
 		call hitem.format(hitembean)
 		call hitembean.destroy()
-		set hitembean = hItemBean.create() // 雷神之锤 [ 30L ]
-		set hitembean.item_id = 'I01N'
+        // --------------------------------------
+        set hitembean = hItemBean.create() // A 残暴之爪
+		set hitembean.item_id = 'I011'
         set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_lumber = 30
-		set hitembean.attackHuntType = "thunder"
-		set hitembean.thunder = 20
-		set hitembean.attackSpeed = 45
-        call hitem.format(hitembean)
+		set hitembean.item_overlay = 1
+		set hitembean.attackPhysical = 725
+        set hitembean.corrosionVal = 7
+        set hitembean.corrosionDuring = 5
+		call hitem.format(hitembean)
 		call hitembean.destroy()
-		set hitembean = hItemBean.create() // 生命宝珠 [ 30L ]
-		set hitembean.item_id = 'I01W'
+        // --------------------------------------
+        set hitembean = hItemBean.create() // A 精红球
+		set hitembean.item_id = 'I01A'
         set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_lumber = 30
-		set hitembean.life = 5000
-        call hitem.format(hitembean)
+		set hitembean.item_overlay = 1
+		set hitembean.lifeBack = 150
+        set hitembean.hemophagia = 25
+		call hitem.format(hitembean)
 		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 骸骨灵魂 [ 35L ]
+        // --------------------------------------
+        set hitembean = hItemBean.create() // A 烈焰之剑
+		set hitembean.item_id = 'I01M'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.burnVal = 180
+        set hitembean.burnDuring = 6
+        set hitembean.knocking = 950
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // A 冰原之剑
+		set hitembean.item_id = 'I01R'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.freezeVal = 10
+        set hitembean.freezeDuring = 6
+        set hitembean.violence = 1000
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // A 侠盗短剑
+		set hitembean.item_id = 'I028'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.attackPhysical = 300
+        set hitembean.attackSpeed = 55
+        set hitembean.knocking = 400
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // A 赤炼斧
+		set hitembean.item_id = 'I02C'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.split = 35
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+    endmethod
+
+    //[商店]奇异宝店
+    public static method registerItem5 takes nothing returns nothing
+        local hItemBean hitembean
+        call htime.delTimer(GetExpiredTimer())
+        set hitembean = hItemBean.create() // S 恶魔的紫色血浆
+		set hitembean.item_id = 'I00Y'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // SS 恶魔的灵魂
+		set hitembean.item_id = 'I01G'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+        set hitembean.bluntVal = 125
+        set hitembean.muggleVal = 125
+        set hitembean.tortuaVal = 145
+        set hitembean.silentOdds = 20
+        set hitembean.unarmOdds = 20
+        set hitembean.fetterOdds = 35
+        set hitembean.bluntDuring = 3
+        set hitembean.muggleDuring = 3
+        set hitembean.tortuaDuring = 3
+        set hitembean.silentDuring = 3
+        set hitembean.unarmDuring = 3
+        set hitembean.fetterDuring = 3
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // SS 毒液根
+		set hitembean.item_id = 'I01C'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.poison = 155
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // SS 骸骨灵魂
 		set hitembean.item_id = 'I01Q'
         set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_lumber = 35
-		set hitembean.attackHuntType = "ghost"
-		set hitembean.ghost = 20
-		set hitembean.dark = 5
-		set hitembean.corrosionVal = 3
-		set hitembean.corrosionDuring = 3
+		set hitembean.item_overlay = 1
+        set hitembean.attackHuntType = "ghost"
+		set hitembean.ghost = 70
+        set hitembean.dark = 50
+        set hitembean.corrosionVal = 10
+        set hitembean.corrosionDuring = 3
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // SS 寒霜玉
+		set hitembean.item_id = 'I01E'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+        set hitembean.attackHuntType = "icewater"
+		set hitembean.ice = 30
+        set hitembean.water = 30
+        set hitembean.corrosionVal = 10
+        set hitembean.corrosionDuring = 3
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // SS 烈焰珠
+		set hitembean.item_id = 'I01d'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.fire = 195
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // SS 灵光爆
+		set hitembean.item_id = 'I01H'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.light = 120
+		set hitembean.resistance = 50
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+		set hitembean = hItemBean.create() // SS 闪电球
+		set hitembean.item_id = 'I01B'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.thunder = 115
+        set hitembean.lightningChainOdds = 50
+        set hitembean.lightningChainQty = 3
+        set hitembean.lightningChainVal = 2000
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+		set hitembean = hItemBean.create() // SS 影子球
+		set hitembean.item_id = 'I01F'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.dark = 165
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // 合成
+        call hitemMix.newFormula('I01G',1) // SS 恶魔的灵魂
+		call hitemMix.addFlag('I011','I00Z',1) // D 无用的水晶球
+        call hitemMix.addFlag('I011','I00Y',1) // S 恶魔的紫色血浆
+    endmethod
+
+    //[商店]黑科技
+    public static method registerItem6 takes nothing returns nothing
+        local hItemBean hitembean
+        call htime.delTimer(GetExpiredTimer())
+        set hitembean = hItemBean.create() // SSS 刺虫之壳
+		set hitembean.item_id = 'I01O'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.huntRebound = 150
+        set hitembean.huntAmplitude = 20
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+		set hitembean = hItemBean.create() // SSS 蓄风的叶子
+		set hitembean.item_id = 'I01P'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.wind = 200
+		set hitembean.attackPhysical = 1000
+		set hitembean.avoid = 30
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+		set hitembean = hItemBean.create() // SSS 雷神之锤
+		set hitembean.item_id = 'I01N'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.attackHuntType = "thunder"
+		set hitembean.thunder = 180
+		set hitembean.attackSpeed = 75
         call hitem.format(hitembean)
 		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 否决神杖 [ 40L ]
+        // --------------------------------------
+		set hitembean = hItemBean.create() // SSS 生命宝珠
+		set hitembean.item_id = 'I01W'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.life = 20000
+        call hitem.format(hitembean)
+		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // SSS 否决神杖
 		set hitembean.item_id = 'I01X'
         set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_lumber = 40
-		set hitembean.int = 185
-		set hitembean.unarmOdds = 4.5
+		set hitembean.item_overlay = 1
+		set hitembean.unarmOdds = 12.5
 		set hitembean.unarmDuring = 2.5
         call hitem.format(hitembean)
 		call hitembean.destroy()
-        set hitembean = hItemBean.create() // 天神法杖 [ 100L ]
+        // --------------------------------------
+        set hitembean = hItemBean.create() // SSS 天神法杖
 		set hitembean.item_id = 'I022'
         set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 9
-		set hitembean.item_lumber = 100
-        set hitembean.silentOdds = 10.0
-		set hitembean.unarmOdds = 10.0
-		set hitembean.unarmDuring = 2.5
+		set hitembean.item_overlay = 1
+        set hitembean.silentOdds = 16.0
+		set hitembean.unarmOdds = 16.0
+        set hitembean.silentDuring = 3.5
+		set hitembean.unarmDuring = 3.5
         call hitem.format(hitembean)
 		call hitembean.destroy()
     endmethod
@@ -2137,52 +2270,30 @@ struct hGlobals
         call hevent.onAttack(mon,function thistype.onBossAttack)
     endmethod
     public static method bossDeadDrop takes unit mon returns nothing
-        local integer uid = GetUnitTypeId(mon)
-        if(uid == 'n046')then // 5
-            call hitem.toXY('I00J',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n047')then // 10
-            call hitem.toXY('I00J',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n048')then // 15
-            call hitem.toXY('I00Z',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n049')then // 20
-            call hitem.toXY('I015',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04A')then // 25
-            call hitem.toXY('I017',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04B')then // 30
-            call hitem.toXY('I010',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04C')then // 35
-            call hitem.toXY('I016',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04K')then // 40
-            call hitem.toXY('I015',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04O')then // 45
-            call hitem.toXY('I00Z',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04L')then // 50
-            call hitem.toXY('I01F',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04P')then // 55
-            call hitem.toXY('I016',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04N')then // 60
-            call hitem.toXY('I01R',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04Q')then // 65
-            call hitem.toXY('I01K',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04M')then // 70
-            call hitem.toXY('I015',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04J')then // 75
-            call hitem.toXY('I01R',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04D')then // 80
-            call hitem.toXY('I010',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04I')then // 85
-            call hitem.toXY('I01Z',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04F')then // 90
-            call hitem.toXY('I010',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04G')then // 95
-            call hitem.toXY('I01M',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04E')then // 100
-            call hitem.toXY('I019',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n04H')then // 105
-            call hitem.toXY('I01K',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        elseif(uid == 'n051')then // 110
-            call hitem.toXY('I00Z',1,GetUnitX(mon),GetUnitY(mon),120.0)
-        endif
+        local integer total = 20
+        local integer array itempools
+        set itempools[1] = 'I00C'
+        set itempools[2] = 'I01K'
+        set itempools[3] = 'I01I'
+        set itempools[4] = 'I00X'
+        set itempools[5] = 'I000'
+        set itempools[6] = 'I012'
+        set itempools[7] = 'I00F'
+        set itempools[8] = 'I00L'
+        set itempools[9] = 'I016'
+        set itempools[10] = 'I01J'
+        set itempools[11] = 'I014'
+        set itempools[12] = 'I017'
+        set itempools[13] = 'I013'
+        set itempools[14] = 'I00D'
+        set itempools[15] = 'I00E'
+        set itempools[16] = 'I018'
+        set itempools[17] = 'I00I'
+        set itempools[18] = 'I00G'
+        set itempools[19] = 'I002'
+        set itempools[20] = 'I00K'
+        call hitem.toXY(itempools[GetRandomInt(1,total)],1,GetUnitX(mon),GetUnitY(mon),120.0)
+        call hitem.toXY(itempools[GetRandomInt(1,total)],1,GetUnitX(mon),GetUnitY(mon),120.0)
     endmethod
 
 
@@ -2297,6 +2408,8 @@ struct hGlobals
         call htime.setTimeout(0.75,function thistype.registerItem2)
         call htime.setTimeout(0.80,function thistype.registerItem3)
         call htime.setTimeout(0.85,function thistype.registerItem4)
+        call htime.setTimeout(0.90,function thistype.registerItem5)
+        call htime.setTimeout(0.95,function thistype.registerItem6)
 
         call thistype.registerToken()
         call thistype.registerBuilding()

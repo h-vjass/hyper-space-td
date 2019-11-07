@@ -430,10 +430,13 @@ library Main initializer init needs hJass
 		call htime.setTimeout(chooseTime + 1.5,function openRect)
 		
 		// 商店们
-		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04S', stopX+128*0,stopY))
-		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04T', stopX+128*1,stopY))
-		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04V', stopX+128*2,stopY))
-		call hitem.initShop(hunit.createUnitXY(player_ally, 'n040', stopX+128*3,stopY))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n05O', stopX+128*0,stopY))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n05Q', stopX+128*1,stopY))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04S', stopX+128*2,stopY))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n05P', stopX+128*3,stopY))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04T', stopX+128*4,stopY))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n04V', stopX+128*5,stopY))
+		call hitem.initShop(hunit.createUnitXY(player_ally, 'n040', stopX+128*6,stopY))
 		// 可爱信使
 		set i = player_max_qty
 		loop
