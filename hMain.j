@@ -118,7 +118,7 @@ library Main initializer init needs hJass
 		call hSet.failEnv()
 		set u = hunit.createUnitXYFacing(player_ally,'n002',4663,1407, 180)
 		set dia[1] = "时空之轮破碎了！惨烈！"
-		set dia[2] = "情况已经没法挽救了，任务失败！～"
+		set dia[2] = "情况已经没法挽救了，守护失败！～"
 		set dia[5] = null
 		call hSync_moive2force(playerForce,u,dia)
 		call hunit.del(u,10.00)
