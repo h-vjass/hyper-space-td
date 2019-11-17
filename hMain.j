@@ -105,7 +105,7 @@ library Main initializer init needs hJass
 		call SetCameraTargetController( u, 0, 0, false )
 		call CameraSetupApplyForceDuration( gg_cam_cam_c, true, 0.00 )
 		set loc = GetUnitLoc(u)
-		call heffect.toLoc("war3mapImported\\ExplosionBIG.mdl",loc,0)
+		call heffect.toLoc("war3mapImported\\eff_ExplosionBIG.mdl",loc,0)
 		call RemoveLocation(loc)
 		call PolledWait( 2.00 )
 		//BGM走起
@@ -127,7 +127,7 @@ library Main initializer init needs hJass
 		set u_zhanglao = hunit.createUnitXYFacing(player_passive,'n002',6306,-1920, 150)
 		//
 		// 失败提醒
-		call hmark.display(null,"war3mapImported\\defeat.blp",1.0,6.0,100.0,100.0)
+		call hmark.display(null,"war3mapImported\\mark_defeat.blp",1.0,6.0,100.0,100.0)
 		//
 		call htime.setTimeout(15.00, function fail)
 		set u = null

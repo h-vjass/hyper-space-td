@@ -75,7 +75,7 @@ struct hSet
 					set u = FirstOfGroup(g)
 					call GroupRemoveUnit( g , u )
 					call hattr.addAttackPhysical(u,I2R(GetUnitLevel(triggerUnit)) * 2,30)
-					call heffect.toUnitLoc("war3mapImported\\CallOfAggression.mdx",u,1.00)
+					call heffect.toUnitLoc("war3mapImported\\eff_CallOfAggression.mdx",u,1.00)
 					set u = null
 				endloop
 			endif
@@ -139,7 +139,7 @@ struct hSet
 					if(hgroup.isIn(u,sk_group_fusuzhiguang) == false)then
 						call hgroup.in(u,sk_group_fusuzhiguang)
 						call hattr.addAttackHuntType(u,"light",15.0)
-						call heffect.toUnit("war3mapImported\\HolyAurora.mdx",u,"origin",13.50)
+						call heffect.toUnit("war3mapImported\\eff_HolyAurora.mdx",u,"origin",13.50)
 						set t = htime.setTimeout(15.00,function thistype.fusuzhiguang)
 						call htime.setUnit(t,1,u)
 					endif
@@ -470,7 +470,7 @@ struct hSet
 			call hweather.del(rectWeathereffect)
 		endif
 		// 任务F9提醒
-		call hmark.display(null,"war3mapImported\\win.blp",1.0,10.0,100.0,100.0)
+		call hmark.display(null,"war3mapImported\\mark_win.blp",1.0,10.0,100.0,100.0)
 		set txt = ""
 		set txt = txt + "冒险者感谢你！"
 		set txt = txt + "|n时空境域恢复了原来的生气，村民都出来游玩了"
@@ -727,7 +727,7 @@ struct hSet
 			call hattr.addLifeBack(u_timering,0.60,0)
 			//
 			if (hlogic.imod(g_wave,g_boss_mod) == 0) then
-				call hmark.display(null,"war3mapImported\\warning.blp",1.0,5.0,100.0,100.0)
+				call hmark.display(null,"war3mapImported\\mark_warning.blp",1.0,5.0,100.0,100.0)
 				call hmedia.bgmStop()
 				call htime.setDialog(g_timer_wave, "第"+I2S(g_wave)+"波※BOSS")
 				call hmsg.echo("时空炸裂！！小心！|cffff8080BOSS|r 要来了～")

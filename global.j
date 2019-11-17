@@ -548,7 +548,7 @@ struct hGlobals
             call hattrEffect.addBombOdds(u,80,0)
             call hattrEffect.addBombVal(u,175,0)
             call hattrEffect.addBombRange(u,200,0)
-            call hattrEffect.setBombModel(u,"war3mapImported\\ShadowBurn.mdl")
+            call hattrEffect.setBombModel(u,"war3mapImported\\eff_ShadowBurn.mdl")
         elseif(abid == 'A04S')then // A 巨魔蝙蝠骑手 - 火焰燃油
             call hattr.addAttackHuntType(u,"fire",0)
             call hattrNatural.addFire(u,25.0,0)
@@ -590,7 +590,7 @@ struct hGlobals
             call hattrEffect.addBombVal(u,200,0)
             call hattrEffect.addBombOdds(u,50,0)
             call hattrEffect.addBombRange(u,300,0)
-            call hattrEffect.setBombModel(u,"war3mapImported\\NewGroundEX.mdl")
+            call hattrEffect.setBombModel(u,"war3mapImported\\eff_NewGroundEX.mdl")
         elseif(abid == 'A051')then // A 图腾战牛 - 抨击
             call hattrEffect.addSwimOdds(u,35,0)
             call hattrEffect.addSwimDuring(u,1.0,0)
@@ -751,7 +751,7 @@ struct hGlobals
 				set i = i+1
 			endloop
 			call hmsg.echoTo(p,"尘归尘，土归土，"+GetUnitName(triggerUnit)+"已化作时空碎片~ 回收金： |cffffff80"+I2S(gold)+" G|r",0)
-			call heffect.toUnitLoc("war3mapImported\\DreadAwe.mdx",triggerUnit,0)
+			call heffect.toUnitLoc("war3mapImported\\eff_DreadAwe.mdx",triggerUnit,0)
 			call hitem.drop(triggerUnit)
 			call GroupRemoveUnit(g_gp_summon, triggerUnit)
 			call hunit.del(triggerUnit,0)
@@ -941,7 +941,7 @@ struct hGlobals
         if(rand<=3)then
             // A 魔导师 - 感应
             if(GetUnitAbilityLevel(triggerUnit,'A09J') >= 1)then
-                call heffect.toUnit("war3mapImported\\StaticRemnant.mdl",targetUnit,"origin",1.00)
+                call heffect.toUnit("war3mapImported\\eff_StaticRemnant.mdl",targetUnit,"origin",1.00)
                 set filter = hFilter.create()
                 call filter.isAlive(true)
                 call filter.isEnemy(true,triggerUnit)
@@ -1055,7 +1055,7 @@ struct hGlobals
             endif
             // A 智慧古树 - 通明
             if(GetUnitAbilityLevel(triggerUnit,'A07Y') >= 1)then
-                call heffect.toUnit("war3mapImported\\Energy Spark.mdl",triggerUnit,"origin",1.00)
+                call heffect.toUnit("war3mapImported\\eff_Energy_Spark.mdl",triggerUnit,"origin",1.00)
                 set filter = hFilter.create()
                 call filter.isAlive(true)
                 call filter.isAlly(true,triggerUnit)
@@ -1090,7 +1090,7 @@ struct hGlobals
             call hattr.subLifeBack(triggerUnit,30,4.5)
             call hattr.addAttackSpeed(triggerUnit,70,4.5)
             call hattr.addAttackPhysical(triggerUnit,10,4.5)
-            call heffect.toUnit("war3mapImported\\BloodElementalMissile.mdl",triggerUnit,"origin",1.00)
+            call heffect.toUnit("war3mapImported\\eff_BloodElementalMissile.mdl",triggerUnit,"origin",1.00)
         endif
         // S 寒冰女巫 - 千里冰封
         if(GetUnitAbilityLevel(triggerUnit,'A081') >= 1)then
@@ -1099,7 +1099,7 @@ struct hGlobals
                 set i = 0
             endif
             if(i>=10)then
-                call heffect.toUnit("war3mapImported\\Enchantment.mdl",triggerUnit,"origin",1.00)
+                call heffect.toUnit("war3mapImported\\eff_Enchantment.mdl",triggerUnit,"origin",1.00)
                 call hattrEffect.addBombVal(triggerUnit,700,3)
                 call SetUnitUserData(triggerUnit,0)
             else
@@ -1988,7 +1988,7 @@ struct hGlobals
 			set bean = hAttrHuntBean.create()
             set bean.damage = g_wave * 40
             set bean.fromUnit = triggerUnit
-            set bean.huntEff = "war3mapImported\\DarkSwirl.mdl"
+            set bean.huntEff = "war3mapImported\\eff_DarkSwirl.mdl"
             set bean.huntKind = "attack"
             set bean.huntType = "physical"
             call hskill.leap(triggerUnit,loc,55,"Objects\\Spawnmodels\\Undead\\ImpaleTargetDust\\ImpaleTargetDust.mdl",150,false,bean)
@@ -2008,7 +2008,7 @@ struct hGlobals
 			set bean = hAttrHuntBean.create()
             set bean.damage = g_wave * 40
             set bean.fromUnit = triggerUnit
-            set bean.huntEff = "war3mapImported\\DarkSwirl.mdl"
+            set bean.huntEff = "war3mapImported\\eff_DarkSwirl.mdl"
             set bean.huntKind = "skill"
             set bean.huntType = "realdark"
             call hskill.shuttleToUnit(triggerUnit,hevent.getTargetUnit(),500,16,30,5,350,null,"attack",'A087',bean)
@@ -2117,7 +2117,7 @@ struct hGlobals
             call hattrNatural.addWaterOppose(mon,50.0,0)
         elseif(uid == 'n048')then // 飞天食尸鬼
             call hattr.addHemophagia(mon,15.0,0)
-            call heffect.toUnit("war3mapImported\\DarkSwirl.mdl",mon,"origin",0.60)
+            call heffect.toUnit("war3mapImported\\eff_DarkSwirl.mdl",mon,"origin",0.60)
         elseif(uid == 'n049')then // 食人魔统领
             call hattr.addSplit(mon,15.0,0)
         elseif(uid == 'n04A')then // 冰魔法师
@@ -2241,7 +2241,7 @@ struct hGlobals
             call hattrEffect.setBombOdds(mon,10,0)
             call hattrEffect.setBombVal(mon,g_wave*3,0)
             call hattrEffect.setBombRange(mon,125,0)
-            call hattrEffect.setBombModel(mon,"war3mapImported\\Arcane Nova.mdl")
+            call hattrEffect.setBombModel(mon,"war3mapImported\\eff_Arcane_Nova.mdl")
         elseif(uid == 'n052')then // 机车人
             call hattr.addAttackHuntType(mon,"metal",0)
             call hattrNatural.addMetalOppose(mon,88.0,0)
