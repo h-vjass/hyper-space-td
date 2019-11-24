@@ -2601,36 +2601,36 @@ struct hGlobals
         call thistype.registerSummon('o023',false,"B",2000,1500,     400,6,3,    250,0,1.90) // 熊战德鲁伊
         call thistype.registerSummon('o01G',false,"B",2000,2000,    400,6,4,    300,0,2.90) // 远古树精
 
-        call thistype.registerSummon('o00D',true,"A",4000,2500,     500,8,7,   460,0,1.80) // 剑士
-        call thistype.registerSummon('o00N',true,"A",4000,2400,     500,8,6,    490,0,2.20) // 骑士
-        call thistype.registerSummon('o00X',true,"A",4000,2100,     500,8,4,    770,0,3.50) // 迫击炮小队
-        call thistype.registerSummon('o00P',true,"A",4000,1700,     500,8,3,    0,490,1.80) // 女巫
-        call thistype.registerSummon('o00O',true,"A",4000,1900,     500,8,3,    110,400,1.80) // 魔导师
-        call thistype.registerSummon('o010',true,"A",4000,2200,     500,8,4,    500,30,1.80) // 狮鹫骑士
-        call thistype.registerSummon('o00Y',true,"A",4000,2000,     500,8,4,    480,0,1.80) // 飞行机器
-        call thistype.registerSummon('o012',true,"A",4000,2500,     500,8,6,    800,0,3.50) // 坦克部队
-        call thistype.registerSummon('o015',true,"A",4000,1800,     500,8,2,    470,0,1.80) // 幻界飞龙
-        call thistype.registerSummon('o01H',true,"A",4000,2050,     500,8,2,    490,0,1.90) // 巨魔蝙蝠骑手
+        call thistype.registerSummon('o00D',false,"A",4000,2500,     500,8,7,   460,0,1.80) // 剑士
+        call thistype.registerSummon('o00N',false,"A",4000,2400,     500,8,6,    490,0,2.20) // 骑士
+        call thistype.registerSummon('o00X',false,"A",4000,2100,     500,8,4,    770,0,3.50) // 迫击炮小队
+        call thistype.registerSummon('o00P',false,"A",4000,1700,     500,8,3,    0,490,1.80) // 女巫
+        call thistype.registerSummon('o00O',false,"A",4000,1900,     500,8,3,    110,400,1.80) // 魔导师
+        call thistype.registerSummon('o010',false,"A",4000,2200,     500,8,4,    500,30,1.80) // 狮鹫骑士
+        call thistype.registerSummon('o015',false,"A",4000,1800,     500,8,2,    470,0,1.80) // 幻界飞龙
+        call thistype.registerSummon('o01H',false,"A",4000,2050,     500,8,2,    490,0,1.90) // 巨魔蝙蝠骑手
         call thistype.registerSummon('o01C',false,"A",4000,2700,    500,8,4,    540,0,2.00) // 科多骑手
-        call thistype.registerSummon('o01B',true,"A",4000,2200,     500,8,2,    465,0,2.00) // 骷骨巫长
-        call thistype.registerSummon('o018',true,"A",4000,3000,     500,8,5,    580,0,2.40) // 图腾战牛
-        call thistype.registerSummon('o00U',true,"A",4000,2300,     500,8,3,    555,0,1.80) // 邪恶狼骑
-        call thistype.registerSummon('o01A',true,"A",4000,2100,     500,8,1,    0,600,2.00) // 邪恶巫师
-        call thistype.registerSummon('o024',true,"A",4000,2500,     500,8,4,    625,0,2.10) // 猛熊德鲁伊
-        call thistype.registerSummon('o025',true,"A",4000,1900,     500,8,2,    260,320,1.90) // 奇美拉
-        call thistype.registerSummon('o021',true,"A",4000,1600,     500,8,2,    200,270,1.90) // 黑暗精灵
-        call thistype.registerSummon('o01X',true,"A",4000,2900,     500,8,3,    680,0,2.50) // 山岭巨人
-        call thistype.registerSummon('o01R',true,"A",4000,2600,     500,8,6,    300,380,2.80) // 秘迹古树
-        call thistype.registerSummon('o01J',true,"A",4000,2700,     500,8,6,    680,0,2.80) // 战争古树
-        call thistype.registerSummon('o01L',true,"A",4000,2500,     500,8,6,    0,700,2.80) // 智慧古树
-        call thistype.registerSummon('o01Q',true,"A",4000,2600,     500,8,6,    340,270,2.80) // 苍风古树
+        call thistype.registerSummon('o01B',false,"A",4000,2200,     500,8,2,    465,0,2.00) // 骷骨巫长
+        call thistype.registerSummon('o018',false,"A",4000,3000,     500,8,5,    580,0,2.40) // 图腾战牛
+        call thistype.registerSummon('o00U',false,"A",4000,2300,     500,8,3,    555,0,1.80) // 邪恶狼骑
+        call thistype.registerSummon('o01A',false,"A",4000,2100,     500,8,1,    0,600,2.00) // 邪恶巫师
+        call thistype.registerSummon('o024',false,"A",4000,2500,     500,8,4,    625,0,2.10) // 猛熊德鲁伊
+        call thistype.registerSummon('o025',false,"A",4000,1900,     500,8,2,    260,320,1.90) // 奇美拉
+        call thistype.registerSummon('o021',false,"A",4000,1600,     500,8,2,    200,270,1.90) // 黑暗精灵
+        call thistype.registerSummon('o01X',false,"A",4000,2900,     500,8,3,    680,0,2.50) // 山岭巨人
+        call thistype.registerSummon('o01R',false,"A",4000,2600,     500,8,6,    300,380,2.80) // 秘迹古树
+        call thistype.registerSummon('o01J',false,"A",4000,2700,     500,8,6,    680,0,2.80) // 战争古树
+        call thistype.registerSummon('o01L',false,"A",4000,2500,     500,8,6,    0,700,2.80) // 智慧古树
+        call thistype.registerSummon('o01Q',false,"A",4000,2600,     500,8,6,    340,270,2.80) // 苍风古树
 
-        call thistype.registerSummon('o01Y',true,"S",8000,3800,     600,9,10,    1300,0,2.30) // 山岭巨人·战棍
-        call thistype.registerSummon('o01D',true,"S",8000,4200,     600,9,12,    1280,0,1.90) // 邪恶科多骑手
-        call thistype.registerSummon('o00Q',true,"S",12500,3000,    600,9,8,    0,780,1.80) // 寒冰女巫
-        call thistype.registerSummon('o013',true,"S",15000,5000,    600,9,14,    730,670,1.60) // 火凤凰
-        call thistype.registerSummon('o01E',true,"S",16500,6500,    600,9,18,   2000,0,1.80) // 牛头人酋长
-        call thistype.registerSummon('o026',true,"S",18000,7000,    600,9,16,   2350,0,1.50) // 月之女祭司
+        call thistype.registerSummon('o00Y',false,"S",8000,4000,     600,8,8,    960,0,1.80) // 飞行机器
+        call thistype.registerSummon('o012',false,"S",8000,5000,     600,8,12,    1600,0,3.50) // 坦克部队
+        call thistype.registerSummon('o01Y',false,"S",8000,3800,     600,9,10,    1300,0,2.30) // 山岭巨人·战棍
+        call thistype.registerSummon('o01D',false,"S",8000,4200,     600,9,12,    1280,0,1.90) // 邪恶科多骑手
+        call thistype.registerSummon('o00Q',false,"S",12500,3000,    600,9,8,    0,780,1.80) // 寒冰女巫
+        call thistype.registerSummon('o013',false,"S",15000,5000,    600,9,14,    730,670,1.60) // 火凤凰
+        call thistype.registerSummon('o01E',false,"S",16500,6500,    600,9,18,   2000,0,1.80) // 牛头人酋长
+        call thistype.registerSummon('o026',false,"S",18000,7000,    600,9,16,   2350,0,1.50) // 月之女祭司
 
 
         call thistype.registerSummonAbility('o00M','A04K') // N 地穴 - 尖针
