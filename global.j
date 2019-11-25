@@ -1734,6 +1734,14 @@ struct hGlobals
 		set hitembean.split = 35
 		call hitem.format(hitembean)
 		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // A 大木棍
+		set hitembean.item_id = 'I02D'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.knocking = 1400
+		call hitem.format(hitembean)
+		call hitembean.destroy()
     endmethod
 
     //[商店]奇异宝店
@@ -1857,7 +1865,7 @@ struct hGlobals
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
 		set hitembean.wind = 200
-		set hitembean.attackPhysical = 1000
+		set hitembean.attackPhysical = 2000
 		set hitembean.avoid = 30
 		call hitem.format(hitembean)
 		call hitembean.destroy()
@@ -1899,70 +1907,17 @@ struct hGlobals
 		set hitembean.unarmDuring = 3.5
         call hitem.format(hitembean)
 		call hitembean.destroy()
+        // --------------------------------------
+        set hitembean = hItemBean.create() // SSS 光辉刀锋
+		set hitembean.item_id = 'I02E'
+        set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+        set hitembean.attackPhysical = 5500
+		set hitembean.attackMagic = 5500
+        call hitem.format(hitembean)
+		call hitembean.destroy()
     endmethod
 
-    public static method enemyBuilt takes unit mon returns nothing
-        local integer uid = GetUnitTypeId(mon)
-        call hattr.addKnocking(mon,g_wave*70,0)
-        call hattr.addViolence(mon,g_wave*90,0)
-        if(uid == 'n017' or uid == 'n01E' or uid == 'n01F' or uid == 'n01Y' or uid == 'n01G')then // 6/7/8/9/10
-            call hattrNatural.addWaterOppose(mon,5.0,0)
-        elseif(uid == 'n01H')then // 11
-            call hattr.addHemophagia(mon,15.0,0)
-        elseif(uid == 'n01K')then // 14
-            call hattr.addAttackHuntType(mon,"ghost",0)
-            call hattrNatural.addGhostOppose(mon,60.0,0)
-        elseif(uid == 'n01V')then // 25
-            call hattrEffect.addAttackSpeedVal(mon,10.0,0)
-            call hattrEffect.addAttackSpeedDuring(mon,3.5,0)
-        elseif(uid == 'n01W' or uid == 'n01X')then // 26/27
-            call hattr.addAttackHuntType(mon,"water",0)
-            call hattrNatural.addWaterOppose(mon,50.0,0)
-            call hattrNatural.addFireOppose(mon,75.0,0)
-        elseif(uid == 'n03U' or uid == 'n03T' or uid == 'n03Y')then // 31/32/33
-            call hattr.addKnocking(mon,7000.0,0)
-        elseif(uid == 'n01Z')then // 35
-            call hattrEffect.addToxicVal(mon,3.0,0)
-            call hattrEffect.addToxicDuring(mon,10.0,0)
-        elseif(uid == 'n022' or uid == 'n023' or uid == 'n024')then // 39/40/41
-            call hattr.addAttackHuntType(mon,"ice",0)
-            call hattrNatural.addIceOppose(mon,50.0,0)
-        elseif(uid == 'n02D' or uid == 'n02E')then // 49/50
-            call hattr.addKnocking(mon,13000.0,0)
-        elseif(uid == 'n02G')then // 52
-            call hattrEffect.addSwimOdds(mon,10.0,0)
-            call hattrEffect.addSwimDuring(mon,1,0)
-        elseif(uid == 'n02K')then // 56
-            call hattr.addAttackHuntType(mon,"soil",0)
-        elseif(uid == 'n02M' or uid == 'n02O')then // 58/60
-            call hattr.addAttackHuntType(mon,"poison",0)
-            call hattrNatural.addPoisonOppose(mon,50.0,0)
-        elseif(uid == 'n02T')then // 65
-            call hattrEffect.addCorrosionVal(mon,0.5,0)
-            call hattrEffect.addCorrosionDuring(mon,2.0,0)
-        elseif(uid == 'n032' or uid == 'n033')then // 74/75
-            call hattr.addAttackHuntType(mon,"poison",0)
-        elseif(uid == 'n03A')then // 82
-            call hattr.addAttackHuntType(mon,"fire",0)
-        elseif(uid == 'n03C' or uid == 'n03D')then // 84/85
-            call hattr.addAttackHuntType(mon,"wind",0)
-        elseif(uid == 'n03J')then // 91
-            call hattr.addAttackHuntType(mon,"light",0)
-        elseif(uid == 'n03K')then // 92
-            call hattr.addAttackHuntType(mon,"thunder",0)
-            call hattrNatural.addThunderOppose(mon,10.0,0)
-        elseif(uid == 'n042' or uid == 'n043' or uid == 'n045')then // 103/104/105
-            call hattr.addAttackHuntType(mon,"poison",0)
-            call hattrNatural.addPoisonOppose(mon,50.0,0)
-        elseif(uid == 'n053' or uid == 'n054')then // 106/107
-            call hattr.addAttackHuntType(mon,"ghost",0)
-            call hattrNatural.addGhostOppose(mon,90.0,0)
-            call hattr.addHemophagia(mon,50,0)
-        elseif(uid == 'n05D' or uid == 'n05C')then // 114/115
-            call hattr.addAttackHuntType(mon,"soil",0)
-            call hattrNatural.addSoilOppose(mon,90.0,0)
-        endif
-    endmethod
     public static method enemyDeadDrop takes unit mon returns nothing
         local integer uid = GetUnitTypeId(mon)
     endmethod
@@ -2052,60 +2007,63 @@ struct hGlobals
             call hattr.addToughness(triggerUnit,I2R(g_wave) * 6,30)
         endif
         if(rand < 7)then
-            if(uid == 'n046')then // 5
-            elseif(uid == 'n047')then // 10
-            elseif(uid == 'n048')then // 15
+            if(uid == 'n046')then // BOSS 巨龙海龟
+            elseif(uid == 'n047')then // BOSS 岩石龙虾
+            elseif(uid == 'n048')then // BOSS 飞天石像鬼
                 call IssueTargetOrder( triggerUnit, "thunderbolt", targetUnit )
-            elseif(uid == 'n049')then // 20
+            elseif(uid == 'n049')then // BOSS 食人魔统领
                 call IssueImmediateOrder( triggerUnit, "stomp" )
-            elseif(uid == 'n04A')then // 25
-            elseif(uid == 'n04B')then // 30
+            elseif(uid == 'n05R')then // BOSS 剧毒龙虾
+                call IssueTargetOrder( triggerUnit, "shadowstrike", targetUnit )
+            endif
+            if(uid == 'n04A')then // BOSS 冰魔法师
+            elseif(uid == 'n04B')then // BOSS Panda
                 call IssueImmediateOrder( triggerUnit, "stomp" )
-            elseif(uid == 'n04C')then // 35
+            elseif(uid == 'n04C')then // BOSS 沙蝎之王
                 call IssueTargetOrder( triggerUnit, "impale", targetUnit )
-            elseif(uid == 'n04K')then // 40
+            elseif(uid == 'n04K')then // BOSS 寒冰巨龙
                 call IssuePointOrder( triggerUnit, "blizzard", GetUnitX(targetUnit), GetUnitY(targetUnit) )
-            elseif(uid == 'n04O')then // 45
+            elseif(uid == 'n04O')then // BOSS 人马可汗
                 call IssueImmediateOrder( triggerUnit, "stomp" )
-            elseif(uid == 'n04L')then // 50
+            elseif(uid == 'n04L')then // BOSS 疾风隐刺
                 call hattrNatural.addDark(triggerUnit,2.0,10.0)
-            elseif(uid == 'n04P')then // 55
-            elseif(uid == 'n04N')then // 60
-            elseif(uid == 'n04Q')then // 65
+            elseif(uid == 'n04P')then // BOSS 潮汐巨人
+            elseif(uid == 'n04N')then // BOSS 灭却龙
+            elseif(uid == 'n04Q')then // BOSS 猎足之蛛
                 if(GetRandomInt(1,10) < 5)then
                     call IssueImmediateOrder( triggerUnit, "mirrorimage" )
                 else
                     call IssueTargetOrder( triggerUnit, "magicleash", targetUnit )
                 endif
-            elseif(uid == 'n04M')then // 70
+            elseif(uid == 'n04M')then // BOSS 白毛猛犸王
                 if(GetRandomInt(1,10) < 5)then
                     call IssueTargetOrder( triggerUnit, "thunderbolt", targetUnit )
                 else
                     call IssueImmediateOrder( triggerUnit, "roar" )
                 endif
-            elseif(uid == 'n04J')then // 75
+            elseif(uid == 'n04J')then // BOSS 奇美拉
                 call IssuePointOrder( triggerUnit, "clusterrockets", GetUnitX(targetUnit), GetUnitY(targetUnit) )
-            elseif(uid == 'n04D')then // 80
+            elseif(uid == 'n04D')then // BOSS 龙卵领主
                 call IssueTargetOrder( triggerUnit, "forkedlightning", targetUnit )
-            elseif(uid == 'n04I')then // 85
+            elseif(uid == 'n04I')then // BOSS 旋风女皇
                 call IssueTargetOrder( triggerUnit, "thunderbolt", targetUnit )
-            elseif(uid == 'n04F')then // 90
-            elseif(uid == 'n04G')then // 95
+            elseif(uid == 'n04F')then // BOSS 斧帝
+            elseif(uid == 'n04G')then // BOSS 深渊地狱火
             endif
-            if(uid == 'n04E')then // 100
+            if(uid == 'n04E')then // BOSS 毁灭炎尊
                 call IssuePointOrder( triggerUnit, "rainoffire", GetUnitX(targetUnit), GetUnitY(targetUnit) )
-            elseif(uid == 'n04H')then // 105
+            elseif(uid == 'n04H')then // BOSS 赐死鹿
                 call hattrEffect.addBombVal(triggerUnit,135,20)
                 if(GetRandomInt(1,10) < 5)then
                     call IssueTargetOrder( triggerUnit, "thunderbolt", targetUnit )
                 else
                     call IssueImmediateOrder( triggerUnit, "stomp" )
                 endif
-            elseif(uid == 'n052')then // 110
+            elseif(uid == 'n052')then // BOSS 机车人
                 call IssueImmediateOrder( triggerUnit, "whirlwind" )
-            elseif(uid == 'n05B')then // 115
+            elseif(uid == 'n05B')then // BOSS 钻石巨人
                call IssuePointOrder( triggerUnit, "clusterrockets", GetUnitX(targetUnit), GetUnitY(targetUnit) )
-            elseif(uid == 'n05H')then // 120
+            elseif(uid == 'n05H')then // BOSS 寒春龙神
                call IssuePointOrder( triggerUnit, "stampede", GetUnitX(targetUnit), GetUnitY(targetUnit) )
             endif
         endif
@@ -2120,8 +2078,12 @@ struct hGlobals
         if(uid == 'n046')then // 巨龙海龟
             call hattrNatural.addWaterOppose(mon,40.0,0)
             call hattr.addHuntRebound(mon,30.0,0)
-        elseif(uid == 'n047')then // 龙虾首领
+        elseif(uid == 'n047')then // 岩石龙虾
             call hattrNatural.addWaterOppose(mon,50.0,0)
+        elseif(uid == 'n05R')then // 剧毒龙虾
+            call hattrNatural.addPoisonOppose(mon,100.0,0)
+            call hattrEffect.addToxicVal(mon,g_wave*5.0,0)
+            call hattrEffect.addToxicDuring(mon,5.0,0)
         elseif(uid == 'n048')then // 飞天食尸鬼
             call hattr.addHemophagia(mon,15.0,0)
             call heffect.toUnit("war3mapImported\\eff_DarkSwirl.mdl",mon,"origin",0.60)
@@ -2422,7 +2384,7 @@ struct hGlobals
         call thistype.registerBuilding()
         call thistype.registerGift()
 
-        set g_boss_count = 21
+        set g_boss_count = 25
         set g_boss[1]  = 'n046'
         set g_boss[2]  = 'n047'
         set g_boss[3]  = 'n048'
@@ -2447,6 +2409,7 @@ struct hGlobals
         set g_boss[22] = 'n052'
         set g_boss[23] = 'n05B'
         set g_boss[24] = 'n05H'
+        set g_boss[25] = 'n05R'
 
         set g_mon_count = 105
         set g_mon[1] = 'n011'

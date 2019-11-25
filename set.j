@@ -559,7 +559,6 @@ struct hSet
 				call hattr.setLife(u,life,0)
 				call hattr.setMove(u,move,0)
 				call hattr.setAttackPhysical(u,attack,0)
-				call hGlobals.enemyBuilt(u)
 				call SetUnitUserData(u,0)
 				set j = j+1
 		endloop
