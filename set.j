@@ -333,6 +333,8 @@ struct hSet
 		set killer = null
 		set bekiller = null
 	endmethod
+
+	// 选英雄
     private static method onHeroPick takes nothing returns nothing
         local unit u = hevent.getTriggerUnit()
         local integer uid = GetUnitTypeId(u)
@@ -343,6 +345,7 @@ struct hSet
 		call hevent.onLevelUp(u,function thistype.onHeroLevelUp)
 		call hevent.onKill(u,function thistype.onHeroKill)
 		call UnitAddAbility(u,'A082') // reborn
+		call UnitAddAbility(u,'A043') // summon spring
         //检测英雄类别
         if(t == "str")then
 			call hattr.addMove(u,200,0)
