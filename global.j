@@ -345,10 +345,9 @@ struct hGlobals
         endif
         // ---------------------------------------------
         if(triggerUID == 'o00K')then // B 铁枪手
-            set targetCount = 3
+            set targetCount = 2
             set targetArr[1] = 'o00X' // A 迫击炮小队
-            set targetArr[2] = 'o012' // A 坦克部队
-            set targetArr[3] = 'o00Y' // A 飞行机器
+            set targetArr[2] = 'o00N' // A 骑士
         endif
         if(triggerUID == 'o00C')then // B 步兵
             set targetCount = 3
@@ -365,6 +364,13 @@ struct hGlobals
             set targetCount = 1
             set targetArr[1] = 'o010' // A 狮鹫骑士
         endif
+        // ---------------------------------------------
+        if(triggerUID == 'o00X')then // A 迫击炮小队
+            set targetCount = 2
+            set targetArr[1] = 'o012' // S 坦克部队
+            set targetArr[2] = 'o00Y' // S 飞行机器
+        endif
+        // ---------------------------------------------
         if(triggerUID == 'o00T')then // B 狼骑
             set targetCount = 2
             set targetArr[1] = 'o00U' // A 邪恶狼骑
@@ -539,8 +545,6 @@ struct hGlobals
             call hattrEffect.addAttackSpeedDuring(u,8,0)
         elseif(abid == 'A03O')then // A 骑士 - 斩铁式
             // 技能自带效果
-        elseif(abid == 'A07X')then // A 飞行机器 - 机关枪
-            // 攻击事件实现
         elseif(abid == 'A07V')then // A 黑暗精灵 - 魅刃
             call hattr.addAttackHuntType(u,"dark",0)
             call hattrEffect.addDarkDuring(u,5.0,0)
@@ -583,14 +587,6 @@ struct hGlobals
             call hattrEffect.addLightningChainVal(u,280,0)
             call hattrEffect.addLightningChainQty(u,5,0)
             call hattrEffect.setLightningChainModel(u,lightningCode_shandianlian_ci)
-        elseif(abid == 'A04R')then // A 坦克部队 - 烈性炮弹
-            call hattr.addAttackHuntType(u,"fire",0)
-            call hattrEffect.addBurnVal(u,135,0)
-            call hattrEffect.addBurnDuring(u,3,0)
-            call hattrEffect.addBombVal(u,200,0)
-            call hattrEffect.addBombOdds(u,50,0)
-            call hattrEffect.addBombRange(u,300,0)
-            call hattrEffect.setBombModel(u,"war3mapImported\\eff_NewGroundEX.mdl")
         elseif(abid == 'A051')then // A 图腾战牛 - 抨击
             call hattrEffect.addSwimOdds(u,35,0)
             call hattrEffect.addSwimDuring(u,1.0,0)
@@ -617,6 +613,33 @@ struct hGlobals
             call hattrEffect.addSwimDuring(u,1.0,0)
         elseif(abid == 'A07Y')then // A 智慧古树 - 通明
             // 攻击事件实现
+        endif
+        if(abid == 'A07X')then // S 飞行机器 - 机关枪
+            // 攻击事件实现
+        elseif(abid == 'A04R')then // S 坦克部队 - 烈性炮弹
+            call hattr.addAttackHuntType(u,"fire",0)
+            call hattrEffect.addBurnVal(u,235,0)
+            call hattrEffect.addBurnDuring(u,3,0)
+            call hattrEffect.addBombVal(u,400,0)
+            call hattrEffect.addBombOdds(u,50,0)
+            call hattrEffect.addBombRange(u,300,0)
+            call hattrEffect.setBombModel(u,"war3mapImported\\eff_NewGroundEX.mdl")
+        elseif(abid == 'A07U')then // S 邪恶科多骑手 - 邪殇
+            call hattrNatural.addGhost(u,300.0,0)
+        elseif(abid == 'A04B')then // S 山岭巨人·战棍 - 过激
+            call hattrEffect.addAttackSpeedVal(u,5,0)
+            call hattrEffect.addAttackSpeedDuring(u,30,0)
+            call hattrEffect.addKnockingVal(u,150,0)
+            call hattrEffect.addKnockingDuring(u,30,0)
+        elseif(abid == 'A04C')then // S 山岭巨人·战棍 - 战棍
+            call hattr.addAttackHuntType(u,"soil",0)
+            call hattrNatural.addSoilOppose(u,75.0,0)
+            call hattrEffect.setCrackFlyVal(u,300,0)
+            call hattrEffect.setCrackFlyOdds(u,20,0)
+            call hattrEffect.setCrackFlyHigh(u,250,0)
+            call hattrEffect.setCrackFlyDistance(u,200,0)
+        elseif(abid == 'A03Y')then // S 山岭巨人·战棍 - 大闹一番
+            // 施法事件实现
         endif
         if(abid == 'A03T')then // S 寒冰女巫 - 冰心魂
             call hattr.addAttackHuntType(u,"ice",0)
@@ -648,22 +671,6 @@ struct hGlobals
             call hattr.addKnocking(u,3000,0)
             call hattrEffect.addSwimOdds(u,60,0)
             call hattrEffect.addSwimDuring(u,1.0,0)
-        elseif(abid == 'A04B')then // S 山岭巨人·战棍 - 过激
-            call hattrEffect.addAttackSpeedVal(u,5,0)
-            call hattrEffect.addAttackSpeedDuring(u,30,0)
-            call hattrEffect.addKnockingVal(u,150,0)
-            call hattrEffect.addKnockingDuring(u,30,0)
-        elseif(abid == 'A04C')then // S 山岭巨人·战棍 - 战棍
-            call hattr.addAttackHuntType(u,"soil",0)
-            call hattrNatural.addSoilOppose(u,75.0,0)
-            call hattrEffect.setCrackFlyVal(u,300,0)
-            call hattrEffect.setCrackFlyOdds(u,20,0)
-            call hattrEffect.setCrackFlyHigh(u,250,0)
-            call hattrEffect.setCrackFlyDistance(u,200,0)
-        elseif(abid == 'A03Y')then // S 山岭巨人·战棍 - 大闹一番
-            // 施法事件实现
-        elseif(abid == 'A07U')then // S 邪恶科多骑手 - 邪殇
-            call hattrNatural.addGhost(u,300.0,0)
         elseif(abid == 'A04X')then // S 月之女祭司 - 强弓
             call hattrEffect.addAttackSpeedVal(u,40,0)
             call hattrEffect.addAttackSpeedDuring(u,3,0)
@@ -926,15 +933,15 @@ struct hGlobals
 		endif
         // 1/10几率
         if(rand<=3)then
-            // A 飞行机器 - 机关枪
-            if(GetUnitAbilityLevel(triggerUnit,'A09D') >= 1)then
-                call hattr.addAttackSpeed(triggerUnit,150,3)
-                call hattr.addKnocking(triggerUnit,2000,5)
-                call heffect.toUnit("Abilities\\Spells\\Other\\BreathOfFire\\BreathOfFireDamage.mdl",triggerUnit,"weapon",3.00)
-            endif
             // A 邪恶狼骑 - 掠夺
             if(GetUnitAbilityLevel(triggerUnit,'A09I') >= 1)then
                 call haward.forUnit(triggerUnit,0,g_wave * 4,0)
+            endif
+            // S 飞行机器 - 机关枪
+            if(GetUnitAbilityLevel(triggerUnit,'A09D') >= 1)then
+                call hattr.addAttackSpeed(triggerUnit,200,6)
+                call hattr.addKnocking(triggerUnit,2000,6)
+                call heffect.toUnit("Abilities\\Spells\\Other\\BreathOfFire\\BreathOfFireDamage.mdl",triggerUnit,"weapon",6.00)
             endif
         endif
         // 1/9几率
@@ -2609,7 +2616,7 @@ struct hGlobals
         call thistype.registerSummon('o010',false,"A",4000,2200,     500,8,4,    500,30,1.80) // 狮鹫骑士
         call thistype.registerSummon('o015',false,"A",4000,1800,     500,8,2,    470,0,1.80) // 幻界飞龙
         call thistype.registerSummon('o01H',false,"A",4000,2050,     500,8,2,    490,0,1.90) // 巨魔蝙蝠骑手
-        call thistype.registerSummon('o01C',false,"A",4000,2700,    500,8,4,    540,0,2.00) // 科多骑手
+        call thistype.registerSummon('o01C',false,"A",4000,2700,     500,8,4,    540,0,2.00) // 科多骑手
         call thistype.registerSummon('o01B',false,"A",4000,2200,     500,8,2,    465,0,2.00) // 骷骨巫长
         call thistype.registerSummon('o018',false,"A",4000,3000,     500,8,5,    580,0,2.40) // 图腾战牛
         call thistype.registerSummon('o00U',false,"A",4000,2300,     500,8,3,    555,0,1.80) // 邪恶狼骑
@@ -2617,20 +2624,23 @@ struct hGlobals
         call thistype.registerSummon('o024',false,"A",4000,2500,     500,8,4,    625,0,2.10) // 猛熊德鲁伊
         call thistype.registerSummon('o025',false,"A",4000,1900,     500,8,2,    260,320,1.90) // 奇美拉
         call thistype.registerSummon('o021',false,"A",4000,1600,     500,8,2,    200,270,1.90) // 黑暗精灵
-        call thistype.registerSummon('o01X',false,"A",4000,2900,     500,8,3,    680,0,2.50) // 山岭巨人
-        call thistype.registerSummon('o01R',false,"A",4000,2600,     500,8,6,    300,380,2.80) // 秘迹古树
+        call thistype.registerSummon('o01X',true,"A",4000,2900,      500,8,3,    680,0,2.50) // 山岭巨人
         call thistype.registerSummon('o01J',false,"A",4000,2700,     500,8,6,    680,0,2.80) // 战争古树
-        call thistype.registerSummon('o01L',false,"A",4000,2500,     500,8,6,    0,700,2.80) // 智慧古树
-        call thistype.registerSummon('o01Q',false,"A",4000,2600,     500,8,6,    340,270,2.80) // 苍风古树
 
-        call thistype.registerSummon('o00Y',false,"S",8000,4000,     600,8,8,    960,0,1.80) // 飞行机器
-        call thistype.registerSummon('o012',false,"S",8000,5000,     600,8,12,    1600,0,3.50) // 坦克部队
-        call thistype.registerSummon('o01Y',false,"S",8000,3800,     600,9,10,    1300,0,2.30) // 山岭巨人·战棍
-        call thistype.registerSummon('o01D',false,"S",8000,4200,     600,9,12,    1280,0,1.90) // 邪恶科多骑手
-        call thistype.registerSummon('o00Q',false,"S",12500,3000,    600,9,8,    0,780,1.80) // 寒冰女巫
-        call thistype.registerSummon('o013',false,"S",15000,5000,    600,9,14,    730,670,1.60) // 火凤凰
-        call thistype.registerSummon('o01E',false,"S",16500,6500,    600,9,18,   2000,0,1.80) // 牛头人酋长
-        call thistype.registerSummon('o026',false,"S",18000,7000,    600,9,16,   2350,0,1.50) // 月之女祭司
+        call thistype.registerSummon('o00Y',false,"S",8000,4000,     600,10,8,    1160,0,1.80) // 飞行机器
+        call thistype.registerSummon('o012',false,"S",8000,5000,     600,10,12,    1700,0,3.50) // 坦克部队
+        call thistype.registerSummon('o01D',false,"S",8000,4200,     600,10,12,    1380,0,1.90) // 邪恶科多骑手
+        call thistype.registerSummon('o01R',false,"S",8000,5200,     600,10,6,    500,580,2.80) // 秘迹古树
+        call thistype.registerSummon('o01E',false,"S",16000,6500,    600,10,10,   1300,0,1.80) // 牛头人酋长
+
+        call thistype.registerSummon('o01Q',false,"SS",16000,10000,  700,12,6,    1340,870,2.80) // 苍风古树
+
+        call thistype.registerSummon('o01L',false,"SSS",32000,25000, 800,14,6,    0,5700,2.80) // 智慧古树
+        // R
+        call thistype.registerSummon('o00Q',true,"S",8000,2000,    600,10,8,    0,780,1.80) // [R]寒冰女巫
+        call thistype.registerSummon('o013',true,"S",8000,3000,    600,10,12,    630,570,1.60) // [R]火凤凰
+        call thistype.registerSummon('o026',true,"S",8000,2400,    600,10,11,   1050,0,1.50) // [R]月之女祭司
+        call thistype.registerSummon('o01Y',true,"SS",16000,10000,     700,12,14,     5100,0,2.30) // [R]山岭巨人·战棍
 
 
         call thistype.registerSummonAbility('o00M','A04K') // N 地穴 - 尖针
@@ -2662,7 +2672,6 @@ struct hGlobals
         call thistype.registerSummonAbility('o019','A07K') // B 巫师 - 邪术
         call thistype.registerSummonAbility('o00D','A04U') // A 剑士 - 刃风式
         call thistype.registerSummonAbility('o00N','A03O') // A 骑士 - 斩铁式
-        call thistype.registerSummonAbility('o00Y','A07X') // A 飞行机器 - 机关枪
         call thistype.registerSummonAbility('o021','A07V') // A 黑暗精灵 - 魅刃
         call thistype.registerSummonAbility('o015','A07T') // A 幻界飞龙 - 蔽日
         call thistype.registerSummonAbility('o01H','A04S') // A 巨魔蝙蝠骑手 - 火焰燃油
@@ -2675,7 +2684,6 @@ struct hGlobals
         call thistype.registerSummonAbility('o025','A058') // A 奇美拉 - 龙息
         call thistype.registerSummonAbility('o01X','A052') // A 山岭巨人 - 嘲讽
         call thistype.registerSummonAbility('o010','A08D') // A 狮鹫骑士 - 风暴战锤
-        call thistype.registerSummonAbility('o012','A04R') // A 坦克部队 - 烈性炮弹
         call thistype.registerSummonAbility('o018','A051') // A 图腾战牛 - 抨击
         call thistype.registerSummonAbility('o00U','A09I') // A 邪恶狼骑 - 掠夺
         call thistype.registerSummonAbility('o01A','A07J') // A 邪恶巫师 - 痛苦链
@@ -2683,6 +2691,9 @@ struct hGlobals
         call thistype.registerSummonAbility('o01R','A05A') // A 秘迹古树 - 秘沼
         call thistype.registerSummonAbility('o01J','A08Z') // A 战争古树 - 林撼
         call thistype.registerSummonAbility('o01L','A07Y') // A 智慧古树 - 通明
+        call thistype.registerSummonAbility('o00Y','A07X') // S 飞行机器 - 机关枪
+        call thistype.registerSummonAbility('o012','A04R') // S 坦克部队 - 烈性炮弹
+        // --
         call thistype.registerSummonAbility('o00Q','A03T') // S 寒冰女巫 - 冰心魂
         call thistype.registerSummonAbility('o00Q','A080') // S 寒冰女巫 - 暴风雪
         call thistype.registerSummonAbility('o00Q','A081') // S 寒冰女巫 - 千里冰封
