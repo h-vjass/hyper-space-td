@@ -307,176 +307,31 @@ struct hGlobals
 
     public static method getSummonTargetUid takes integer triggerUID returns integer
         local integer targetUID = 0
-        local integer targetCount = 0
         local integer array targetArr
+        local string targetGlv = LoadStr(hash_unit,triggerUID,0)
         if(triggerUID == 'o009')then // 帐篷
-            set targetCount = 3
             set targetArr[1] = 'o00A' // N 农场
             set targetArr[2] = 'o00M' // N 地穴
             set targetArr[3] = 'o01S' // N 月亮井
+            set targetUID = targetArr[GetRandomInt(1,3)]
+        elseif("SSS" == targetGlv)then
+            return 0
+        elseif("SS" == targetGlv)then
+            set targetUID = targetArr[GetRandomInt(1,g_summon_count_sss)]
+        elseif("S" == targetGlv)then
+            set targetUID = targetArr[GetRandomInt(1,g_summon_count_ss)]
+        elseif("A" == targetGlv)then
+            set targetUID = targetArr[GetRandomInt(1,g_summon_count_s)]
+        elseif("B" == targetGlv)then
+            set targetUID = targetArr[GetRandomInt(1,g_summon_count_a)]
+        elseif("C" == targetGlv)then
+            set targetUID = targetArr[GetRandomInt(1,g_summon_count_b)]
+        elseif("D" == targetGlv)then
+            set targetUID = targetArr[GetRandomInt(1,g_summon_count_c)]
+        elseif("E" == targetGlv)then
+            set targetUID = targetArr[GetRandomInt(1,g_summon_count_d)]
         endif
-        if(triggerUID == 'o00B')then // D 农民
-            set targetCount = 2
-            set targetArr[1] = 'o008' // C 民兵
-            set targetArr[2] = 'o00E' // C 血妖精
-        endif
-        if(triggerUID == 'o00I')then // D 苦力
-            set targetCount = 4
-            set targetArr[1] = 'o00S' // C 邪恶苦力
-            set targetArr[2] = 'o00R' // C 兽人大兵
-            set targetArr[3] = 'o016' // C 萨满牛祭司
-            set targetArr[4] = 'o00W' // C 巨魔巫医
-        endif
-        if(triggerUID == 'o00J')then // D 小精灵
-            set targetCount = 9
-            set targetArr[1] = 'o01F' // C 树人
-            set targetArr[2] = 'o01F' // C 树人
-            set targetArr[3] = 'o01V' // C 暗夜弓手
-            set targetArr[4] = 'o01V' // C 暗夜弓手
-            set targetArr[5] = 'o01W' // C 角鹰弓手
-            set targetArr[6] = 'o01W' // C 角鹰弓手
-            set targetArr[7] = 'o022' // C 德鲁伊
-            set targetArr[8] = 'o022' // C 德鲁伊
-            set targetArr[9] = 'o020' // B 精灵龙
-        endif
-        // ---------------------------------------------
-        if(triggerUID == 'o008')then // C 民兵
-            set targetCount = 2
-            set targetArr[1] = 'o00K' // B 铁枪手
-            set targetArr[2] = 'o00C' // B 步兵
-        endif
-        if(triggerUID == 'o00E')then // C 血妖精
-            set targetCount = 2
-            set targetArr[1] = 'o00L' // B 牧师
-            set targetArr[2] = 'o00Z' // B 龙鹰骑士
-        endif
-        if(triggerUID == 'o00S')then // C 邪恶苦力
-            set targetCount = 2
-            set targetArr[1] = 'o00V' // B 邪恶兽人大兵
-            set targetArr[2] = 'o014' // B 飞龙骑士
-        endif
-        if(triggerUID == 'o00R')then // C 兽人大兵
-            set targetCount = 4
-            set targetArr[1] = 'o00T' // B 狼骑
-            set targetArr[2] = 'o019' // B 巫师
-            set targetArr[3] = 'o00V' // B 邪恶兽人大兵
-            set targetArr[4] = 'o014' // B 飞龙骑士
-        endif
-        if(triggerUID == 'o016')then // C 萨满牛祭司
-            set targetCount = 1
-            set targetArr[1] = 'o017' // B 灯提白牛
-        endif
-        if(triggerUID == 'o00W')then // C 巨魔巫医
-            set targetCount = 2
-            set targetArr[1] = 'o00G' // B 巨魔枪士
-            set targetArr[2] = 'o019' // B 巫师
-        endif
-        if(triggerUID == 'o01F')then // C 树人
-            set targetCount = 2
-            set targetArr[1] = 'o01U' // B 树妖
-            set targetArr[2] = 'o01G' // B 远古树精
-        endif
-        if(triggerUID == 'o01V' or triggerUID == 'o01W')then // C 暗夜弓手 | C 角鹰弓手
-            set targetCount = 1
-            set targetArr[1] = 'o01Z' // B 露娜
-        endif
-        if(triggerUID == 'o022')then // C 德鲁伊
-            set targetCount = 1
-            set targetArr[1] = 'o023' // B 熊战德鲁伊
-        endif
-        // ---------------------------------------------
-        if(triggerUID == 'o00K')then // B 铁枪手
-            set targetCount = 2
-            set targetArr[1] = 'o00X' // A 迫击炮小队
-            set targetArr[2] = 'o00N' // A 骑士
-        endif
-        if(triggerUID == 'o00C')then // B 步兵
-            set targetCount = 3
-            set targetArr[1] = 'o00D' // A 剑士
-            set targetArr[2] = 'o00N' // A 骑士
-            set targetArr[3] = 'o010' // A 狮鹫骑士
-        endif
-        if(triggerUID == 'o00L')then // B 牧师
-            set targetCount = 2
-            set targetArr[1] = 'o00P' // A 女巫
-            set targetArr[2] = 'o00O' // A 魔导师
-        endif
-        if(triggerUID == 'o00Z')then // B 龙鹰骑士
-            set targetCount = 1
-            set targetArr[1] = 'o010' // A 狮鹫骑士
-        endif
-        // ---------------------------------------------
-        if(triggerUID == 'o00X')then // A 迫击炮小队
-            set targetCount = 2
-            set targetArr[1] = 'o012' // S 坦克部队
-            set targetArr[2] = 'o00Y' // S 飞行机器
-        endif
-        // ---------------------------------------------
-        if(triggerUID == 'o00T')then // B 狼骑
-            set targetCount = 2
-            set targetArr[1] = 'o00U' // A 邪恶狼骑
-            set targetArr[1] = 'o01C' // A 科多骑手
-        endif
-        if(triggerUID == 'o019')then // B 巫师
-            set targetCount = 2
-            set targetArr[1] = 'o01A' // A 邪恶巫师
-            set targetArr[2] = 'o01B' // A 骷骨巫长
-        endif
-        if(triggerUID == 'o00V')then // B 邪恶兽人大兵
-            set targetCount = 2
-            set targetArr[1] = 'o00U' // A 邪恶狼骑
-            set targetArr[1] = 'o01A' // A 邪恶巫师
-        endif
-        if(triggerUID == 'o014')then // B 飞龙骑士
-            set targetCount = 1
-            set targetArr[1] = 'o015' // A 幻界飞龙
-        endif
-        if(triggerUID == 'o017')then // B 灯提白牛
-            set targetCount = 1
-            set targetArr[1] = 'o018' // A 图腾战牛
-        endif
-        if(triggerUID == 'o00G')then // B 巨魔枪士
-            set targetCount = 1
-            set targetArr[1] = 'o00H' // A 巨魔蝙蝠骑手
-        endif
-        if(triggerUID == 'o01U')then // B 树妖
-            set targetCount = 1
-            set targetArr[1] = 'o01X' // A 山岭巨人
-        endif
-        if(triggerUID == 'o01U')then // B 远古树精
-            set targetCount = 4
-            set targetArr[1] = 'o01J' // A 战争古树
-            set targetArr[2] = 'o01L' // A 智慧古树
-            set targetArr[3] = 'o01R' // A 秘迹古树
-            set targetArr[4] = 'o01Q' // A 苍风古树
-        endif
-        if(triggerUID == 'o01Z')then // B 露娜
-            set targetCount = 1
-            set targetArr[1] = 'o021' // A 黑暗精灵
-        endif
-        if(triggerUID == 'o023')then // B 熊战德鲁伊
-            set targetCount = 1
-            set targetArr[1] = 'o024' // A 猛熊德鲁伊
-        endif
-        if(triggerUID == 'o020')then // B 精灵龙
-            set targetCount = 1
-            set targetArr[1] = 'o025' // S 奇美拉
-        endif
-        // ---------------------------------------------
-        if(triggerUID == 'o01C')then // A 科多骑手
-            set targetCount = 1
-            set targetArr[1] = 'o01D' // S 邪恶科多骑手
-        endif
-        if(triggerUID == 'o01X')then // A 山岭巨人
-            set targetCount = 1
-            set targetArr[1] = 'o01Y' // S 山岭巨人·战棍
-        endif
-        // ---------------------------------------------
-        if(targetCount == 1)then
-            set targetUID = targetArr[1]
-        else
-            set targetUID = targetArr[GetRandomInt(1,targetCount)]
-        endif
+        set targetGlv = null
         return targetUID
     endmethod
 
@@ -841,12 +696,12 @@ struct hGlobals
                 call hlightning.unit2unit(lightningCode_linghun_suolian, targetUnit, triggerUnit, 0.6)
                 set x = GetUnitX(triggerUnit)
                 set y = GetUnitY(triggerUnit)
-                call GroupRemoveUnit(g_gp_summon, triggerUnit)
-                call GroupRemoveUnit(g_gp_summon, targetUnit)
-                call ShowUnit(triggerUnit, false)
-                call ShowUnit(targetUnit, false)
                 set targetUID = thistype.getSummonTargetUid(triggerUID)
                 if(targetUID != 0)then
+                    call GroupRemoveUnit(g_gp_summon, triggerUnit)
+                    call GroupRemoveUnit(g_gp_summon, targetUnit)
+                    call ShowUnit(triggerUnit, false)
+                    call ShowUnit(targetUnit, false)
                     set u = hunit.createUnitXY(p,targetUID, x, y)
                     set ttg = hmsg.ttg2Unit(u,GetUnitName(triggerUnit)+"成功连锁升级为 |cffffff80"+GetUnitName(u)+"|r",7,"",0,1.70,60.00)
                     call hmsg.style(ttg,"scale",0,0.1)
@@ -855,10 +710,13 @@ struct hGlobals
                     call thistype.initSummonAbility(u,triggerUnit,targetUnit)
                     call hitem.copy(triggerUnit,u)
                     call hitem.copy(targetUnit,u)
-                    //
+                    call RemoveUnit(triggerUnit)
+                    call RemoveUnit(targetUnit)
+                else
+                    set ttg = hmsg.ttg2Unit(u,"升级失败",7,"",0,1.70,60.00)
+                    call hmsg.style(ttg,"scale",0,0.1)
+                    set ttg = null
                 endif
-                call RemoveUnit(triggerUnit)
-                call RemoveUnit(targetUnit)
             endif
 		elseif(skillid == 'A08V')then // B 巨魔枪士 - 丧心病狂
 			call hunit.setUserData(triggerUnit,777,4.5)
