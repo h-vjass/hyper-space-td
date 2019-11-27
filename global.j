@@ -2534,6 +2534,15 @@ struct hGlobals
         call thistype.registerSummon('o02D',false,"SS",16000,8500,  700,15,13,  1200,2600,2.10) // 水魔灵
         call thistype.registerSummon('o02L',false,"SS",16000,8100,  700,15,13,  3700,500,2.10) // 悟空
         call thistype.registerSummon('o02M',false,"SS",16000,7500,  700,15,11,  1900,1500,1.90) // 小鹿
+        call thistype.registerSummon('o02T',false,"SS",16000,8600,  700,15,14,  3600,500,1.90) // 熊猫酒仙
+        call thistype.registerSummon('o02Q',false,"SS",16000,7900,  700,15,12,  3700,0,1.70) // 逸风
+
+        call thistype.registerSummon('o02I',false,"SSS",32000,15000,  800,18,15,  0,7600,1.80) // 画笔仙女
+        call thistype.registerSummon('o02H',false,"SSS",32000,20000,  800,18,26,  7500,0,1.90) // 潮汐巨人
+        call thistype.registerSummon('o02G',false,"SSS",32000,14000,  800,18,16,  4500,3000,1.60) // 电气
+        call thistype.registerSummon('o02J',false,"SSS",32000,17000,  800,18,19,  7400,0,1.70) // 娜迦女王
+        call thistype.registerSummon('o02O',false,"SSS",32000,16000,  800,18,16,  500,7200,1.80) // 圣人·阿德莱
+        call thistype.registerSummon('o02E',false,"SSS",32000,18000,  800,18,21,  7800,0,1.70) // 御龙骑士
 
 
         call thistype.registerSummonAbility('o00M','A04K') // N 地穴 - 尖针
