@@ -2589,6 +2589,7 @@ struct hGlobals
         call thistype.registerSummonAbility('o00U','A09I') // A 邪恶狼骑 - 掠夺
         call thistype.registerSummonAbility('o01A','A07J') // A 邪恶巫师 - 痛苦链
         call thistype.registerSummonAbility('o01J','A08Z') // A 战争古树 - 林撼
+        call thistype.registerSummonAbility('o02B','A04E') // A 伐木机 - 齿轮割裂
         call thistype.registerSummonAbility('o00Y','A07X') // S 飞行机器 - 机关枪
         call thistype.registerSummonAbility('o012','A04R') // S 坦克部队 - 烈性炮弹
         call thistype.registerSummonAbility('o01D','A07U') // S 邪恶科多骑手 - 邪殇
