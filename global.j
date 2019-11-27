@@ -2457,35 +2457,36 @@ struct hGlobals
         call thistype.registerSummon('o01S',true,"N",3000,3000,     100,10,30,     0,0,0.00) // 月亮井
 
         call thistype.registerSummon('o00J',false,"E",250,100,      100,3,0,      10,10,1.95) // 小精灵
-        call thistype.registerSummon('o00B',false,"D",500,200,      100,3,0,      45,0,1.80) // 农民
-        call thistype.registerSummon('o00I',false,"D",500,260,      100,3,0,      60,0,2.30) // 苦力
+
+        call thistype.registerSummon('o00B',false,"D",500,220,      100,3,0,      45,0,1.80) // 农民
+        call thistype.registerSummon('o00I',false,"D",500,280,      100,3,0,      50,0,2.30) // 苦力
 
         call thistype.registerSummon('o008',false,"C",1000,400,     300,5,1,    100,0,1.80) // 民兵
         call thistype.registerSummon('o00E',false,"C",1000,380,     300,5,0,    50,60,1.90) // 血精灵
         call thistype.registerSummon('o00R',false,"C",1000,500,     300,5,1,    130,0,2.30) // 兽人大兵
         call thistype.registerSummon('o00S',false,"C",1000,480,     300,5,1,    120,0,2.20) // 邪恶苦力
         call thistype.registerSummon('o00W',false,"C",1000,420,     300,5,0,    0,95,2.20) // 巨魔巫医
-        call thistype.registerSummon('o016',false,"C",1000,440,     300,5,0,    15,90,2.20) // 萨满牛祭司
+        call thistype.registerSummon('o016',false,"C",1000,440,     300,5,0,    20,90,2.20) // 萨满牛祭司
         call thistype.registerSummon('o01F',false,"C",1000,600,     300,5,0,    95,0,2.10) // 树人
         call thistype.registerSummon('o01V',false,"C",1000,360,     300,5,0,    100,0,1.90) // 暗夜弓手
         call thistype.registerSummon('o01W',false,"C",1000,360,     300,5,0,    110,0,1.90) // 角鹰弓手
         call thistype.registerSummon('o022',false,"C",1000,360,     300,5,0,    35,70,2.10) // 德鲁伊
 
-        call thistype.registerSummon('o00C',false,"B",2000,1300,     400,6,3,    190,0,1.80) // 步兵
+        call thistype.registerSummon('o00C',false,"B",2000,1200,     400,6,3,    190,0,1.80) // 步兵
         call thistype.registerSummon('o00L',false,"B",2000,700,     400,6,2,    180,0,1.90) // 牧师
         call thistype.registerSummon('o00K',false,"B",2000,900,     400,6,2,    200,0,1.70) // 铁抢手
         call thistype.registerSummon('o00Z',false,"B",2000,1000,     400,6,1,    210,0,1.90) // 龙鹰骑士
-        call thistype.registerSummon('o017',false,"B",2000,1400,     400,6,1,    240,0,2.20) // 灯提白牛
-        call thistype.registerSummon('o00T',false,"B",2000,1300,     400,6,1,    230,0,2.10) // 狼骑
+        call thistype.registerSummon('o017',false,"B",2000,1200,     400,6,1,    240,0,2.20) // 灯提白牛
+        call thistype.registerSummon('o00T',false,"B",2000,1200,     400,6,1,    230,0,2.10) // 狼骑
         call thistype.registerSummon('o00G',false,"B",2000,1100,     400,6,0,    225,0,2.40) // 巨魔枪士
-        call thistype.registerSummon('o00V',false,"B",2000,1350,     400,6,2,    260,0,2.40) // 邪恶兽人大兵
+        call thistype.registerSummon('o00V',false,"B",2000,1300,     400,6,2,    260,0,2.40) // 邪恶兽人大兵
         call thistype.registerSummon('o014',false,"B",2000,1000,     400,6,0,    210,0,1.90) // 飞龙骑士
         call thistype.registerSummon('o019',false,"B",2000,900,     400,6,0,    0,220,2.30) // 巫师
         call thistype.registerSummon('o020',false,"B",2000,700,     400,6,0,    70,100,2.00) // 精灵龙
         call thistype.registerSummon('o01Z',false,"B",2000,860,     400,6,1,    140,0,2.20) // 露娜
         call thistype.registerSummon('o01U',false,"B",2000,1200,     400,6,1,    225,0,2.10) // 树妖
-        call thistype.registerSummon('o023',false,"B",2000,1500,     400,6,3,    250,0,1.90) // 熊战德鲁伊
-        call thistype.registerSummon('o01G',false,"B",2000,2000,    400,6,4,    300,0,2.90) // 远古树精
+        call thistype.registerSummon('o023',false,"B",2000,1400,     400,6,3,    250,0,1.90) // 熊战德鲁伊
+        call thistype.registerSummon('o01G',false,"B",2000,1700,    400,6,4,    300,0,2.90) // 远古树精
 
         call thistype.registerSummon('o00D',false,"A",4000,2500,    500,8,7,   460,0,1.80) // 剑士
         call thistype.registerSummon('o00N',false,"A",4000,2400,    500,8,6,    490,0,2.20) // 骑士
@@ -2493,10 +2494,11 @@ struct hGlobals
         call thistype.registerSummon('o00P',false,"A",4000,1700,    500,8,3,    0,490,1.80) // 女巫
         call thistype.registerSummon('o00O',false,"A",4000,1900,    500,8,3,    110,400,1.80) // 魔导师
         call thistype.registerSummon('o010',false,"A",4000,2200,    500,8,4,    500,30,1.80) // 狮鹫骑士
+        call thistype.registerSummon('o027',false,"A",4000,1900,    500,8,2,    500,0,2.00) // 精灵射手
         call thistype.registerSummon('o015',false,"A",4000,1800,    500,8,2,    470,0,1.80) // 幻界飞龙
         call thistype.registerSummon('o01H',false,"A",4000,2050,    500,8,2,    490,0,1.90) // 巨魔蝙蝠骑手
         call thistype.registerSummon('o01C',false,"A",4000,2700,    500,8,4,    540,0,2.00) // 科多骑手
-        call thistype.registerSummon('o01B',false,"A",4000,2200,    500,8,2,    465,0,2.00) // 骷骨巫长
+        call thistype.registerSummon('o01B',false,"A",4000,2200,    500,8,2,    35,465,2.00) // 骷骨巫长
         call thistype.registerSummon('o018',false,"A",4000,3000,    500,8,5,    580,0,2.40) // 图腾战牛
         call thistype.registerSummon('o00U',false,"A",4000,2300,    500,8,3,    555,0,1.80) // 邪恶狼骑
         call thistype.registerSummon('o01A',false,"A",4000,2100,    500,8,1,    0,600,2.00) // 邪恶巫师
@@ -2504,19 +2506,34 @@ struct hGlobals
         call thistype.registerSummon('o025',false,"A",4000,1900,    500,8,2,    260,320,1.90) // 奇美拉
         call thistype.registerSummon('o021',false,"A",4000,1600,    500,8,2,    200,270,1.90) // 黑暗精灵
         call thistype.registerSummon('o01X',false,"A",4000,2900,    500,8,3,    680,0,2.50) // 山岭巨人
-        call thistype.registerSummon('o01J',false,"A",4000,2700,    500,8,6,    680,0,2.80) // 战争古树
-        call thistype.registerSummon('o01R',false,"A",4000,2700,    500,8,6,    300,380,2.80) // 秘迹古树
-        call thistype.registerSummon('o01Q',false,"A",4000,2700,    500,8,6,    540,170,2.80) // 苍风古树
-        call thistype.registerSummon('o01L',false,"A",4000,2700,    500,8,6,    0,570,2.80) // 智慧古树
+        call thistype.registerSummon('o01J',false,"A",4000,2700,    500,8,5,    680,0,2.80) // 战争古树
+        call thistype.registerSummon('o01R',false,"A",4000,2700,    500,8,5,    300,380,2.80) // 秘迹古树
+        call thistype.registerSummon('o01Q',false,"A",4000,2700,    500,8,5,    540,170,2.80) // 苍风古树
+        call thistype.registerSummon('o01L',false,"A",4000,2700,    500,8,5,    0,570,2.80) // 智慧古树
+        call thistype.registerSummon('o02B',false,"A",4000,2200,    500,8,4,    520,0,2.10) // 伐木机
+        call thistype.registerSummon('o02C',false,"A",4000,2000,    500,8,3,    540,0,1.90) // 机关兵
+        call thistype.registerSummon('o029',false,"A",4000,1700,    500,8,2,    100,450,2.10) // 骷髅魔法师
+        call thistype.registerSummon('o02A',false,"A",4000,1800,    500,8,4,    530,0,2.00) // 娜迦海兵
 
-        call thistype.registerSummon('o00Y',false,"S",8000,3500,    600,10,8,    1160,0,1.80) // 飞行机器
-        call thistype.registerSummon('o012',false,"S",8000,4000,    600,10,12,    1700,0,3.50) // 坦克部队
-        call thistype.registerSummon('o01D',false,"S",8000,4000,    600,10,12,    1380,0,1.90) // 邪恶科多骑手
-        call thistype.registerSummon('o01E',false,"S",8000,3600,    600,10,10,   1300,0,1.80) // 牛头人酋长
-        call thistype.registerSummon('o00Q',false,"S",8000,3000,    600,10,8,    0,880,1.80) // 寒冰女巫
-        call thistype.registerSummon('o013',false,"S",8000,3600,    600,10,12,    630,570,1.60) // 火凤凰
-        call thistype.registerSummon('o026',false,"S",8000,3200,    600,10,11,   1250,0,1.50) // 月之女祭司
-        call thistype.registerSummon('o01Y',false,"S",8000,3800,    600,10,10,  1600,0,2.30) // 山岭巨人·战棍
+        call thistype.registerSummon('o028',false,"S",8000,3800,    600,10,7,    660,660,1.80) // 暗影猎手
+        call thistype.registerSummon('o02F',false,"S",8000,3900,    600,10,8,    100,1160,2.10) // 冰魔怪
+        call thistype.registerSummon('o02N',false,"S",8000,3700,    600,10,6,    700,660,1.90) // 黑暗游侠
+        call thistype.registerSummon('o00Y',false,"S",8000,4000,    600,10,7,    1160,0,1.80) // 飞行机器
+        call thistype.registerSummon('o012',false,"S",8000,4500,    600,10,10,    1700,0,3.50) // 坦克部队
+        call thistype.registerSummon('o01D',false,"S",8000,4500,    600,10,10,    1380,0,1.90) // 邪恶科多骑手
+        call thistype.registerSummon('o01E',false,"S",8000,4100,    600,10,9,   1300,0,1.80) // 牛头人酋长
+        call thistype.registerSummon('o00Q',false,"S",8000,3500,    600,10,8,    0,880,1.80) // 寒冰女巫
+        call thistype.registerSummon('o013',false,"S",8000,4100,    600,10,9,    630,570,1.60) // 火凤凰
+        call thistype.registerSummon('o026',false,"S",8000,3700,    600,10,7,   1150,0,1.50) // 月之女祭司
+        call thistype.registerSummon('o01Y',false,"S",8000,4300,    600,10,9,  1600,0,2.30) // 山岭巨人·战棍
+
+        call thistype.registerSummon('o02R',false,"SS",16000,8000,  700,15,13,  3600,0,1.70) // 恶魔猎手
+        call thistype.registerSummon('o02K',false,"SS",16000,8400,  700,15,15,  3800,0,2.00) // 牛头人武士
+        call thistype.registerSummon('o02P',false,"SS",16000,8200,  700,15,14,  3500,0,2.00) // 山丘之王
+        call thistype.registerSummon('o02S',false,"SS",16000,7600,  700,15,12,  3700,0,1.80) // 守望者
+        call thistype.registerSummon('o02D',false,"SS",16000,8500,  700,15,13,  1200,2600,2.10) // 水魔灵
+        call thistype.registerSummon('o02L',false,"SS",16000,8100,  700,15,13,  3700,500,2.10) // 悟空
+        call thistype.registerSummon('o02M',false,"SS",16000,7500,  700,15,11,  1900,1500,1.90) // 小鹿
 
 
         call thistype.registerSummonAbility('o00M','A04K') // N 地穴 - 尖针
