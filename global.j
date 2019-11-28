@@ -492,6 +492,23 @@ struct hGlobals
             call hattr.addAttackHuntType(u,"wood",0)
             call hattrEffect.addSwimOdds(u,45,0)
             call hattrEffect.addSwimDuring(u,1.0,0)
+        elseif(abid == 'A05A')then // A 秘迹古树 - 秘沼
+            call hattr.addAttackHuntType(u,"water",0)
+            call hattrEffect.addChaosVal(u,12,0)
+            call hattrEffect.addChaosDuring(u,4,0)
+            call hattrEffect.addTwineVal(u,25,0)
+            call hattrEffect.addTwineDuring(u,4,0)
+        elseif(abid == 'A04I')then // A 苍风古树 - 烈风
+            call hattr.addAttackHuntType(u,"wind",0)
+            call hattrEffect.addWindVal(u,15,0)
+            call hattrEffect.addWindDuring(u,30.0,0)
+        elseif(abid == 'A07Y')then // A 智慧古树 - 通明
+            // 攻击事件实现
+        elseif(abid == 'A04X')then // A 精灵射手 - 强弓
+            call hattrEffect.addAttackSpeedVal(u,20,0)
+            call hattrEffect.addAttackSpeedDuring(u,3,0)
+        elseif(abid == 'A09P')then // A 骷髅魔法师 - 深渊
+            // 攻击事件实现
         endif
         if(abid == 'A07X')then // S 飞行机器 - 机关枪
             // 攻击事件实现
@@ -508,78 +525,62 @@ struct hGlobals
         elseif(abid == 'A058')then // S 奇美拉 - 龙息
             call hattr.addAttackHuntType(u,"fire",0)
             call hattr.addAttackHuntType(u,"ice",0)
-            call hattrEffect.addCorrosionVal(u,22,0)
+            call hattrEffect.addCorrosionVal(u,14,0)
             call hattrEffect.addCorrosionDuring(u,5,0)
-        elseif(abid == 'A05A')then // S 秘迹古树 - 秘沼
-            call hattr.addAttackHuntType(u,"water",0)
-            call hattrEffect.addChaosVal(u,12,0)
-            call hattrEffect.addChaosDuring(u,8,0)
-            call hattrEffect.addTwineVal(u,25,0)
-            call hattrEffect.addTwineDuring(u,8,0)
-        endif
-        if(abid == 'A04B')then // SS 山岭巨人·战棍 - 过激
-            call hattrEffect.addAttackSpeedVal(u,5,0)
-            call hattrEffect.addAttackSpeedDuring(u,30,0)
-            call hattrEffect.addKnockingVal(u,150,0)
-            call hattrEffect.addKnockingDuring(u,30,0)
-        elseif(abid == 'A04C')then // SS 山岭巨人·战棍 - 战棍
+        elseif(abid == 'A04C')then // S 山岭巨人·战棍 - 战棍
             call hattr.addAttackHuntType(u,"soil",0)
             call hattrNatural.addSoilOppose(u,75.0,0)
-            call hattrEffect.setCrackFlyVal(u,300,0)
+            call hattrEffect.setCrackFlyVal(u,500,0)
             call hattrEffect.setCrackFlyOdds(u,20,0)
             call hattrEffect.setCrackFlyHigh(u,250,0)
             call hattrEffect.setCrackFlyDistance(u,200,0)
-        elseif(abid == 'A03Y')then // SS 山岭巨人·战棍 - 大闹一番
-            // 施法事件实现
-        elseif(abid == 'A04I')then // SS 苍风古树 - 烈风
-            call hattr.addAttackHuntType(u,"wind",0)
-            call hattrEffect.addWindVal(u,10,0)
-            call hattrEffect.addWindDuring(u,60.0,0)
-        endif
-        if(abid == 'A07Y')then // SSS 智慧古树 - 通明
-            // 攻击事件实现
-        endif
-        if(abid == 'A03T')then // S 寒冰女巫 - 冰心魂
+        elseif(abid == 'A03T')then // S 寒冰女巫 - 冰心魂
             call hattr.addAttackHuntType(u,"ice",0)
             call hattrEffect.addFreezeVal(u,35,0)
             call hattrEffect.addFreezeDuring(u,4,0)
             call hattrEffect.addColdVal(u,10,0)
             call hattrEffect.addColdDuring(u,4,0)
-        elseif(abid == 'A080')then // S 寒冰女巫 - 暴风雪
+        elseif(abid == 'A080')then // S 冰魔怪 - 暴风雪
             // 施法事件实现
-        elseif(abid == 'A081')then // S 寒冰女巫 - 千里冰封
+        elseif(abid == 'A081')then // S 冰魔灵 - 千里冰封
             // 施法事件实现
             call hattrEffect.addBombRange(u,100,0)
             call hattrEffect.setBombModel(u,"Abilities\\Spells\\Undead\\FrostNova\\FrostNovaTarget.mdl")
-        elseif(abid == 'A08M')then // S 火凤凰 - 火鸟
-            call hattr.addAttackHuntType(u,"fire",0)
-            call hattrNatural.addFireOppose(u,100,0)
-            call hattrNatural.subWaterOppose(u,50,0)
-        elseif(abid == 'A08N')then // S 火凤凰 - 涅磐
+        elseif(abid == 'A08O')then // S 火凤凰 - 涅磐
             // 重生系统实现
-        elseif(abid == 'A08O')then // S 火凤凰 - 展翅
             // 攻击事件实现
-        elseif(abid == 'A065')then // S 牛头人酋长 - 燃方
-            // 技能自带效果
         elseif(abid == 'A04A')then // S 牛头人酋长 - 粉碎
             call hattrEffect.addCorrosionVal(u,5,0)
             call hattrEffect.addCorrosionDuring(u,7,0)
-        elseif(abid == 'A08T')then // S 牛头人酋长 - 狂野
-            call hattr.addHemophagia(u,10,0)
-            call hattr.addKnocking(u,3000,0)
+            call hattrEffect.addSwimOdds(u,20,0)
+            call hattrEffect.addSwimDuring(u,1.0,0)
+        elseif(abid == 'A04Z')then // S 月之女祭司 - 星落
+            call hattrEffect.addBombVal(u,600,0)
+            call hattrEffect.addBombOdds(u,100,0)
+            call hattrEffect.addBombRange(u,100,0)
+            call hattrEffect.setBombModel(u,"Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl")
+        elseif(abid == 'A09S')then // S 暗影猎手 - 毒手
+            call hattr.addAttackHuntType(u,"poison",0)
+            call hattrEffect.addToxicVal(u,127,0)
+            call hattrEffect.addToxicDuring(u,5,0)
+        endif
+        if(abid == 'A04B')then // SS 悟空 - 过激顽石
+            call hattrEffect.addAttackSpeedVal(u,15,0)
+            call hattrEffect.addAttackSpeedDuring(u,30,0)
+            call hattrEffect.addKnockingVal(u,350,0)
+            call hattrEffect.addKnockingDuring(u,30,0)
+        elseif(abid == 'A08T')then // SS 牛头人武士 - 狂野
+            call hattr.addHemophagia(u,20,0)
+            call hattr.addKnocking(u,5000,0)
             call hattrEffect.addSwimOdds(u,60,0)
             call hattrEffect.addSwimDuring(u,1.0,0)
-        elseif(abid == 'A04X')then // S 月之女祭司 - 强弓
-            call hattrEffect.addAttackSpeedVal(u,40,0)
-            call hattrEffect.addAttackSpeedDuring(u,3,0)
-        elseif(abid == 'A050')then // S 月之女祭司 - 威吓
+        elseif(abid == 'A050')then // SS 守望者 - 威吓
             call hattrEffect.addUnarmOdds(u,20.0,0)
             call hattrEffect.addUnarmDuring(u,5.0,0)
-        elseif(abid == 'A04Z')then // S 月之女祭司 - 星落
-            call hattrEffect.addBombVal(u,500,0)
-            call hattrEffect.addBombOdds(u,100,0)
-            call hattrEffect.addBombRange(u,50,0)
-            call hattrEffect.setBombModel(u,"Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl")
+        elseif(abid == 'A08M')then // SS 熊猫酒仙 - 心火
+            call hattr.addAttackHuntType(u,"fire",0)
+            call hattrNatural.addFireOppose(u,100,0)
+            call hattrNatural.subWaterOppose(u,50,0)
         endif
     endmethod
 
@@ -727,10 +728,6 @@ struct hGlobals
         elseif(skillid == 'A07K' and targetUnit != null)then // B 巫师 - 邪术
 			call hattr.addLifeBack(targetUnit,30,20)
             call hattr.addAttackSpeed(targetUnit,45,20)
-        elseif(skillid == 'A03Y')then // S 山岭巨人·战棍 大闹一番
-            call hattr.addHuntAmplitude(triggerUnit,30, 10)
-			call hattrEffect.setSwimOdds(triggerUnit,50,10)
-            call hattrEffect.setSwimDuring(triggerUnit,0.5,10)
         endif
         set triggerUnit = null
         set targetUnit = null
@@ -894,9 +891,7 @@ struct hGlobals
         if(rand<=5)then
             if(GetUnitAbilityLevel(triggerUnit,'A08V') >= 1)then // B 巨魔枪士 - 丧心病狂
                 call IssueImmediateOrder( triggerUnit, "avatar" )
-            elseif(GetUnitAbilityLevel(triggerUnit,'A03Y') >= 1)then // SS 山岭巨人·战棍 - 大闹一番
-                call IssueImmediateOrder( triggerUnit, "whirlwind" )
-            elseif(GetUnitAbilityLevel(triggerUnit,'A080') >= 1)then // S 寒冰女巫 - 暴风雪
+            elseif(GetUnitAbilityLevel(triggerUnit,'A080') >= 1)then // S 冰魔怪 - 暴风雪
                 call IssuePointOrder( triggerUnit, "blizzard",GetUnitX(targetUnit),GetUnitY(targetUnit))
             elseif(GetUnitAbilityLevel(triggerUnit,'A08G') >= 1)then // A 女巫 - 大焚火
                 call IssuePointOrder( triggerUnit, "breathoffire",GetUnitX(targetUnit),GetUnitY(targetUnit))
@@ -976,20 +971,20 @@ struct hGlobals
                 call DestroyGroup(g)
                 set g = null
             endif
-            // SSS 智慧古树 - 通明
+            // A 智慧古树 - 通明
             if(GetUnitAbilityLevel(triggerUnit,'A07Y') >= 1)then
                 call heffect.toUnit("war3mapImported\\eff_Energy_Spark.mdl",triggerUnit,"origin",1.00)
                 set filter = hFilter.create()
                 call filter.isAlive(true)
                 call filter.isAlly(true,triggerUnit)
                 call filter.isOwnerPlayer(false,players[12] )
-                set g = hgroup.createByUnit(triggerUnit,1000.0,function hFilter.get )
+                set g = hgroup.createByUnit(triggerUnit,700.0,function hFilter.get )
                 call filter.destroy()
                 loop
                     exitwhen(IsUnitGroupEmptyBJ(g) == true)
                         set u = FirstOfGroup(g)
                         call GroupRemoveUnit(g,u)
-                        call hattr.addViolence(u,1400,10)
+                        call hattr.addViolence(u,500,10)
                         call heffect.toUnit("Abilities\\Spells\\Items\\AIim\\AIimTarget.mdl",u,"origin",1.00)
                         set u = null
                 endloop
@@ -1015,7 +1010,7 @@ struct hGlobals
             call hattr.addAttackPhysical(triggerUnit,10,4.5)
             call heffect.toUnit("war3mapImported\\eff_BloodElementalMissile.mdl",triggerUnit,"origin",1.00)
         endif
-        // S 寒冰女巫 - 千里冰封
+        // S 冰魔灵 - 千里冰封
         if(GetUnitAbilityLevel(triggerUnit,'A081') >= 1)then
             set i = GetUnitUserData(triggerUnit)
             if(i<0)then
@@ -1029,7 +1024,7 @@ struct hGlobals
                 call SetUnitUserData(triggerUnit,i+1)
             endif
         endif
-        // S 火凤凰 - 展翅
+        // S 火凤凰 - 涅磐
         if(GetUnitAbilityLevel(triggerUnit,'A08O') >= 1)then
             set i = GetUnitUserData(triggerUnit)
             if(i<0)then
@@ -1226,7 +1221,7 @@ struct hGlobals
             return
         endif
         // 正常死亡
-        if(GetUnitAbilityLevel(u,'A08N') >= 1)then // 火凤凰 - 涅磐
+        if(GetUnitAbilityLevel(u,'A08O') >= 1)then // 火凤凰 - 涅磐
             set rebornTime = rebornTime * 0.5
         endif
         if(his.ownItem(u,'I00H'))then // 拥有 SSS 时空之轮精粹
@@ -2516,7 +2511,7 @@ struct hGlobals
         call thistype.registerSummon('o02A',false,"A",4000,1800,    500,8,4,    530,0,2.00) // 娜迦海兵
 
         call thistype.registerSummon('o028',false,"S",8000,3800,    600,10,7,    660,660,1.80) // 暗影猎手
-        call thistype.registerSummon('o02F',false,"S",8000,3900,    600,10,8,    100,1160,2.10) // 冰魔怪
+        call thistype.registerSummon('o02F',false,"S",8000,3900,    600,10,8,    1100,160,2.10) // 冰魔怪
         call thistype.registerSummon('o02N',false,"S",8000,3700,    600,10,6,    700,660,1.90) // 黑暗游侠
         call thistype.registerSummon('o00Y',false,"S",8000,4000,    600,10,7,    1160,0,1.80) // 飞行机器
         call thistype.registerSummon('o012',false,"S",8000,4500,    600,10,10,    1700,0,3.50) // 坦克部队
@@ -2526,6 +2521,7 @@ struct hGlobals
         call thistype.registerSummon('o013',false,"S",8000,4100,    600,10,9,    630,570,1.60) // 火凤凰
         call thistype.registerSummon('o026',false,"S",8000,3700,    600,10,7,   1150,0,1.50) // 月之女祭司
         call thistype.registerSummon('o01Y',false,"S",8000,4300,    600,10,9,  1600,0,2.30) // 山岭巨人·战棍
+        call thistype.registerSummon('o02V',false,"S",8000,3700,    600,10,8,    0,1450,2.20) // 冰魔灵
 
         call thistype.registerSummon('o02R',false,"SS",16000,8000,  700,15,13,  3600,0,1.70) // 恶魔猎手
         call thistype.registerSummon('o02K',false,"SS",16000,8400,  700,15,15,  3800,0,2.00) // 牛头人武士
@@ -2589,30 +2585,44 @@ struct hGlobals
         call thistype.registerSummonAbility('o00U','A09I') // A 邪恶狼骑 - 掠夺
         call thistype.registerSummonAbility('o01A','A07J') // A 邪恶巫师 - 痛苦链
         call thistype.registerSummonAbility('o01J','A08Z') // A 战争古树 - 林撼
+        call thistype.registerSummonAbility('o01R','A05A') // A 秘迹古树 - 秘沼
+        call thistype.registerSummonAbility('o01Q','A04I') // A 苍风古树 - 烈风
+        call thistype.registerSummonAbility('o01L','A07Y') // A 智慧古树 - 通明
         call thistype.registerSummonAbility('o02B','A04E') // A 伐木机 - 齿轮割裂
+        call thistype.registerSummonAbility('o02C','A08F') // A 机关兵 - 灼热火焰
+        call thistype.registerSummonAbility('o027','A04X') // A 精灵射手 - 强弓
+        call thistype.registerSummonAbility('o029','A09P') // A 骷髅魔法师 - 深渊
+        call thistype.registerSummonAbility('o02A','A08E') // A 娜迦海兵 - 激浪
         call thistype.registerSummonAbility('o00Y','A07X') // S 飞行机器 - 机关枪
         call thistype.registerSummonAbility('o012','A04R') // S 坦克部队 - 烈性炮弹
         call thistype.registerSummonAbility('o01D','A07U') // S 邪恶科多骑手 - 邪殇
-        call thistype.registerSummonAbility('o01R','A05A') // S 秘迹古树 - 秘沼
         call thistype.registerSummonAbility('o025','A058') // S 奇美拉 - 龙息
-        call thistype.registerSummonAbility('o01Y','A04B') // SS 山岭巨人·战棍 - 过激
-        call thistype.registerSummonAbility('o01Y','A04C') // SS 山岭巨人·战棍 - 战棍
-        call thistype.registerSummonAbility('o01Y','A03Y') // SS 山岭巨人·战棍 - 大闹一番
-        call thistype.registerSummonAbility('o01Q','A04I') // SS 苍风古树 - 烈风
-        call thistype.registerSummonAbility('o01L','A07Y') // SSS 智慧古树 - 通明
-        // --
+        call thistype.registerSummonAbility('o028','A09S') // S 暗影猎手 - 毒手
         call thistype.registerSummonAbility('o00Q','A03T') // S 寒冰女巫 - 冰心魂
-        call thistype.registerSummonAbility('o00Q','A080') // S 寒冰女巫 - 暴风雪
-        call thistype.registerSummonAbility('o00Q','A081') // S 寒冰女巫 - 千里冰封
-        call thistype.registerSummonAbility('o013','A08M') // S 火凤凰 - 火鸟
-        call thistype.registerSummonAbility('o013','A08N') // S 火凤凰 - 涅磐
-        call thistype.registerSummonAbility('o013','A08O') // S 火凤凰 - 展翅
-        call thistype.registerSummonAbility('o01E','A065') // S 牛头人酋长 - 狂热
+        call thistype.registerSummonAbility('o02F','A080') // S 冰魔怪 - 暴风雪
+        call thistype.registerSummonAbility('o02V','A081') // S 冰魔灵 - 千里冰封
+        call thistype.registerSummonAbility('o013','A08O') // S 火凤凰 - 涅磐
+        call thistype.registerSummonAbility('o01Y','A04C') // S 山岭巨人·战棍 - 战棍
         call thistype.registerSummonAbility('o01E','A04A') // S 牛头人酋长 - 粉碎
-        call thistype.registerSummonAbility('o01E','A08T') // S 牛头人酋长 - 心狂
-        call thistype.registerSummonAbility('o026','A04X') // S 月之女祭司 - 强弓
-        call thistype.registerSummonAbility('o026','A050') // S 月之女祭司 - 威吓
         call thistype.registerSummonAbility('o026','A04Z') // S 月之女祭司 - 星落
+        call thistype.registerSummonAbility('o02N','A03Y') // S 黑暗游侠 - 黑羽箭
+
+        call thistype.registerSummonAbility('o02K','A08T') // SS 牛头人武士 - 狂野
+        call thistype.registerSummonAbility('o02L','A04B') // SS 悟空 - 过激顽石
+        call thistype.registerSummonAbility('o02D','A065') // SS 水魔灵 - 水体
+        call thistype.registerSummonAbility('o02S','A050') // SS 守望者 - 威吓
+        call thistype.registerSummonAbility('o02T','A08M') // SS 熊猫酒仙 - 心火
+        call thistype.registerSummonAbility('o02M','A09T') // SS 小鹿 - 缠绕
+        call thistype.registerSummonAbility('o02R','A09U') // SS 恶魔猎手 - 旋环切割
+        call thistype.registerSummonAbility('o02Q','A09V') // SS 逸风 - 致命一击
+        call thistype.registerSummonAbility('o02P','A09W') // SS 山丘之王 - 致命一击
+
+        call thistype.registerSummonAbility('o02H','A09X') // SSS 潮汐巨人 - 重踏
+        call thistype.registerSummonAbility('o02E','A08N') // SSS 御龙骑士 - 龙神爪
+        call thistype.registerSummonAbility('o02I','A09Y') // SSS 画笔仙女 - 笔墨一道
+        call thistype.registerSummonAbility('o02G','A09Z') // SSS 电气 - 哔哩哔哩
+        call thistype.registerSummonAbility('o02J','A057') // SSS 娜迦女王 - 腐蚀之液
+        call thistype.registerSummonAbility('o02O','A0A0') // SSS 圣人·阿德莱 - 光明照耀
         
 
         // 瞬时物品
