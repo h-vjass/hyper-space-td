@@ -504,10 +504,17 @@ struct hGlobals
             call hattrEffect.addWindDuring(u,30.0,0)
         elseif(abid == 'A07Y')then // A 智慧古树 - 通明
             // 攻击事件实现
+        elseif(abid == 'A04E')then // A 伐木机 - 齿轮割裂
+            // 攻击事件实现
+        elseif(abid == 'A08F')then // A 机关兵 - 灼热火焰
+            call hattrEffect.addBurnVal(u,300,0)
+            call hattrEffect.addBurnDuring(u,3,0)
         elseif(abid == 'A04X')then // A 精灵射手 - 强弓
             call hattrEffect.addAttackSpeedVal(u,20,0)
             call hattrEffect.addAttackSpeedDuring(u,3,0)
         elseif(abid == 'A09P')then // A 骷髅魔法师 - 深渊
+            // 攻击事件实现
+        elseif(abid == 'A08E')then // A 娜迦海兵 - 激浪
             // 攻击事件实现
         endif
         if(abid == 'A07X')then // S 飞行机器 - 机关枪
@@ -563,6 +570,10 @@ struct hGlobals
             call hattr.addAttackHuntType(u,"poison",0)
             call hattrEffect.addToxicVal(u,127,0)
             call hattrEffect.addToxicDuring(u,5,0)
+        elseif(abid == 'A03Y')then // S 黑暗游侠 - 黑羽箭
+            call hattr.addAttackHuntType(u,"dark",0)
+            call hattrEffect.addCorrosionVal(u,8,0)
+            call hattrEffect.addCorrosionDuring(u,6,0)
         endif
         if(abid == 'A04B')then // SS 悟空 - 过激顽石
             call hattrEffect.addAttackSpeedVal(u,15,0)
@@ -581,6 +592,43 @@ struct hGlobals
             call hattr.addAttackHuntType(u,"fire",0)
             call hattrNatural.addFireOppose(u,100,0)
             call hattrNatural.subWaterOppose(u,50,0)
+        elseif(abid == 'A09U')then // SS 恶魔猎手 - 旋环切割
+            // 攻击事件实现
+        elseif(abid == 'A065')then // SS 水魔灵 - 水体
+            call hattr.addAttackHuntType(u,"water",0)
+            call hattrNatural.addWater(u,100,0)
+            call hattrNatural.addWaterOppose(u,100,0)
+        elseif(abid == 'A09T')then // SS 小鹿 - 缠绕
+            // 攻击事件实现
+        elseif(abid == 'A09V')then // SS 逸风 - 致命一击
+            call hattr.addAttackHuntType(u,"wind",0)
+            call hattr.addHuntAmplitude(u,100,0)
+        elseif(abid == 'A09W')then // SS 山丘之王 - 雷霆之怒
+            // 攻击事件实现
+        endif
+        if(abid == 'A09X')then // SSS 潮汐巨人 - 重踏
+            // 攻击事件实现
+        elseif(abid == 'A08N')then // SSS 御龙骑士 - 龙神爪
+            call hattr.addAttackHuntType(u,"dragonfire",0)
+            call hattr.addAttackPhysical(u,2000,0)
+            call hattr.addAttackMagic(u,2000,0)
+        elseif(abid == 'A09Y')then // SSS 画笔仙女 - 笔墨一道
+            // 攻击事件实现
+        elseif(abid == 'A09Z')then // SSS 电气 - 哔哩哔哩
+            call hattr.addAttackHuntType(u,"thunder",0)
+            call hattr.addAttackSpeed(u,50,0)
+            call hattrEffect.addLightningChainOdds(u,100.0,0)
+            call hattrEffect.addLightningChainVal(u,3700,0)
+            call hattrEffect.addLightningChainQty(u,3,0)
+            call hattrEffect.setLightningChainModel(u,lightningCode_shandianlian_zhu)
+        elseif(abid == 'A057')then // SSS 娜迦女王 - 腐蚀之液
+            call hattr.addAttackHuntType(u,"poison",0)
+            call hattrEffect.addToxicVal(u,1300,0)
+            call hattrEffect.addToxicDuring(u,6,0)
+            call hattrEffect.addCorrosionVal(u,10,0)
+            call hattrEffect.addCorrosionDuring(u,6,0)
+        elseif(abid == 'A0A0')then // SSS 圣人·阿德莱 - 光明照耀
+            // 攻击事件实现
         endif
     endmethod
 
@@ -2615,7 +2663,7 @@ struct hGlobals
         call thistype.registerSummonAbility('o02M','A09T') // SS 小鹿 - 缠绕
         call thistype.registerSummonAbility('o02R','A09U') // SS 恶魔猎手 - 旋环切割
         call thistype.registerSummonAbility('o02Q','A09V') // SS 逸风 - 致命一击
-        call thistype.registerSummonAbility('o02P','A09W') // SS 山丘之王 - 致命一击
+        call thistype.registerSummonAbility('o02P','A09W') // SS 山丘之王 - 雷霆之怒
 
         call thistype.registerSummonAbility('o02H','A09X') // SSS 潮汐巨人 - 重踏
         call thistype.registerSummonAbility('o02E','A08N') // SSS 御龙骑士 - 龙神爪
