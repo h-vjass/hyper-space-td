@@ -317,19 +317,19 @@ struct hGlobals
         elseif("SSS" == targetGlv)then
             return 0
         elseif("SS" == targetGlv)then
-            set targetUID = targetArr[GetRandomInt(1,g_summon_count_sss)]
+            set targetUID = g_summon_sss[GetRandomInt(1,g_summon_count_sss)]
         elseif("S" == targetGlv)then
-            set targetUID = targetArr[GetRandomInt(1,g_summon_count_ss)]
+            set targetUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
         elseif("A" == targetGlv)then
-            set targetUID = targetArr[GetRandomInt(1,g_summon_count_s)]
+            set targetUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
         elseif("B" == targetGlv)then
-            set targetUID = targetArr[GetRandomInt(1,g_summon_count_a)]
+            set targetUID = g_summon_a[GetRandomInt(1,g_summon_count_a)]
         elseif("C" == targetGlv)then
-            set targetUID = targetArr[GetRandomInt(1,g_summon_count_b)]
+            set targetUID = g_summon_b[GetRandomInt(1,g_summon_count_b)]
         elseif("D" == targetGlv)then
-            set targetUID = targetArr[GetRandomInt(1,g_summon_count_c)]
+            set targetUID = g_summon_c[GetRandomInt(1,g_summon_count_c)]
         elseif("E" == targetGlv)then
-            set targetUID = targetArr[GetRandomInt(1,g_summon_count_d)]
+            set targetUID = g_summon_d[GetRandomInt(1,g_summon_count_d)]
         endif
         set targetGlv = null
         return targetUID
@@ -710,33 +710,37 @@ struct hGlobals
 			call GroupRemoveUnit(g_gp_summon, triggerUnit)
 			call hunit.del(triggerUnit,0)
         elseif(skillid == 'A06G')then // 建筑移动
-            call RemoveUnit(GetSpellTargetUnit())
             set loc = GetSpellTargetLoc()
             call SetUnitPositionLoc( triggerUnit, loc )
             call RemoveLocation(loc)
             set loc = null
-        elseif(skillid == 'A043')then // 召唤精灵
+        elseif(skillid == 'A043')then // 召唤D级兵种
             set p = GetOwningPlayer(triggerUnit)
-            set triggerUID = GetUnitTypeId(GetSpellTargetUnit())
-            call RemoveUnit(GetSpellTargetUnit())
-            if(hplayer.getGold(p) < 250)then
+            set loc = GetSpellTargetLoc()
+            call SetUnitPosition( triggerUnit, GetUnitX(triggerUnit), GetUnitY(triggerUnit) )
+            if(GetPlayerState(p, PLAYER_STATE_RESOURCE_FOOD_CAP) - GetPlayerState(p, PLAYER_STATE_RESOURCE_FOOD_USED) <= 0) then
+                set ttg = hmsg.ttg2Unit(triggerUnit,"需要更多的人口",7,"",0,1.70,60.00)
+                call hmsg.style(ttg,"scale",0,0.1)
+                set ttg = null
+            elseif(hplayer.getGold(p) < 500)then
                 set ttg = hmsg.ttg2Unit(triggerUnit,"黄金不足",7,"",0,1.70,60.00)
                 call hmsg.style(ttg,"scale",0,0.1)
                 set ttg = null
             else
-                call hplayer.subGold(p,250)
-                set loc = GetSpellTargetLoc()
+                call hplayer.subGold(p,500)
+                set triggerUID = g_summon_d[GetRandomInt(1,g_summon_count_d)]
                 set u = hunit.createUnit(p,triggerUID,loc)
                 call thistype.initSummon(u)
                 call thistype.initSummonAbility(u,null,null)
                 set u = null
-                call RemoveLocation(loc)
-                set loc = null
             endif
+            call RemoveLocation(loc)
+            set loc = null
         elseif(skillid == 'A06F' or skillid == 'A06D' or skillid == 'A06I' or skillid == 'A07L')then // 召唤A~SSS
             set p = GetOwningPlayer(triggerUnit)
+            set loc = GetSpellTargetLoc()
             call RemoveUnit(GetSpellTargetUnit())
-            if(GetPlayerState(p, PLAYER_STATE_RESOURCE_FOOD_CAP) - GetPlayerState(Player(0), PLAYER_STATE_RESOURCE_FOOD_USED) <= 0) then
+            if(GetPlayerState(p, PLAYER_STATE_RESOURCE_FOOD_CAP) - GetPlayerState(p, PLAYER_STATE_RESOURCE_FOOD_USED) <= 0) then
                 set ttg = hmsg.ttg2Unit(triggerUnit,"需要更多的人口",7,"",0,1.70,60.00)
                 call hmsg.style(ttg,"scale",0,0.1)
                 set ttg = null
@@ -783,14 +787,13 @@ struct hGlobals
                         set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
                     endif
                 endif
-                set loc = GetSpellTargetLoc()
                 set u = hunit.createUnit(p,triggerUID,loc)
                 call thistype.initSummon(u)
                 call thistype.initSummonAbility(u,null,null)
                 set u = null
-                call RemoveLocation(loc)
-                set loc = null
             endif
+            call RemoveLocation(loc)
+            set loc = null
         elseif(skillid == 'A04J')then // 升级连锁
             set p = GetOwningPlayer(triggerUnit)
             set triggerUID = GetUnitTypeId(triggerUnit)
@@ -2735,8 +2738,7 @@ struct hGlobals
         call thistype.registerSummon('o00M',true,"N",3000,3000,     100,10,30,     80,0,1.00) // 地穴
         call thistype.registerSummon('o01S',true,"N",3000,3000,     100,10,30,     0,0,0.00) // 月亮井
 
-        call thistype.registerSummon('o00J',false,"E",250,100,      100,3,0,      10,10,1.95) // 小精灵
-
+        call thistype.registerSummon('o00J',false,"D",500,260,      100,3,0,      20,20,1.95) // 小精灵
         call thistype.registerSummon('o00B',false,"D",500,220,      100,3,0,      45,0,1.80) // 农民
         call thistype.registerSummon('o00I',false,"D",500,280,      100,3,0,      50,0,2.30) // 苦力
 

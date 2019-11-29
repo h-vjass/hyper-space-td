@@ -25,6 +25,7 @@ struct hSet
 	private static method onHeroSkillHappen takes nothing returns nothing
 		local unit triggerUnit = hevent.getTriggerUnit()
 		local integer skillid = hevent.getTriggerSkill()
+		local integer triggerUID = 0
 		local location loc = null
 		local location loc2 = null
 		local hAttrHuntBean bean
@@ -34,6 +35,88 @@ struct hSet
 		local integer i = 0
 		local hFilter hf
 		local timer t = null
+		local texttag ttg = null
+		if(skillid == 'A043')then // 召唤D级兵种
+            set p = GetOwningPlayer(triggerUnit)
+			set loc = GetSpellTargetLoc()
+            call SetUnitPosition( triggerUnit, GetUnitX(triggerUnit), GetUnitY(triggerUnit) )
+			if(GetPlayerState(p, PLAYER_STATE_RESOURCE_FOOD_CAP) - GetPlayerState(p, PLAYER_STATE_RESOURCE_FOOD_USED) <= 0) then
+                set ttg = hmsg.ttg2Unit(triggerUnit,"需要更多的人口",7,"",0,1.70,60.00)
+                call hmsg.style(ttg,"scale",0,0.1)
+                set ttg = null
+            elseif(hplayer.getGold(p) < 500)then
+                set ttg = hmsg.ttg2Unit(triggerUnit,"黄金不足",7,"",0,1.70,60.00)
+                call hmsg.style(ttg,"scale",0,0.1)
+                set ttg = null
+            else
+                call hplayer.subGold(p,500)
+				set triggerUID = g_summon_d[GetRandomInt(1,g_summon_count_d)]
+                set u = hunit.createUnit(p,triggerUID,loc)
+                call hGlobals.initSummon(u)
+                call hGlobals.initSummonAbility(u,null,null)
+                set u = null
+            endif
+			call RemoveLocation(loc)
+			set loc = null
+        elseif(skillid == 'A06F' or skillid == 'A06D' or skillid == 'A06I' or skillid == 'A07L')then // 召唤A~SSS
+            set p = GetOwningPlayer(triggerUnit)
+			set loc = GetSpellTargetLoc()
+			call SetUnitPosition( triggerUnit, GetUnitX(triggerUnit), GetUnitY(triggerUnit) )
+            if(GetPlayerState(p, PLAYER_STATE_RESOURCE_FOOD_CAP) - GetPlayerState(p, PLAYER_STATE_RESOURCE_FOOD_USED) <= 0) then
+                set ttg = hmsg.ttg2Unit(triggerUnit,"需要更多的人口",7,"",0,1.70,60.00)
+                call hmsg.style(ttg,"scale",0,0.1)
+                set ttg = null
+                if(skillid == 'A06F')then // A~S
+                    call UnitAddItemByIdSwapped( 'I024', triggerUnit )
+                elseif(skillid == 'A06D')then // A~SS
+                    call UnitAddItemByIdSwapped( 'I026', triggerUnit )
+                elseif(skillid == 'A06I')then // S~SS
+                    call UnitAddItemByIdSwapped( 'I025', triggerUnit )
+                elseif(skillid == 'A07L')then // S~SSS
+                    call UnitAddItemByIdSwapped( 'I027', triggerUnit )
+                endif
+            else
+                if(skillid == 'A06F')then // A~S
+                    set i = GetRandomInt(1,10)
+                    if(i < 2) then
+                        set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
+                    else
+                        set triggerUID = g_summon_a[GetRandomInt(1,g_summon_count_a)]
+                    endif
+                elseif(skillid == 'A06D')then // A~SS
+                    set i = GetRandomInt(1,11)
+                    if(i <= 1) then
+                        set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
+                    elseif(i < 6) then
+                         set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
+                    else
+                        set triggerUID = g_summon_a[GetRandomInt(1,g_summon_count_a)]
+                    endif
+                elseif(skillid == 'A06I')then // S~SS
+                    set i = GetRandomInt(1,10)
+                    if(i <= 3) then
+                        set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
+                    else
+                        set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
+                    endif
+                elseif(skillid == 'A07L')then // S~SSS
+                    set i = GetRandomInt(1,11)
+                    if(i <= 1) then
+                        set triggerUID = g_summon_sss[GetRandomInt(1,g_summon_count_sss)]
+                    elseif(i < 6) then
+                        set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
+                    else
+                        set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
+                    endif
+                endif
+                set u = hunit.createUnit(p,triggerUID,loc)
+                call hGlobals.initSummon(u)
+                call hGlobals.initSummonAbility(u,null,null)
+                set u = null
+            endif
+			call RemoveLocation(loc)
+			set loc = null
+		endif
 		if(skillid == 'A05K')then // 逸风 - 一刹
 			call SetUnitAnimation( triggerUnit, "attack slam" )
 			set loc = hevent.getTargetLoc()
