@@ -610,8 +610,8 @@ struct hGlobals
             // 攻击事件实现
         elseif(abid == 'A08N')then // SSS 御龙骑士 - 龙神爪
             call hattr.addAttackHuntType(u,"dragonfire",0)
-            call hattr.addAttackPhysical(u,2000,0)
-            call hattr.addAttackMagic(u,2000,0)
+            call hattr.addAttackPhysical(u,3000,0)
+            call hattr.addAttackMagic(u,3000,0)
         elseif(abid == 'A09Y')then // SSS 画笔仙女 - 笔墨一道
             // 攻击事件实现
         elseif(abid == 'A09Z')then // SSS 电气 - 哔哩哔哩
@@ -726,7 +726,68 @@ struct hGlobals
             else
                 call hplayer.subGold(p,250)
                 set loc = GetSpellTargetLoc()
-                call hunit.createUnit(p,triggerUID,loc)
+                set u = hunit.createUnit(p,triggerUID,loc)
+                call thistype.initSummon(u)
+                call thistype.initSummonAbility(u,null,null)
+                set u = null
+                call RemoveLocation(loc)
+                set loc = null
+            endif
+        elseif(skillid == 'A06F' or skillid == 'A06D' or skillid == 'A06I' or skillid == 'A07L')then // 召唤A~SSS
+            set p = GetOwningPlayer(triggerUnit)
+            call RemoveUnit(GetSpellTargetUnit())
+            if(GetPlayerState(p, PLAYER_STATE_RESOURCE_FOOD_CAP) - GetPlayerState(Player(0), PLAYER_STATE_RESOURCE_FOOD_USED) <= 0) then
+                set ttg = hmsg.ttg2Unit(triggerUnit,"需要更多的人口",7,"",0,1.70,60.00)
+                call hmsg.style(ttg,"scale",0,0.1)
+                set ttg = null
+                if(skillid == 'A06F')then // A~S
+                    call UnitAddItemByIdSwapped( 'I024', triggerUnit )
+                elseif(skillid == 'A06D')then // A~SS
+                    call UnitAddItemByIdSwapped( 'I026', triggerUnit )
+                elseif(skillid == 'A06I')then // S~SS
+                    call UnitAddItemByIdSwapped( 'I025', triggerUnit )
+                elseif(skillid == 'A07L')then // S~SSS
+                    call UnitAddItemByIdSwapped( 'I027', triggerUnit )
+                endif
+            else
+                if(skillid == 'A06F')then // A~S
+                    set i = GetRandomInt(1,10)
+                    if(i < 2) then
+                        set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
+                    else
+                        set triggerUID = g_summon_a[GetRandomInt(1,g_summon_count_a)]
+                    endif
+                elseif(skillid == 'A06D')then // A~SS
+                    set i = GetRandomInt(1,11)
+                    if(i <= 1) then
+                        set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
+                    elseif(i < 6) then
+                         set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
+                    else
+                        set triggerUID = g_summon_a[GetRandomInt(1,g_summon_count_a)]
+                    endif
+                elseif(skillid == 'A06I')then // S~SS
+                    set i = GetRandomInt(1,10)
+                    if(i <= 3) then
+                        set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
+                    else
+                        set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
+                    endif
+                elseif(skillid == 'A07L')then // S~SSS
+                    set i = GetRandomInt(1,11)
+                    if(i <= 1) then
+                        set triggerUID = g_summon_sss[GetRandomInt(1,g_summon_count_sss)]
+                    elseif(i < 6) then
+                        set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
+                    else
+                        set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
+                    endif
+                endif
+                set loc = GetSpellTargetLoc()
+                set u = hunit.createUnit(p,triggerUID,loc)
+                call thistype.initSummon(u)
+                call thistype.initSummonAbility(u,null,null)
+                set u = null
                 call RemoveLocation(loc)
                 set loc = null
             endif
@@ -1041,6 +1102,94 @@ struct hGlobals
                 set g = null
             endif
         endif
+        // 1/3几率
+        if(rand<=10)then
+            // A 娜迦海兵 - 激浪
+            if(GetUnitAbilityLevel(triggerUnit,'A08E') >= 1)then
+                call heffect.toUnit("war3mapImported\\eff_Pillar_of_Flame_Blue.mdl",targetUnit,"origin",1.00)
+                set filter = hFilter.create()
+                call filter.isAlive(true)
+                call filter.isEnemy(true,triggerUnit)
+                set g = hgroup.createByUnit(triggerUnit,500.0,function hFilter.get )
+                call filter.destroy()
+                loop
+                    exitwhen(IsUnitGroupEmptyBJ(g) == true)
+                        set u = FirstOfGroup(g)
+                        call GroupRemoveUnit(g,u)
+                        call hattr.subDefend(u,3,5)
+                        set u = null
+                endloop
+                call GroupClear(g)
+                call DestroyGroup(g)
+                set g = null
+            endif
+            // SS 恶魔猎手 - 旋环切割
+            if(GetUnitAbilityLevel(triggerUnit,'A09U') >= 1)then
+                call heffect.toUnit("war3mapImported\\eff_DustWindCirclefaster.mdl",triggerUnit,"origin",1.50)
+                call heffect.toUnit("war3mapImported\\eff_light_speed_cutting.mdl",triggerUnit,"origin",1.50)
+                set filter = hFilter.create()
+                call filter.isAlive(true)
+                call filter.isEnemy(true,triggerUnit)
+                set g = hgroup.createByUnit(targetUnit,1000.0,function hFilter.get )
+                call filter.destroy()
+                set bean = hAttrHuntBean.create()
+                set bean.damage = 0.55 * hattr.getAttackPhysical(triggerUnit)
+                set bean.fromUnit = triggerUnit
+                set bean.huntEff = "Objects\\Spawnmodels\\Human\\HumanBlood\\BloodElfSpellThiefBlood.mdl"
+                set bean.huntKind = "attack"
+                set bean.huntType = "physical"
+                loop
+                    exitwhen(IsUnitGroupEmptyBJ(g) == true)
+                        set u = FirstOfGroup(g)
+                        call GroupRemoveUnit(g,u)
+                        set bean.toUnit = u
+                        call hattrHunt.huntUnit(bean)
+                        set u = null
+                endloop
+                call GroupClear(g)
+                call DestroyGroup(g)
+                set g = null
+            endif
+            // SSS 画笔仙女 - 笔墨一道
+            if(GetUnitAbilityLevel(triggerUnit,'A09Y') >= 1)then
+                set u = hunit.createUnitXYFacing(GetOwningPlayer(triggerUnit),'n05T',GetUnitX(triggerUnit),GetUnitY(triggerUnit),hlogic.getDegBetweenUnit(triggerUnit,targetUnit))
+                call SetUnitAnimation( u, "spell" )
+                call hunit.del(u,0.7)
+                set hxy.x = GetUnitX(triggerUnit)
+                set hxy.y = GetUnitY(triggerUnit)
+                set hxy = hlogic.polarProjection(hxy,700,hlogic.getDegBetweenUnit(u,targetUnit))
+                set loc = Location(hxy.x,hxy.y)
+                set bean = hAttrHuntBean.create()
+                set bean.damage = 0.4*hattr.getAttackMagic(triggerUnit)
+                set bean.fromUnit = triggerUnit
+                set bean.huntKind = "skill"
+                set bean.huntType = "realdark"
+                call hskill.leap(u,loc,8,null,150,false,bean)
+                call bean.destroy()
+            endif
+            // SSS 圣人·阿德莱 - 光明照耀
+            if(GetUnitAbilityLevel(triggerUnit,'A0A0') >= 1)then
+                call heffect.toUnit("war3mapImported\\eff_light_spin.mdl",triggerUnit,"origin",1.00)
+                set filter = hFilter.create()
+                call filter.isAlive(true)
+                call filter.isAlly(true,triggerUnit)
+                call filter.isOwnerPlayer(false,players[12] )
+                set g = hgroup.createByUnit(triggerUnit,800.0,function hFilter.get )
+                call filter.destroy()
+                loop
+                    exitwhen(IsUnitGroupEmptyBJ(g) == true)
+                        set u = FirstOfGroup(g)
+                        call GroupRemoveUnit(g,u)
+                        call hattr.addAttackSpeed(u,30,10)
+                        call hattr.addLifeBack(u,65,10)
+                        call heffect.toUnit("war3mapImported\\eff_different_landing.mdl",u,"origin",1.00)
+                        set u = null
+                endloop
+                call GroupClear(g)
+                call DestroyGroup(g)
+                set g = null
+            endif
+        endif
         // 1/2几率
         if(rand<=15)then
             // A 科多骑手 - 吞噬
@@ -1048,6 +1197,93 @@ struct hGlobals
                 call hattr.addAttackPhysical(triggerUnit,25,10)
                 call hattr.subMove(targetUnit,50,5)
                 call heffect.toUnit("Abilities\\Spells\\Orc\\Devour\\DevourEffectArt.mdl",targetUnit,"origin",1.00)
+            endif
+            // A 伐木机 - 齿轮割裂
+            if(GetUnitAbilityLevel(triggerUnit,'A04E') >= 1)then
+                call heffect.toUnit("war3mapImported\\eff_round_dance4.mdl",targetUnit,"origin",1.00)
+                set filter = hFilter.create()
+                call filter.isAlive(true)
+                call filter.isEnemy(true,triggerUnit)
+                set g = hgroup.createByUnit(targetUnit,250.0,function hFilter.get )
+                call filter.destroy()
+                set bean = hAttrHuntBean.create()
+                set bean.damage = 425
+                set bean.fromUnit = triggerUnit
+                set bean.huntEff = "Objects\\Spawnmodels\\Human\\HumanBlood\\BloodElfSpellThiefBlood.mdl"
+                set bean.huntKind = "skill"
+                set bean.huntType = "metal"
+                loop
+                    exitwhen(IsUnitGroupEmptyBJ(g) == true)
+                        set u = FirstOfGroup(g)
+                        call GroupRemoveUnit(g,u)
+                        set bean.toUnit = u
+                        call hattrHunt.huntUnit(bean)
+                        set u = null
+                endloop
+                call GroupClear(g)
+                call DestroyGroup(g)
+                set g = null
+            endif
+            // A 骷髅魔法师 - 深渊
+            if(GetUnitAbilityLevel(triggerUnit,'A09P') >= 1)then
+                set u = hunit.createUnitXY(GetOwningPlayer(triggerUnit),'n05S',GetUnitX(targetUnit),GetUnitY(targetUnit))
+                call hunit.kill(u,6)
+                call hattr.setAttackPhysical(u,0.5*hattr.getAttackMagic(triggerUnit),0)
+                set u = null
+            endif
+            // SS 山丘之王 - 雷霆之怒
+            if(GetUnitAbilityLevel(triggerUnit,'A09W') >= 1)then
+                call heffect.toUnit("Abilities\\Spells\\Human\\Thunderclap\\ThunderClapCaster.mdl",triggerUnit,"origin",1.50)
+                set filter = hFilter.create()
+                call filter.isAlive(true)
+                call filter.isEnemy(true,triggerUnit)
+                set g = hgroup.createByUnit(targetUnit,700.0,function hFilter.get )
+                call filter.destroy()
+                set bean = hAttrHuntBean.create()
+                set bean.damage = 0.30 * hattr.getAttackPhysical(triggerUnit)
+                set bean.fromUnit = triggerUnit
+                set bean.huntEff = "war3mapImported\\eff_thunderbolt.mdl"
+                set bean.huntKind = "skill"
+                set bean.huntType = "thunder"
+                loop
+                    exitwhen(IsUnitGroupEmptyBJ(g) == true)
+                        set u = FirstOfGroup(g)
+                        call GroupRemoveUnit(g,u)
+                        set bean.toUnit = u
+                        call hattrHunt.huntUnit(bean)
+                        call hattr.subMove(u,150,3)
+                        set u = null
+                endloop
+                call GroupClear(g)
+                call DestroyGroup(g)
+                set g = null
+            endif
+            // SSS 潮汐巨人 - 重踏
+            if(GetUnitAbilityLevel(triggerUnit,'A09X') >= 1)then
+                call heffect.toUnit("war3mapImported\\eff_lava_burst2.mdl",triggerUnit,"origin",1.50)
+                set filter = hFilter.create()
+                call filter.isAlive(true)
+                call filter.isEnemy(true,triggerUnit)
+                set g = hgroup.createByUnit(targetUnit,600.0,function hFilter.get )
+                call filter.destroy()
+                set bean = hAttrHuntBean.create()
+                set bean.damage = 0.60 * hattr.getAttackPhysical(triggerUnit)
+                set bean.fromUnit = triggerUnit
+                set bean.huntEff = "war3mapImported\\eff_red_flame_flash.mdl"
+                set bean.huntKind = "skill"
+                set bean.huntType = "fire"
+                loop
+                    exitwhen(IsUnitGroupEmptyBJ(g) == true)
+                        set u = FirstOfGroup(g)
+                        call GroupRemoveUnit(g,u)
+                        set bean.toUnit = u
+                        call hattrHunt.huntUnit(bean)
+                        call hability.swim(u,4)
+                        set u = null
+                endloop
+                call GroupClear(g)
+                call DestroyGroup(g)
+                set g = null
             endif
         endif
         // 100%触发
