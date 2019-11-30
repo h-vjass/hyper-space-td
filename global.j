@@ -2562,6 +2562,9 @@ struct hGlobals
         call thistype.registerHero('H00K',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNShadowHunter.blp",2.00) // t01 暗影猎手
         call thistype.registerHero('H001',HERO_TYPE_AGI,"ReplaceableTextures\\CommandButtons\\BTNHeroBlademaster.blp",2.00) // t01 逸风
         call thistype.registerHero('H003',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNHeroFarseer.blp",2.00) // t01 先知
+        call thistype.registerHero('H004',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNHeroDeathKnight.blp",2.00) // t01 死骑
+        call thistype.registerHero('H004',HERO_TYPE_AGI,"ReplaceableTextures\\CommandButtons\\BTNHeroDreadLord.blp",2.00) // t01 蝠王
+        call thistype.registerHero('H004',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNHeroCryptLord.blp",2.00) // t01 地穴领主
         call thistype.registerHero('H00I',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNChaosBlademaster.blp",2.00) // t02 赤血
         call thistype.registerHero('H00N',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNHeroPaladin.blp",2.00) // t02 圣骑士
         call thistype.registerHero('H00O',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNArthas.blp",2.00) // t03 魔剑士
