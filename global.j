@@ -2564,13 +2564,16 @@ struct hGlobals
         call thistype.registerHero('H003',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNHeroFarseer.blp",2.00) // t01 先知
         call thistype.registerHero('H004',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNHeroDeathKnight.blp",2.00) // t01 死骑
         call thistype.registerHero('H004',HERO_TYPE_AGI,"ReplaceableTextures\\CommandButtons\\BTNHeroDreadLord.blp",2.00) // t01 蝠王
-        call thistype.registerHero('H004',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNHeroCryptLord.blp",2.00) // t01 地穴领主
+        call thistype.registerHero('H007',HERO_TYPE_AGI,"ReplaceableTextures\\CommandButtons\\BTNHeroCryptLord.blp",2.00) // t01 地穴领主
+        call thistype.registerHero('H008',HERO_TYPE_AGI,"ReplaceableTextures\\CommandButtons\\BTNHeroTinker.blp",2.00) // t01 机械师
+        call thistype.registerHero('H00A',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNBeastMaster.blp",2.00) // t01 兽王
         call thistype.registerHero('H00I',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNChaosBlademaster.blp",2.00) // t02 赤血
         call thistype.registerHero('H00N',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNHeroPaladin.blp",2.00) // t02 圣骑士
         call thistype.registerHero('H00O',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNArthas.blp",2.00) // t03 魔剑士
         call thistype.registerHero('H00P',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNKeeperOfTheGrove.blp",2.00) // t04 森林老鹿
         call thistype.registerHero('H00Q',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNLichVersion2.blp",2.00) // t05 巫妖
         call thistype.registerHero('H00X',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNHeroBloodElfPrince.blp",2.00) // t06 操火师
+        call thistype.registerHero('H009',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNNagaSeaWitch.blp",2.00) // t07 美杜莎
         call thistype.registerHero('H00S',HERO_TYPE_AGI,"ReplaceableTextures\\CommandButtons\\BTNBansheeRanger.blp",2.00) // t10 黑游
         call thistype.registerHero('H00R',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNHeroAlchemist.blp",2.00) // t20 炼金
 

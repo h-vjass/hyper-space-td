@@ -66,7 +66,8 @@ struct hSet
                 set ttg = hmsg.ttg2Unit(triggerUnit,"需要更多的人口",7,"",0,1.70,60.00)
                 call hmsg.style(ttg,"scale",0,0.1)
                 set ttg = null
-                if(skillid == 'A06F')then // A~S
+            else
+			 	if(skillid == 'A06F')then // A~S
                     call UnitAddItemByIdSwapped( 'I024', triggerUnit )
                 elseif(skillid == 'A06D')then // A~SS
                     call UnitAddItemByIdSwapped( 'I026', triggerUnit )
@@ -75,7 +76,6 @@ struct hSet
                 elseif(skillid == 'A07L')then // S~SSS
                     call UnitAddItemByIdSwapped( 'I027', triggerUnit )
                 endif
-            else
                 if(skillid == 'A06F')then // A~S
                     set i = GetRandomInt(1,10)
                     if(i < 2) then
