@@ -28,7 +28,7 @@ boolean g_waving = false
 group g_crazy_boss = CreateGroup()
 
 real g_game_speed = 1.00 //
-real g_game_mon_loop = 3.00 // 每只怪出兵间隔
+real g_game_mon_loop = 2.00 // 每只怪出兵间隔
 integer g_token_count = 0
 integer g_building_count = 0
 integer g_hero_count = 0
@@ -714,7 +714,7 @@ struct hGlobals
             call SetUnitPositionLoc( triggerUnit, loc )
             call RemoveLocation(loc)
             set loc = null
-        elseif(skillid == 'A043')then // 召唤D级兵种
+        elseif(skillid == 'A06F' or skillid == 'A06D' or skillid == 'A06I' or skillid == 'A07L')then // 召唤A~SSS
             set p = GetOwningPlayer(triggerUnit)
             set loc = GetSpellTargetLoc()
             call SetUnitPosition( triggerUnit, GetUnitX(triggerUnit), GetUnitY(triggerUnit) )
@@ -722,47 +722,25 @@ struct hGlobals
                 set ttg = hmsg.ttg2Unit(triggerUnit,"需要更多的人口",7,"",0,1.70,60.00)
                 call hmsg.style(ttg,"scale",0,0.1)
                 set ttg = null
-            elseif(hplayer.getGold(p) < 500)then
-                set ttg = hmsg.ttg2Unit(triggerUnit,"黄金不足",7,"",0,1.70,60.00)
-                call hmsg.style(ttg,"scale",0,0.1)
-                set ttg = null
             else
-                call hplayer.subGold(p,500)
-                set triggerUID = g_summon_d[GetRandomInt(1,g_summon_count_d)]
-                set u = hunit.createUnit(p,triggerUID,loc)
-                call thistype.initSummon(u)
-                call thistype.initSummonAbility(u,null,null)
-                set u = null
-            endif
-            call RemoveLocation(loc)
-            set loc = null
-        elseif(skillid == 'A06F' or skillid == 'A06D' or skillid == 'A06I' or skillid == 'A07L')then // 召唤A~SSS
-            set p = GetOwningPlayer(triggerUnit)
-            set loc = GetSpellTargetLoc()
-            call RemoveUnit(GetSpellTargetUnit())
-            if(GetPlayerState(p, PLAYER_STATE_RESOURCE_FOOD_CAP) - GetPlayerState(p, PLAYER_STATE_RESOURCE_FOOD_USED) <= 0) then
-                set ttg = hmsg.ttg2Unit(triggerUnit,"需要更多的人口",7,"",0,1.70,60.00)
-                call hmsg.style(ttg,"scale",0,0.1)
-                set ttg = null
                 if(skillid == 'A06F')then // A~S
-                    call UnitAddItemByIdSwapped( 'I024', triggerUnit )
+				 	call RemoveItem(GetItemOfTypeFromUnitBJ(triggerUnit, 'I024'))
                 elseif(skillid == 'A06D')then // A~SS
-                    call UnitAddItemByIdSwapped( 'I026', triggerUnit )
+					call RemoveItem(GetItemOfTypeFromUnitBJ(triggerUnit, 'I026'))
                 elseif(skillid == 'A06I')then // S~SS
-                    call UnitAddItemByIdSwapped( 'I025', triggerUnit )
+					call RemoveItem(GetItemOfTypeFromUnitBJ(triggerUnit, 'I025'))
                 elseif(skillid == 'A07L')then // S~SSS
-                    call UnitAddItemByIdSwapped( 'I027', triggerUnit )
+					call RemoveItem(GetItemOfTypeFromUnitBJ(triggerUnit, 'I027'))
                 endif
-            else
                 if(skillid == 'A06F')then // A~S
-                    set i = GetRandomInt(1,10)
-                    if(i < 2) then
+                    set i = GetRandomInt(1,15)
+                    if(i == 7) then
                         set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
                     else
                         set triggerUID = g_summon_a[GetRandomInt(1,g_summon_count_a)]
                     endif
                 elseif(skillid == 'A06D')then // A~SS
-                    set i = GetRandomInt(1,11)
+                    set i = GetRandomInt(1,15)
                     if(i <= 1) then
                         set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
                     elseif(i < 6) then
@@ -771,21 +749,14 @@ struct hGlobals
                         set triggerUID = g_summon_a[GetRandomInt(1,g_summon_count_a)]
                     endif
                 elseif(skillid == 'A06I')then // S~SS
-                    set i = GetRandomInt(1,10)
+                    set i = GetRandomInt(1,15)
                     if(i <= 3) then
                         set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
                     else
                         set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
                     endif
-                elseif(skillid == 'A07L')then // S~SSS
-                    set i = GetRandomInt(1,11)
-                    if(i <= 1) then
-                        set triggerUID = g_summon_sss[GetRandomInt(1,g_summon_count_sss)]
-                    elseif(i < 6) then
-                        set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
-                    else
-                        set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
-                    endif
+                elseif(skillid == 'A07L')then // SS
+                    set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
                 endif
                 set u = hunit.createUnit(p,triggerUID,loc)
                 call thistype.initSummon(u)
@@ -826,7 +797,7 @@ struct hGlobals
                     call RemoveUnit(triggerUnit)
                     call RemoveUnit(targetUnit)
                 else
-                    set ttg = hmsg.ttg2Unit(u,"升级失败",7,"",0,1.70,60.00)
+                    set ttg = hmsg.ttg2Unit(u,"无法升级",7,"",0,1.70,60.00)
                     call hmsg.style(ttg,"scale",0,0.1)
                     set ttg = null
                 endif
@@ -2570,6 +2541,7 @@ struct hGlobals
         call thistype.registerHero('H00I',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNChaosBlademaster.blp",2.00) // t02 赤血
         call thistype.registerHero('H00N',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNHeroPaladin.blp",2.00) // t02 圣骑士
         call thistype.registerHero('H00O',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNArthas.blp",2.00) // t03 魔剑士
+        call thistype.registerHero('H00C',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNHeroAvatarOfFlame.blp",2.00) // t03 火焰巨魔
         call thistype.registerHero('H00P',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNKeeperOfTheGrove.blp",2.00) // t04 森林老鹿
         call thistype.registerHero('H00Q',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNLichVersion2.blp",2.00) // t05 巫妖
         call thistype.registerHero('H00X',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNHeroBloodElfPrince.blp",2.00) // t06 操火师

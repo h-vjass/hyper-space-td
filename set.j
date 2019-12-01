@@ -22,6 +22,7 @@ struct hSet
 		set t = null
 		set u = null
 	endmethod
+	
 	private static method onHeroSkillHappen takes nothing returns nothing
 		local unit triggerUnit = hevent.getTriggerUnit()
 		local integer skillid = hevent.getTriggerSkill()
@@ -68,23 +69,23 @@ struct hSet
                 set ttg = null
             else
 			 	if(skillid == 'A06F')then // A~S
-                    call UnitAddItemByIdSwapped( 'I024', triggerUnit )
+				 	call RemoveItem(GetItemOfTypeFromUnitBJ(triggerUnit, 'I024'))
                 elseif(skillid == 'A06D')then // A~SS
-                    call UnitAddItemByIdSwapped( 'I026', triggerUnit )
+					call RemoveItem(GetItemOfTypeFromUnitBJ(triggerUnit, 'I026'))
                 elseif(skillid == 'A06I')then // S~SS
-                    call UnitAddItemByIdSwapped( 'I025', triggerUnit )
+					call RemoveItem(GetItemOfTypeFromUnitBJ(triggerUnit, 'I025'))
                 elseif(skillid == 'A07L')then // S~SSS
-                    call UnitAddItemByIdSwapped( 'I027', triggerUnit )
+					call RemoveItem(GetItemOfTypeFromUnitBJ(triggerUnit, 'I027'))
                 endif
                 if(skillid == 'A06F')then // A~S
-                    set i = GetRandomInt(1,10)
-                    if(i < 2) then
+                    set i = GetRandomInt(1,15)
+                    if(i == 7) then
                         set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
                     else
                         set triggerUID = g_summon_a[GetRandomInt(1,g_summon_count_a)]
                     endif
                 elseif(skillid == 'A06D')then // A~SS
-                    set i = GetRandomInt(1,11)
+                    set i = GetRandomInt(1,15)
                     if(i <= 1) then
                         set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
                     elseif(i < 6) then
@@ -93,21 +94,14 @@ struct hSet
                         set triggerUID = g_summon_a[GetRandomInt(1,g_summon_count_a)]
                     endif
                 elseif(skillid == 'A06I')then // S~SS
-                    set i = GetRandomInt(1,10)
+                    set i = GetRandomInt(1,15)
                     if(i <= 3) then
                         set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
                     else
                         set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
                     endif
-                elseif(skillid == 'A07L')then // S~SSS
-                    set i = GetRandomInt(1,11)
-                    if(i <= 1) then
-                        set triggerUID = g_summon_sss[GetRandomInt(1,g_summon_count_sss)]
-                    elseif(i < 6) then
-                        set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
-                    else
-                        set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
-                    endif
+                elseif(skillid == 'A07L')then // SS
+                    set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
                 endif
                 set u = hunit.createUnit(p,triggerUID,loc)
                 call hGlobals.initSummon(u)
@@ -784,8 +778,8 @@ struct hSet
 			exitwhen i<=0
 				if(GetPlayerServerValueSuccess(players[i]) == true)then
 					if(DzAPI_Map_GetStoredInteger(players[i], "wavelevel") < waveBoss)then
-						call DzAPI_Map_StoreInteger(players[i], "wavelevel", waveBoss )
-						call DzAPI_Map_Stat_SetStat(players[i], "wavelevel", I2S(waveBoss) )
+						call DzAPI_Map_StoreInteger(players[i], "wavelevel", g_diff*waveBoss )
+						call DzAPI_Map_Stat_SetStat(players[i], "wavelevel", I2S(g_diff*waveBoss) )
 					endif
 				endif
 			set i = i-1
@@ -826,8 +820,8 @@ struct hSet
 				exitwhen i<=0
 					if(GetPlayerServerValueSuccess(players[i]) == true)then
 						if(DzAPI_Map_GetStoredInteger(players[i], "wavelevel") < g_wave)then
-							call DzAPI_Map_StoreInteger(players[i], "wavelevel", g_wave )
-							call DzAPI_Map_Stat_SetStat(players[i], "wavelevel", I2S(g_wave) )
+							call DzAPI_Map_StoreInteger(players[i], "wavelevel", g_diff*g_wave )
+							call DzAPI_Map_Stat_SetStat(players[i], "wavelevel", I2S(g_diff*g_wave) )
 						endif
 					endif
 				set i = i-1

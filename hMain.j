@@ -184,7 +184,7 @@ library Main initializer init needs hJass
 		local integer bi = LoadInteger(hash_player,GetHandleId(b),7)
 		set g_diff = bi
 		set g_boss_ready_time = 130 - 10 * g_diff
-		set g_game_mon_loop = g_game_mon_loop - 0.35 * (g_diff-1)
+		set g_game_mon_loop = g_game_mon_loop - 0.30 * (g_diff-1)
 		call hmsg.echo("选择了难度（"+g_diff_label[g_diff]+"）")
 		call FlushChildHashtable(hash_player, GetHandleId(b))
 		call DialogClear( d )
@@ -232,7 +232,7 @@ library Main initializer init needs hJass
 			set i=i+1
 		endloop
 		if(dalaoWave > 0)then
-			call hmsg.echo("队伍里有大佬曾经达到了第 "+I2S(dalaoWave)+" 波,奖励全员 |cffffff80"+I2S(dalaoWave*20)+"|r 金币")
+			call hmsg.echo("队伍里有大佬关卡能力达到了 "+I2S(dalaoWave)+" ！,奖励全员 |cffffff80"+I2S(dalaoWave*20)+"|r 金币")
 			set i = 1
 			loop
 				exitwhen(i>player_max_qty)
@@ -271,6 +271,69 @@ library Main initializer init needs hJass
 		set dtg = null
 	endfunction
 
+	private function onBridSkillHappen takes nothing returns nothing
+		local unit triggerUnit = GetTriggerUnit()
+		local integer skillid = GetSpellAbilityId()
+		local integer triggerUID = 0
+		local location loc = null
+		local player p = null
+		local unit u = null
+		local integer i = 0
+		local texttag ttg = null
+		if(skillid == 'A06F' or skillid == 'A06D' or skillid == 'A06I' or skillid == 'A07L')then // 召唤A~SSS
+            set p = GetOwningPlayer(triggerUnit)
+			set loc = GetSpellTargetLoc()
+			call SetUnitPosition( triggerUnit, GetUnitX(triggerUnit), GetUnitY(triggerUnit) )
+            if(GetPlayerState(p, PLAYER_STATE_RESOURCE_FOOD_CAP) - GetPlayerState(p, PLAYER_STATE_RESOURCE_FOOD_USED) <= 0) then
+                set ttg = hmsg.ttg2Unit(triggerUnit,"需要更多的人口",7,"",0,1.70,60.00)
+                call hmsg.style(ttg,"scale",0,0.1)
+                set ttg = null
+            else
+			 	if(skillid == 'A06F')then // A~S
+				 	call RemoveItem(GetItemOfTypeFromUnitBJ(triggerUnit, 'I024'))
+                elseif(skillid == 'A06D')then // A~SS
+					call RemoveItem(GetItemOfTypeFromUnitBJ(triggerUnit, 'I026'))
+                elseif(skillid == 'A06I')then // S~SS
+					call RemoveItem(GetItemOfTypeFromUnitBJ(triggerUnit, 'I025'))
+                elseif(skillid == 'A07L')then // S~SSS
+					call RemoveItem(GetItemOfTypeFromUnitBJ(triggerUnit, 'I027'))
+                endif
+                if(skillid == 'A06F')then // A~S
+                    set i = GetRandomInt(1,15)
+                    if(i == 7) then
+                        set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
+                    else
+                        set triggerUID = g_summon_a[GetRandomInt(1,g_summon_count_a)]
+                    endif
+                elseif(skillid == 'A06D')then // A~SS
+                    set i = GetRandomInt(1,15)
+                    if(i <= 1) then
+                        set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
+                    elseif(i < 6) then
+                         set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
+                    else
+                        set triggerUID = g_summon_a[GetRandomInt(1,g_summon_count_a)]
+                    endif
+                elseif(skillid == 'A06I')then // S~SS
+                    set i = GetRandomInt(1,15)
+                    if(i <= 3) then
+                        set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
+                    else
+                        set triggerUID = g_summon_s[GetRandomInt(1,g_summon_count_s)]
+                    endif
+                elseif(skillid == 'A07L')then // SS
+                    set triggerUID = g_summon_ss[GetRandomInt(1,g_summon_count_ss)]
+                endif
+                set u = hunit.createUnit(p,triggerUID,loc)
+                call hGlobals.initSummon(u)
+                call hGlobals.initSummonAbility(u,null,null)
+                set u = null
+            endif
+			call RemoveLocation(loc)
+			set loc = null
+		endif
+	endfunction
+
 	//游戏开始0秒
 	private function start takes nothing returns nothing
 		local integer i = 0
@@ -283,6 +346,7 @@ library Main initializer init needs hJass
 		local string txt = null
 		local real stopX = 1540.00
 		local real stopY = 1400.00
+		local trigger tg = null
 		// bgm stop
 		call hmedia.bgmStop()
 		// 死亡轮
@@ -322,7 +386,7 @@ library Main initializer init needs hJass
 					call hplayer.setGold(players[i],2500)
 					call hplayer.setLumber(players[i],0)
 					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,6)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,50)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,20)
 					call hhero.setPlayerAllowQty(players[i],2)
 					call hplayer.setGoldRatio(players[i],93.0+15*player_current_qty,0)
 					call hmsg.echoTo(players[i], " # 您是支持|cffffffcc抢先体验包("+giftTxt+")用户|r，拥有更多的资源、全部测试许可，以及所有后续版本内容!感谢您的支持 ^_^", 0)
@@ -336,8 +400,8 @@ library Main initializer init needs hJass
 					endloop
 				else
 					call hplayer.setGold(players[i],1200)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,5)
-					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,20)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,4)
+					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,10)
 					call hhero.setPlayerAllowQty(players[i],1)
 					call hplayer.setGoldRatio(players[i],85.0+15*player_current_qty,0)
 					call hmsg.echoTo(players[i], " # 您是|cffccffff免费游玩|r的玩家，所以部分游戏内容需要等待后续更新开放。如果您想抢先体验，可购买抢先体验包支持作者 ^_^", 0)
@@ -442,7 +506,11 @@ library Main initializer init needs hJass
 		loop
 			exitwhen i<=0
 				if(player_isvip[i] == true and hplayer.getStatus(players[i])==hplayer.default_status_gaming)then // vip才有
-					call hunit.createUnitXY(players[i],'n04Z',GetLocationX(Loc_JiuGuanBorn),GetLocationY(Loc_JiuGuanBorn))
+					set u = hunit.createUnitXY(players[i],'n04Z',GetLocationX(Loc_JiuGuanBorn),GetLocationY(Loc_JiuGuanBorn))
+					set tg = CreateTrigger()
+					call TriggerRegisterUnitEvent( tg, u, EVENT_UNIT_SPELL_EFFECT )
+					call TriggerAddAction(tg, function onBridSkillHappen)
+					set u =null
 				endif
 			set i=i-1
 		endloop
