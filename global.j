@@ -537,10 +537,8 @@ struct hGlobals
         elseif(abid == 'A04C')then // S 山岭巨人·战棍 - 战棍
             call hattr.addAttackHuntType(u,"soil",0)
             call hattrNatural.addSoilOppose(u,75.0,0)
-            call hattrEffect.setCrackFlyVal(u,500,0)
-            call hattrEffect.setCrackFlyOdds(u,20,0)
-            call hattrEffect.setCrackFlyHigh(u,250,0)
-            call hattrEffect.setCrackFlyDistance(u,200,0)
+            call hattrEffect.addSwimOdds(u,60,0)
+            call hattrEffect.addSwimDuring(u,1.0,0)
         elseif(abid == 'A03T')then // S 寒冰女巫 - 冰心魂
             call hattr.addAttackHuntType(u,"ice",0)
             call hattrEffect.addFreezeVal(u,35,0)

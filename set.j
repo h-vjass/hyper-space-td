@@ -111,7 +111,7 @@ struct hSet
 			call RemoveLocation(loc)
 			set loc = null
 		endif
-		if(skillid == 'A05K')then // 逸风 - 一刹
+		if(skillid == 'A05K')then // 斩破 - 一刹
 			call SetUnitAnimation( triggerUnit, "attack slam" )
 			set loc = hevent.getTargetLoc()
 			set bean = hAttrHuntBean.create()
@@ -122,7 +122,7 @@ struct hSet
             set bean.huntType = "physicalwind"
             call hskill.leap(triggerUnit,loc,50,"Abilities\\Spells\\Orc\\MirrorImage\\MirrorImageCaster.mdl",75,false,bean)
             call bean.destroy()
-		elseif(skillid == 'A05L')then // 逸风 - 无影斩
+		elseif(skillid == 'A05L')then // 斩破 - 无影斩
 			call SetUnitVertexColorBJ( triggerUnit, 100, 100, 100, 75.00 )
 			set bean = hAttrHuntBean.create()
             set bean.damage = hattr.getAttackPhysical(triggerUnit)
