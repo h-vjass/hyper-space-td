@@ -198,6 +198,24 @@ struct hSet
 		elseif(skillid == 'A04G')then // 大魔法师 - 暴风雪
 			call hattr.addAttackHuntType(triggerUnit,"waterice",10.0)
 		endif
+		if(skillid == 'A0A5')then // 地穴领主 - 埋沙
+			call SetUnitAnimation( triggerUnit, "morph" )
+			call SetUnitVertexColor( triggerUnit, 255, 255, 255, 135 )
+			set loc = hevent.getTargetLoc()
+			set bean = hAttrHuntBean.create()
+            set bean.damage = 2 * hattr.getAttackPhysical(triggerUnit)
+            set bean.fromUnit = triggerUnit
+            set bean.huntEff = "Objects\\Spawnmodels\\Human\\HumanBlood\\BloodElfSpellThiefBlood.mdl"
+            set bean.huntKind = "skill"
+            set bean.huntType = "physical"
+            call hskill.leap(triggerUnit,loc,20,"Objects\\Spawnmodels\\Undead\\ImpaleTargetDust\\ImpaleTargetDust.mdl",100,false,bean)
+            call bean.destroy()
+		endif
+		if(skillid == 'A0AA')then // 蝠王 - 血蝠爆破
+
+		elseif(skillid == 'A0AB')then // 蝠王 - 毒蝠丧魂
+			
+		endif
 		if(skillid == 'A06O')then // 圣骑士 - 神圣护甲
 			call hattr.setLifeBack(triggerUnit,hattr.getLife(triggerUnit)*0.1,5)
 		elseif(skillid == 'A06Q')then // 圣骑士 - 闪爆
@@ -443,24 +461,50 @@ struct hSet
             call hattr.addManaBack(u,2.00,0)
             call hattr.addAttackMagic(u,20,0)
         endif
-        if(uid == 'H001')then //逸风
+        if(uid == 'H001')then //斩破
             call hattr.addAvoid(u,25,0)
             call hattr.addAttackHuntType(u,"wind",0)
             call hattrEffect.addAttackSpeedVal(u,3,0)
             call hattrEffect.addAttackSpeedDuring(u,15,0)
         endif
-        if(uid == 'H00I')then //赤血
-            call hattr.addHemophagia(u,0.5,0)
-			call hattrEffect.addSplitVal(u,5,0)
-            call hattrEffect.addSplitDuring(u,7,0)
-        endif
-        if(uid == 'H00K')then //暗影猎手
+        if(uid == 'H00K')then //盗影猎手
             call hattrEffect.addToxicVal(u,0.3,0)
             call hattrEffect.addToxicDuring(u,3,0)
         endif
         if(uid == 'H00M')then //大魔法师
             call hattr.addManaBack(u,3.5,0)
 			call hattrNatural.addWater(u,0.01,0)
+        endif
+		if(uid == 'H007')then //地穴领主
+			call hattr.addResistance(u,10,0)
+			call hattr.addHuntRebound(u,30,0)
+		endif
+		if(uid == 'H005')then //蝠王
+			call hattr.addAttackHuntType(u,"dark",0)
+			call hattr.addHemophagia(u,10,0)
+			call hattr.addHemophagiaSkill(u,10,0)
+		endif
+		if(uid == 'H008')then //机械师
+			call hattr.addDefend(u,30,0)
+		endif
+		if(uid == 'H00A')then //兽王
+			call hattr.addLife(u,3000,0)
+			call hattr.addKnocking(u,1000,0)
+		endif
+		if(uid == 'H004')then //死骑
+			call hattr.addAttackHuntType(u,"ghost",0)
+			call hattrEffect.addAttackPhysicalVal(u,10,0)
+			call hattrEffect.addAttackPhysicalDuring(u,20,0)
+			call hattrEffect.addColdVal(u,20,0)
+			call hattrEffect.addColdDuring(u,20,0)
+		endif
+		if(uid == 'H003')then //先知
+			call hattr.addAttackHuntType(u,"thunder",0)
+		endif
+		if(uid == 'H00I')then //赤血
+            call hattr.addHemophagia(u,0.5,0)
+			call hattrEffect.addSplitVal(u,5,0)
+            call hattrEffect.addSplitDuring(u,7,0)
         endif
         if(uid == 'H00N')then //圣骑士
 			if(sk_group_fusuzhiguang == null)then
@@ -487,6 +531,9 @@ struct hSet
 			call hattrEffect.addFreezeDuring(u,5.0,0)
 			call hattrEffect.addColdVal(u,20.0,0)
 			call hattrEffect.addColdDuring(u,5.0,0)
+		endif
+		if(uid == 'H00C')then //火焰巨魔
+			call hattr.addAttackHuntType(u,"fire",0)
 		endif
 		if(uid == 'H00X')then //操火师
 			call hattr.addAttackHuntType(u,"fire",0)
