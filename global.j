@@ -925,6 +925,10 @@ struct hGlobals
 				endif
 			endif
 		endif
+        if(hunit.getMana(triggerUnit) < 50)then
+            return
+        endif
+        call hunit.subMana(triggerUnit,50)
         // 1/10几率
         if(rand<=3)then
             // A 邪恶狼骑 - 掠夺
@@ -1126,7 +1130,7 @@ struct hGlobals
             if(GetUnitAbilityLevel(triggerUnit,'A09Y') >= 1)then
                 set u = hunit.createUnitXYFacing(GetOwningPlayer(triggerUnit),'n05T',GetUnitX(triggerUnit),GetUnitY(triggerUnit),hlogic.getDegBetweenUnit(triggerUnit,targetUnit))
                 call SetUnitAnimation( u, "spell" )
-                call hunit.del(u,0.7)
+                call hunit.del(u,1.16)
                 set hxy.x = GetUnitX(triggerUnit)
                 set hxy.y = GetUnitY(triggerUnit)
                 set hxy = hlogic.polarProjection(hxy,700,hlogic.getDegBetweenUnit(u,targetUnit))
@@ -1136,7 +1140,7 @@ struct hGlobals
                 set bean.fromUnit = triggerUnit
                 set bean.huntKind = "skill"
                 set bean.huntType = "realdark"
-                call hskill.leap(u,loc,8,null,150,false,bean)
+                call hskill.leap(u,loc,12,null,150,false,bean)
                 call bean.destroy()
             endif
             // SSS 圣人·阿德莱 - 光明照耀

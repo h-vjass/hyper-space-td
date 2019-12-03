@@ -12,6 +12,7 @@ struct hSet
     private static trigger destructableDeadTg = null
     private static trigger luckyDrawTg = null
 
+	// 复苏之光
 	private static method fusuzhiguang takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		local unit u = htime.getUnit(t,1)
@@ -21,6 +22,39 @@ struct hSet
 		endif
 		set t = null
 		set u = null
+	endmethod
+
+	// 奔腾霹雳
+	private static method bentengpili takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		local unit triggerUnit = htime.getUnit(t,1)
+		local integer i = htime.getInteger(t,2)
+		local hAttrHuntBean bean
+		local group g = null
+		local unit u = null
+		local hFilter hf
+		if(i > 30)then
+			call htime.delTimer(t)
+			set t = null
+			set triggerUnit = null
+		endif
+		call htime.setInteger(t,2,i+1)
+		set hf = hFilter.create()
+		call hf.isAlive(true)
+		call hf.isEnemy(true,triggerUnit)
+		set g = hgroup.createByUnit(triggerUnit,1000,function hFilter.get)
+		call hf.destroy()
+		if(hgroup.count(g)>0)then
+			set u = GroupPickRandomUnit(g)
+			call hattr.subMove(u,150,5)
+			call heffect.toUnitLoc("war3mapImported\\eff_Lightnings_Long.mdl",u,1.00)
+			set u = null
+		endif
+		call GroupClear(g)
+		call DestroyGroup(g)
+		set g = null
+		set t = null
+		set triggerUnit = null
 	endmethod
 	
 	private static method onHeroSkillHappen takes nothing returns nothing
@@ -523,6 +557,185 @@ struct hSet
 		elseif(skillid == 'A0AJ')then // 机械师 - 过载机器
 			call hattr.addAttackPhysical(triggerUnit,GetUnitLevel(triggerUnit)*25,60)
 			call hattr.addAttackSpeed(triggerUnit,50,60)
+		endif
+		if(skillid == 'A097')then // 美杜莎 - 冲击
+			set hxy.x = GetUnitX(triggerUnit)
+			set hxy.y = GetUnitY(triggerUnit)
+			set loc = GetUnitLoc(triggerUnit)
+			set hxy = hlogic.polarProjection(hxy,800.0,hlogic.getDegBetweenLoc(loc, hevent.getTargetLoc()))
+			set loc = null
+			set u = hunit.createUnithXY(GetOwningPlayer(triggerUnit),'n05V',hxy)
+			call hunit.setPeriod(u,1.33)
+			set bean = hAttrHuntBean.create()
+            set bean.damage = 4 * hattr.getAttackPhysical(triggerUnit)
+            set bean.fromUnit = triggerUnit
+            set bean.huntEff = "Objects\\Spawnmodels\\Naga\\NagaDeath\\NagaDeath.mdl"
+            set bean.huntKind = "skill"
+            set bean.huntType = "water"
+            call hskill.leap(u,loc,12,"Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl",150,false,bean)
+            call bean.destroy()
+			set u = null
+		elseif(skillid == 'A098')then // 美杜莎 - 诅咒恐惧
+			set hf = hFilter.create()
+			call hf.isAlive(true)
+			call hf.isBuilding(false)
+			call hf.isEnemy(true,triggerUnit)
+			set g = hgroup.createByUnit(hevent.getTargetUnit(),400,function hFilter.get)
+			call hf.destroy()
+			if(hgroup.count(g)>0)then
+				loop
+				exitwhen(IsUnitGroupEmptyBJ(g) == true)
+					set u = FirstOfGroup(g)
+					call GroupRemoveUnit( g , u )
+					call hattr.subAttackSpeed(u,60,10.0)
+					call heffect.toUnit("Abilities\\Spells\\Undead\\Curse\\CurseTarget.mdl",u,"overhead",10)
+					set u = null
+				endloop
+			endif
+			call GroupClear(g)
+			call DestroyGroup(g)
+			set g = null
+		elseif(skillid == 'A099')then // 美杜莎 - 石化
+			set hf = hFilter.create()
+			call hf.isAlive(true)
+			call hf.isBuilding(false)
+			call hf.isEnemy(true,triggerUnit)
+			set g = hgroup.createByUnit(triggerUnit,400,function hFilter.get)
+			call hf.destroy()
+			if(hgroup.count(g)>0)then
+				loop
+				exitwhen(IsUnitGroupEmptyBJ(g) == true)
+					set u = FirstOfGroup(g)
+					call GroupRemoveUnit( g , u )
+					call hattr.subAttackSpeed( u, 300, 10.00 )
+					call hattr.subMove(u,1000,10.0)
+					call heffect.toUnit("war3mapImported\\eff_Void_Spear.mdl",u,"origin",10)
+					set u = null
+				endloop
+			endif
+			call GroupClear(g)
+			call DestroyGroup(g)
+			set g = null
+		endif
+		if(skillid == 'A0AL')then // 兽王 - 灰熊豪猪
+			set loc = hevent.getTargetLoc()
+			set i = 1
+			loop
+				exitwhen i > 3
+					set u = hunit.createUnit(GetOwningPlayer(triggerUnit),'n05W',loc)
+					call hunit.setPeriod(u,60)
+					call hattr.addLife(u,I2R(GetUnitLevel(triggerUnit)) * 40,59.9)
+					call hattr.addAttackPhysical(u,hattr.getAttackPhysical(triggerUnit),0)
+					set u = hunit.createUnit(GetOwningPlayer(triggerUnit),'n05X',loc)
+					call hunit.setPeriod(u,60)
+					call hattr.addLife(u,I2R(GetUnitLevel(triggerUnit)) * 30,59.9)
+					call hattr.addAttackPhysical(u,hattr.getAttackMagic(triggerUnit),0)
+					set u = null
+				set i=i+1
+			endloop
+			call RemoveLocation(loc)
+		elseif(skillid == 'A0AO')then // 兽王 - 犀牛冲撞
+			set hxy.x = GetUnitX(triggerUnit)
+			set hxy.y = GetUnitY(triggerUnit)
+			set loc = GetUnitLoc(triggerUnit)
+			set hxy = hlogic.polarProjection(hxy,800.0,hlogic.getDegBetweenLoc(loc, hevent.getTargetLoc()))
+			set loc = null
+			set u = hunit.createUnithXY(GetOwningPlayer(triggerUnit),'n05Y',hxy)
+			call hunit.setPeriod(u,1.8)
+			set bean = hAttrHuntBean.create()
+            set bean.damage = 4 * hattr.getAttackPhysical(triggerUnit)
+            set bean.fromUnit = triggerUnit
+            set bean.huntEff = "Objects\\Spawnmodels\\Naga\\NagaDeath\\NagaDeath.mdl"
+            set bean.huntKind = "skill"
+            set bean.huntType = "physical"
+            call hskill.leap(u,loc,9,"Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl",150,false,bean)
+            call bean.destroy()
+			set u = null
+		elseif(skillid == 'A0AN')then // 兽王 - 怒吼
+			set hf = hFilter.create()
+			call hf.isAlive(true)
+			call hf.isAlly(true,triggerUnit)
+			set g = hgroup.createByUnit(triggerUnit,600,function hFilter.get)
+			call hf.destroy()
+			if(hgroup.count(g)>0)then
+				loop
+				exitwhen(IsUnitGroupEmptyBJ(g) == true)
+					set u = FirstOfGroup(g)
+					call GroupRemoveUnit( g , u )
+					call hattr.addAttackPhysical(u,I2R(GetUnitLevel(triggerUnit)) * 4,10)
+					call heffect.toUnit("Abilities\\Spells\\NightElf\\BattleRoar\\RoarTarget.mdl",u,"overhead",10)
+					set u = null
+				endloop
+			endif
+			call GroupClear(g)
+			call DestroyGroup(g)
+			set g = null
+		endif
+		if(skillid == 'A0AP')then // 死骑 - 地狱冲击
+			set hxy.x = GetUnitX(triggerUnit)
+			set hxy.y = GetUnitY(triggerUnit)
+			set loc = GetUnitLoc(triggerUnit)
+			set hxy = hlogic.polarProjection(hxy,800.0,hlogic.getDegBetweenLoc(loc, hevent.getTargetLoc()))
+			set loc = null
+			set u = hunit.createUnithXY(GetOwningPlayer(triggerUnit),'n05Z',hxy)
+			call hunit.setPeriod(u,0.88)
+			set bean = hAttrHuntBean.create()
+            set bean.damage = 4 * hattr.getAttackPhysical(triggerUnit)
+            set bean.fromUnit = triggerUnit
+            set bean.huntEff = "war3mapImported\\eff_burst_round_purple.mdl"
+            set bean.huntKind = "skill"
+            set bean.huntType = "ghost"
+            call hskill.leap(u,loc,18,null,300,false,bean)
+            call bean.destroy()
+			set u = null
+		elseif(skillid == 'A0AS')then // 死骑 - 骷髅大军
+			set i = 1
+			loop
+				exitwhen i > 12
+					set hxy.x = GetUnitX(triggerUnit)
+					set hxy.y = GetUnitY(triggerUnit)
+					set hxy = hlogic.polarProjection(hxy,GetRandomReal(100,1000),GetRandomReal(0,360))
+					if(GetRandomInt(1,2) == 1)then
+						set u = hunit.createUnithXY(GetOwningPlayer(triggerUnit),'n05S',hxy)
+						call hattr.addLife(u,I2R(GetUnitLevel(triggerUnit)) * 30,39.9)
+						call hattr.addAttackPhysical(u,hattr.getAttackPhysical(triggerUnit),0)
+					else
+						set u = hunit.createUnithXY(GetOwningPlayer(triggerUnit),'n060',hxy)
+						call hattr.addLife(u,I2R(GetUnitLevel(triggerUnit)) * 15,39.9)
+						call hattr.addAttackPhysical(u,hattr.getAttackMagic(triggerUnit),0)
+					endif
+					call hunit.setPeriod(u,40)
+					set u = null
+				set i = i+1
+			endloop
+		elseif(skillid == 'A0AR')then// 死骑 - 致命缠绕
+			call hattr.subDefend(hevent.getTargetUnit(),16,15)
+			call hattrNatural.subDarkOppose(hevent.getTargetUnit(),75,15)
+		endif
+		if(skillid == 'A0A2')then // 先知 - 幽冥之狼
+			set loc = hevent.getTargetLoc()
+			set i = 1
+			loop
+				exitwhen i > 2
+					set u = hunit.createUnit(GetOwningPlayer(triggerUnit),'n061',loc)
+					call hunit.setPeriod(u,60)
+					call hattr.addLife(u,I2R(GetUnitLevel(triggerUnit)) * 35,59.9)
+					call hattr.addAttackPhysical(u,hattr.getAttackMagic(triggerUnit),0)
+					set u = null
+				set i=i+1
+			endloop
+			call RemoveLocation(loc)
+		elseif(skillid == 'A0A3')then // 先知 - 雷霆攻击
+			call hattr.addAttackHuntType(hevent.getTargetUnit(),"thunder",15)
+			call hattrEffect.addLightningChainOdds(hevent.getTargetUnit(),50,15)
+			call hattrEffect.addLightningChainVal(hevent.getTargetUnit(),hattr.getAttackMagic(triggerUnit),15)
+			call hattrEffect.addLightningChainQty(hevent.getTargetUnit(),3,15)
+			call hattrEffect.setLightningChainModel(hevent.getTargetUnit(),lightningCode_shandianlian_ci)
+		elseif(skillid == 'A0A4')then // 先知 - 奔腾霹雳
+			set t = htime.setInterval(1.00,function thistype.bentengpili)
+			call htime.setUnit(t,1,triggerUnit)
+			call htime.setInteger(t,2,1)
+			set t = null
 		endif
 		set triggerUnit = null
 		set loc = null
