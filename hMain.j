@@ -183,8 +183,8 @@ library Main initializer init needs hJass
 		local button b = GetClickedButton()
 		local integer bi = LoadInteger(hash_player,GetHandleId(b),7)
 		set g_diff = bi
-		set g_boss_ready_time = 130 - 10 * g_diff
-		set g_game_mon_loop = g_game_mon_loop - 0.30 * (g_diff-1)
+		set g_boss_ready_time = 65 - 5 * g_diff
+		set g_game_mon_loop = g_game_mon_loop - 0.20 * (g_diff-1)
 		call hmsg.echo("选择了难度（"+g_diff_label[g_diff]+"）")
 		call FlushChildHashtable(hash_player, GetHandleId(b))
 		call DialogClear( d )
@@ -232,11 +232,15 @@ library Main initializer init needs hJass
 			set i=i+1
 		endloop
 		if(dalaoWave > 0)then
-			call hmsg.echo("队伍里有大佬关卡能力达到了 "+I2S(dalaoWave)+" ！,奖励全员 |cffffff80"+I2S(dalaoWave*20)+"|r 金币")
+			call hmsg.echo("队伍里有大佬关卡能力达到了 "+I2S(dalaoWave)+" ！,奖励全员 |cffffff80"+I2S(dalaoWave*10)+"|r 金币（体验包玩家+8%）")
 			set i = 1
 			loop
 				exitwhen(i>player_max_qty)
-					call hplayer.addGold(players[i],dalaoWave*20)
+					if(player_isvip[i] == true)then
+						call hplayer.addGold(players[i],R2I(I2R(dalaoWave)*10.8))
+					else
+						call hplayer.addGold(players[i],dalaoWave*10)
+					endif
 				set i=i+1
 			endloop
 		endif
@@ -302,7 +306,7 @@ library Main initializer init needs hJass
 					elseif(skillid == 'A09N')then // [特攻]号令·圣斧封印
 						call hability.silent(u,30)
 					elseif(skillid == 'A09O')then // [特攻]号令·圣剑封印
-						call hability.swim(u,30)
+						call hability.unarm(u,30)
 					endif
 					set u = null
 				endloop
@@ -431,7 +435,7 @@ library Main initializer init needs hJass
 						set j=j+1
 					endloop
 				else
-					call hplayer.setGold(players[i],1200)
+					call hplayer.setGold(players[i],1500)
 					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,4)
 					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,10)
 					call hhero.setPlayerAllowQty(players[i],1)

@@ -165,7 +165,7 @@ struct hSet
 					elseif(skillid == 'A09N')then // [特攻]号令·圣斧封印
 						call hability.silent(u,30)
 					elseif(skillid == 'A09O')then // [特攻]号令·圣剑封印
-						call hability.swim(u,30)
+						call hability.unarm(u,30)
 					endif
 					set u = null
 				endloop
@@ -208,6 +208,7 @@ struct hSet
 			set hf = hFilter.create()
 			call hf.isAlive(true)
 			call hf.isAlly(true,triggerUnit)
+			call hf.isOwnerPlayer(false,players[12])
 			set g = hgroup.createByUnit(triggerUnit,600,function hFilter.get)
 			call hf.destroy()
 			if(hgroup.count(g)>0)then
@@ -264,7 +265,7 @@ struct hSet
 		endif
 		if(skillid == 'A0A5')then // 地穴领主 - 埋沙
 			call SetUnitAnimation( triggerUnit, "morph" )
-			call SetUnitVertexColor( triggerUnit, 255, 255, 255, 135 )
+			call SetUnitVertexColor( triggerUnit, 255, 255, 255, 50 )
 			set loc = hevent.getTargetLoc()
 			set bean = hAttrHuntBean.create()
             set bean.damage = 2 * hattr.getAttackPhysical(triggerUnit)
@@ -292,14 +293,16 @@ struct hSet
             set bean.huntEff = "war3mapImported\\eff_dark_night_bat.mdl"
             set bean.huntKind = "skill"
             set bean.huntType = "dark"
+			set i = 0
 			if(hgroup.count(g)>0)then
 				loop
-				exitwhen(IsUnitGroupEmptyBJ(g) == true)
+				exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 5)
 					set u = FirstOfGroup(g)
 					call GroupRemoveUnit( g , u )
 					set bean.toUnit = u
 					call hattrHunt.huntUnit(bean)
 					set u = null
+					set i = i+1
 				endloop
 			endif
 			call bean.destroy()
@@ -323,23 +326,27 @@ struct hSet
 			call hf.isAlive(true)
 			call hf.isBuilding(false)
 			call hf.isEnemy(true,triggerUnit)
-			set g = hgroup.createByUnit(triggerUnit,1000,function hFilter.get)
+			set g = hgroup.createByUnit(triggerUnit,800,function hFilter.get)
 			call hf.destroy()
 			set bean = hAttrHuntBean.create()
-            set bean.damage = 10 * I2R(GetUnitLevel(triggerUnit))
+            set bean.damage = 20 * I2R(GetUnitLevel(triggerUnit))
             set bean.fromUnit = triggerUnit
             set bean.huntEff = "war3mapImported\\eff_flame_flash2.mdl"
             set bean.huntKind = "skill"
             set bean.huntType = "light"
+			set i = 0
 			if(hgroup.count(g)>0)then
 				loop
 				exitwhen(IsUnitGroupEmptyBJ(g) == true)
 					set u = FirstOfGroup(g)
 					call GroupRemoveUnit( g , u )
 					call hattrNatural.subLight(u,50,10)
-					set bean.toUnit = u
-					call hattrHunt.huntUnit(bean)
+					if(i < 5)then
+						set bean.toUnit = u
+						call hattrHunt.huntUnit(bean)
+					endif
 					set u = null
+					set i = i + 1
 				endloop
 			endif
 			call bean.destroy()
@@ -489,19 +496,21 @@ struct hSet
 			set g = hgroup.createByLoc(loc,250,function hFilter.get)
 			call hf.destroy()
 			set bean = hAttrHuntBean.create()
-            set bean.damage = 6 * hattr.getAttackPhysical(triggerUnit)
+            set bean.damage = 8 * hattr.getAttackPhysical(triggerUnit)
             set bean.fromUnit = triggerUnit
             set bean.huntEff = "war3mapImported\\eff_Pillar_of_Flame_Orange.mdl"
             set bean.huntKind = "skill"
             set bean.huntType = "fire"
+			set i = 0
 			if(hgroup.count(g)>0)then
 				loop
-				exitwhen(IsUnitGroupEmptyBJ(g) == true)
+				exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 4)
 					set u = FirstOfGroup(g)
 					call GroupRemoveUnit( g , u )
 					set bean.toUnit = u
 					call hattrHunt.huntUnit(bean)
 					set u = null
+					set i = i + 1
 				endloop
 			endif
 			call bean.destroy()
@@ -523,14 +532,16 @@ struct hSet
             set bean.huntEff = "war3mapImported\\eff_Pillar_of_Flame_Orange.mdl"
             set bean.huntKind = "skill"
             set bean.huntType = "fire"
+			set i = 0
 			if(hgroup.count(g)>0)then
 				loop
-				exitwhen(IsUnitGroupEmptyBJ(g) == true)
+				exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 4)
 					set u = FirstOfGroup(g)
 					call GroupRemoveUnit( g , u )
 					set bean.toUnit = u
 					call hattrHunt.huntUnit(bean)
 					set u = null
+					set i = i + 1
 				endloop
 			endif
 			call bean.destroy()
@@ -559,14 +570,16 @@ struct hSet
             set bean.huntEff = "war3mapImported\\eff_Pillar_of_Flame_Orange.mdl"
             set bean.huntKind = "skill"
             set bean.huntType = "fire"
+			set i = 0
 			if(hgroup.count(g)>0)then
 				loop
-				exitwhen(IsUnitGroupEmptyBJ(g) == true)
+				exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 4)
 					set u = FirstOfGroup(g)
 					call GroupRemoveUnit( g , u )
 					set bean.toUnit = u
 					call hattrHunt.huntUnit(bean)
 					set u = null
+					set i = i + 1
 				endloop
 			endif
 			call bean.destroy()
@@ -589,21 +602,20 @@ struct hSet
 			call hattr.addAttackSpeed(triggerUnit,50,60)
 		endif
 		if(skillid == 'A097')then // 美杜莎 - 冲击
-			set hxy.x = GetUnitX(triggerUnit)
-			set hxy.y = GetUnitY(triggerUnit)
 			set loc = GetUnitLoc(triggerUnit)
-			set hxy = hlogic.polarProjection(hxy,800.0,hlogic.getDegBetweenLoc(loc, hevent.getTargetLoc()))
-			set loc = null
-			set u = hunit.createUnithXY(GetOwningPlayer(triggerUnit),'n05V',hxy)
-			call hunit.setPeriod(u,1.33)
+			set u = hunit.createUnitFacing(GetOwningPlayer(triggerUnit),'n05V',loc,hlogic.getDegBetweenLoc(loc,hevent.getTargetLoc()))
+			call hunit.setPeriod(u,1.16)
 			set bean = hAttrHuntBean.create()
             set bean.damage = 4 * hattr.getAttackPhysical(triggerUnit)
             set bean.fromUnit = triggerUnit
             set bean.huntEff = "Objects\\Spawnmodels\\Naga\\NagaDeath\\NagaDeath.mdl"
             set bean.huntKind = "skill"
             set bean.huntType = "water"
-            call hskill.leap(u,loc,12,"Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl",150,false,bean)
+			set loc2 = PolarProjectionBJ(loc, 700, hlogic.getDegBetweenLoc(loc, hevent.getTargetLoc()))
+            call hskill.leap(u,loc2,12,"Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl",150,false,bean)
             call bean.destroy()
+			set loc = null
+			set loc2 = null
 			set u = null
 		elseif(skillid == 'A098')then // 美杜莎 - 诅咒恐惧
 			set hf = hFilter.create()
@@ -649,42 +661,37 @@ struct hSet
 		endif
 		if(skillid == 'A0AL')then // 兽王 - 灰熊豪猪
 			set loc = hevent.getTargetLoc()
-			set i = 1
-			loop
-				exitwhen i > 3
-					set u = hunit.createUnit(GetOwningPlayer(triggerUnit),'n05W',loc)
-					call hunit.setPeriod(u,60)
-					call hattr.addLife(u,I2R(GetUnitLevel(triggerUnit)) * 40,59.9)
-					call hattr.addAttackPhysical(u,hattr.getAttackPhysical(triggerUnit),0)
-					set u = hunit.createUnit(GetOwningPlayer(triggerUnit),'n05X',loc)
-					call hunit.setPeriod(u,60)
-					call hattr.addLife(u,I2R(GetUnitLevel(triggerUnit)) * 30,59.9)
-					call hattr.addAttackPhysical(u,hattr.getAttackMagic(triggerUnit),0)
-					set u = null
-				set i=i+1
-			endloop
+			set u = hunit.createUnit(GetOwningPlayer(triggerUnit),'n05W',loc)
+			call hunit.setPeriod(u,60)
+			call hattr.addLife(u,I2R(GetUnitLevel(triggerUnit)) * 40,59.9)
+			call hattr.addAttackPhysical(u,hattr.getAttackPhysical(triggerUnit),0)
+			set u = hunit.createUnit(GetOwningPlayer(triggerUnit),'n05X',loc)
+			call hunit.setPeriod(u,60)
+			call hattr.addLife(u,I2R(GetUnitLevel(triggerUnit)) * 30,59.9)
+			call hattr.addAttackPhysical(u,hattr.getAttackMagic(triggerUnit),0)
+			set u = null
 			call RemoveLocation(loc)
 		elseif(skillid == 'A0AO')then // 兽王 - 犀牛冲撞
-			set hxy.x = GetUnitX(triggerUnit)
-			set hxy.y = GetUnitY(triggerUnit)
 			set loc = GetUnitLoc(triggerUnit)
-			set hxy = hlogic.polarProjection(hxy,800.0,hlogic.getDegBetweenLoc(loc, hevent.getTargetLoc()))
-			set loc = null
-			set u = hunit.createUnithXY(GetOwningPlayer(triggerUnit),'n05Y',hxy)
-			call hunit.setPeriod(u,1.8)
+			set u = hunit.createUnitFacing(GetOwningPlayer(triggerUnit),'n05Y',loc,hlogic.getDegBetweenLoc(loc,hevent.getTargetLoc()))
+			call hunit.setPeriod(u,2.7)
 			set bean = hAttrHuntBean.create()
             set bean.damage = 4 * hattr.getAttackPhysical(triggerUnit)
             set bean.fromUnit = triggerUnit
-            set bean.huntEff = "Objects\\Spawnmodels\\Naga\\NagaDeath\\NagaDeath.mdl"
+            set bean.huntEff = "war3mapImported\\eff_CorpseExplosion.mdl"
             set bean.huntKind = "skill"
             set bean.huntType = "physical"
-            call hskill.leap(u,loc,9,"Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl",150,false,bean)
+			set loc2 = PolarProjectionBJ(loc, 1200, hlogic.getDegBetweenLoc(loc, hevent.getTargetLoc()))
+            call hskill.leap(u,loc2,9,null,150,false,bean)
             call bean.destroy()
+			set loc = null
+			set loc2 = null
 			set u = null
 		elseif(skillid == 'A0AN')then // 兽王 - 怒吼
 			set hf = hFilter.create()
 			call hf.isAlive(true)
 			call hf.isAlly(true,triggerUnit)
+			call hf.isOwnerPlayer(false,players[12])
 			set g = hgroup.createByUnit(triggerUnit,600,function hFilter.get)
 			call hf.destroy()
 			if(hgroup.count(g)>0)then
@@ -702,37 +709,38 @@ struct hSet
 			set g = null
 		endif
 		if(skillid == 'A0AP')then // 死骑 - 地狱冲击
-			set hxy.x = GetUnitX(triggerUnit)
-			set hxy.y = GetUnitY(triggerUnit)
 			set loc = GetUnitLoc(triggerUnit)
-			set hxy = hlogic.polarProjection(hxy,800.0,hlogic.getDegBetweenLoc(loc, hevent.getTargetLoc()))
-			set loc = null
-			set u = hunit.createUnithXY(GetOwningPlayer(triggerUnit),'n05Z',hxy)
-			call hunit.setPeriod(u,0.88)
+			set u = hunit.createUnitFacing(GetOwningPlayer(triggerUnit),'n05Z',loc,hlogic.getDegBetweenLoc(loc,hevent.getTargetLoc()))
+			call hunit.setPeriod(u,0.89)
 			set bean = hAttrHuntBean.create()
             set bean.damage = 4 * hattr.getAttackPhysical(triggerUnit)
             set bean.fromUnit = triggerUnit
             set bean.huntEff = "war3mapImported\\eff_burst_round_purple.mdl"
             set bean.huntKind = "skill"
             set bean.huntType = "ghost"
-            call hskill.leap(u,loc,18,null,300,false,bean)
+			set loc2 = PolarProjectionBJ(loc, 800, hlogic.getDegBetweenLoc(loc, hevent.getTargetLoc()))
+            call hskill.leap(u,loc2,18,null,300,false,bean)
             call bean.destroy()
+			set loc = null
+			set loc2 = null
 			set u = null
 		elseif(skillid == 'A0AS')then // 死骑 - 骷髅大军
 			set i = 1
 			loop
-				exitwhen i > 12
+				exitwhen i > 14
 					set hxy.x = GetUnitX(triggerUnit)
 					set hxy.y = GetUnitY(triggerUnit)
-					set hxy = hlogic.polarProjection(hxy,GetRandomReal(100,1000),GetRandomReal(0,360))
+					set hxy = hlogic.polarProjection(hxy,GetRandomReal(100,800),GetRandomReal(0,360))
 					if(GetRandomInt(1,2) == 1)then
 						set u = hunit.createUnithXY(GetOwningPlayer(triggerUnit),'n05S',hxy)
-						call hattr.addLife(u,I2R(GetUnitLevel(triggerUnit)) * 30,39.9)
+						call hattr.addLife(u,I2R(GetUnitLevel(triggerUnit)) * 20,39.9)
 						call hattr.addAttackPhysical(u,hattr.getAttackPhysical(triggerUnit),0)
+						call SetUnitPathing( u, false )
 					else
 						set u = hunit.createUnithXY(GetOwningPlayer(triggerUnit),'n060',hxy)
-						call hattr.addLife(u,I2R(GetUnitLevel(triggerUnit)) * 15,39.9)
+						call hattr.addLife(u,I2R(GetUnitLevel(triggerUnit)) * 10,39.9)
 						call hattr.addAttackPhysical(u,hattr.getAttackMagic(triggerUnit),0)
+						call SetUnitPathing( u, false )
 					endif
 					call hunit.setPeriod(u,40)
 					set u = null
@@ -993,6 +1001,15 @@ struct hSet
 		endif
 	endmethod
 
+	private static method win takes nothing returns nothing
+		local integer i = player_max_qty
+		loop
+			exitwhen i<=0
+				call hplayer.victory(players[i])
+			set i = i-1
+		endloop
+	endmethod
+
 	private static method winEnv takes nothing returns nothing
 		local integer i = 0
 		local integer j = 0
@@ -1011,6 +1028,7 @@ struct hSet
 		if (rectWeathereffect != null) then
 			call hweather.del(rectWeathereffect)
 		endif
+		call htime.setTimeout(30.00, function thistype.win)
 		// 任务F9提醒
 		call hmark.display(null,"war3mapImported\\mark_win.blp",1.0,10.0,100.0,100.0)
 		set txt = ""
@@ -1044,7 +1062,7 @@ struct hSet
 		if(g_gp_attack != null and IsUnitInGroup(u, g_gp_attack) == true)then
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
-		set exp = R2I(I2R(g_wave) * (16+g_diff*2) * g_game_speed)
+		set exp = R2I(I2R(g_wave) * (16+g_diff*2) * g_game_speed) + 10 * player_current_qty
 		set expk = R2I(I2R(g_wave) * (30+g_diff) * g_game_speed)
 		set gold = R2I(I2R(g_wave) * 2.8 * g_game_speed) * player_current_qty + g_diff * 2
 		if(killer != null)then
@@ -1067,7 +1085,8 @@ struct hSet
 	public static method createEnemy takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		local integer i = htime.getInteger(t,1)
-		local integer j = 0 
+		local integer j = 0
+		local integer ri = 0
 		local location loc = null
 		local unit u = null
 		local real life = 0
@@ -1089,19 +1108,33 @@ struct hSet
 			return
 		endif
 		call htime.setInteger(t,1,1+i)
-		set life = g_wave * (110 + g_diff * 20)
-		set move = 120 + g_wave * 3 + g_diff * 6
+		if(g_wave < 30)then
+			set life = g_wave * (150 + g_diff * 50)
+		elseif(g_wave < 60)then
+			set life = g_wave * (250 + g_diff * 100)
+		elseif(g_wave < 90)then
+			set life = g_wave * (350 + g_diff * 150)
+		else
+			set life = g_wave * (450 + g_diff * 200)
+		endif
+		set move = 100 + g_wave * 3 + g_diff * 15
 		set attack = g_wave * (4 + g_diff)
 		set j = 1
 		loop
 			exitwhen j>spaceDegQty
-				set u = henemy.createUnitXY(g_mon[monRand],spaceDegX[j],spaceDegY[j])
-				call GroupAddUnit(g_gp_mon,u)
-				call TriggerRegisterUnitEvent( enemyDeadTg, u, EVENT_UNIT_DEATH )
-				call hattr.setLife(u,life,0)
-				call hattr.setMove(u,move,0)
-				call hattr.setAttackPhysical(u,attack,0)
-				call SetUnitUserData(u,0)
+				set ri = GetRandomInt(1,g_diff+1) // 随机1到(diff+1))个兵，加速并赋予趣味
+				loop
+					exitwhen ri < 1
+						set u = henemy.createUnitXY(g_mon[monRand],spaceDegX[j],spaceDegY[j])
+						call GroupAddUnit(g_gp_mon,u)
+						call TriggerRegisterUnitEvent( enemyDeadTg, u, EVENT_UNIT_DEATH )
+						call hattr.setLife(u,life,0)
+						call hattr.setMana(u,100,0)
+						call hattr.setMove(u,move,0)
+						call hattr.setAttackPhysical(u,attack,0)
+						call SetUnitUserData(u,0)
+					set ri = ri - 1
+				endloop
 				set j = j+1
 		endloop
 		set t = null
@@ -1124,7 +1157,7 @@ struct hSet
 		if(g_gp_attack != null and IsUnitInGroup(u, g_gp_attack) == true)then
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
-		set exp = g_wave * 2800 + 200 * g_diff
+		set exp = g_wave * 3000 + 500 * g_diff
 		set gold = g_wave * (30+g_diff) * player_current_qty
 		if(killer!=null)then
 			call haward.forUnit(killer,exp,0,0)
@@ -1132,10 +1165,10 @@ struct hSet
 		call hitem.toXY(momentItems[2],1,GetUnitX(u),GetUnitY(u),90.00)
 		set i = 1
 		loop
-			exitwhen i > player_current_qty * 20
+			exitwhen i > player_current_qty * 22
 				set hxy.x = GetUnitX(u)
         		set hxy.y = GetUnitY(u)
-				set hxy = hlogic.polarProjection(hxy,i*25,i*20)
+				set hxy = hlogic.polarProjection(hxy,i*20,i*15)
 				call hitem.toXY(momentItems[1],gold,hxy.x,hxy.y,60.00)
 				if(GetRandomInt(1,50) == 33)then
 					call hitem.toXY(momentItems[3],g_wave*1000,hxy.x,hxy.y,60.00)
@@ -1156,14 +1189,26 @@ struct hSet
         local location loc = null
 		local integer bossIndex = bossRand
 		local integer rand = GetRandomInt(1,spaceDegQty)
+		local real life = 0
 		call htime.delTimer(t)
+		if(g_wave < 25)then
+			set life = g_wave * (7500 + 2500 * g_diff)
+		elseif(g_wave < 50)then
+			set life = g_wave * (10000 + 5000 * g_diff)
+		elseif(g_wave < 75)then
+			set life = g_wave * (15000 + 7500 * g_diff)
+		elseif(g_wave < g_max_wave)then
+			set life = g_wave * (20000 + 15000 * g_diff)
+		else
+			set life = g_wave * (30000 + 20000 * g_diff)
+		endif
 		set loc = Location(spaceDegX[rand],spaceDegY[rand])
 		set last_boss_uid = g_boss[bossIndex]
 		set u = henemy.createUnit(last_boss_uid,loc)
 		call GroupAddUnit(g_gp_mon,u)
 		call TriggerRegisterUnitEvent( bossDeadTg, u, EVENT_UNIT_DEATH )
-        call hattr.setLife(u, g_wave * (6400+2300*g_diff) ,0)
-		call hattr.setLifeBack(u, g_wave* 2 + g_diff * 5 ,0)
+        call hattr.setLife(u, life ,0)
+		call hattr.setLifeBack(u, g_wave * 5 + g_diff * 20 ,0)
 		call hattr.addMana(u,1000*g_diff,0)
         call hattr.addManaBack(u,30*g_diff,0)
         call hattr.setDefend(u, (g_wave+g_diff)*4 ,0)
@@ -1318,6 +1363,7 @@ struct hSet
 		endif
 		set g_wave = g_wave+1
 		if(g_wave > g_max_wave)then
+			set g_wave = 100
 			call SetUnitInvulnerable(u_timering, true )
 			call thistype.winEnv()
 			return
