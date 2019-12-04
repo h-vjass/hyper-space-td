@@ -763,6 +763,35 @@ struct hGlobals
             endif
             call RemoveLocation(loc)
             set loc = null
+        elseif(skillid == 'A08X' or skillid == 'A04F' or skillid == 'A09N' or skillid == 'A09O')then // 四种符咒
+			set loc = GetSpellTargetLoc()
+			set hf = hFilter.create()
+			call hf.isAlive(true)
+			call hf.isEnemy(true,triggerUnit)
+			set g = hgroup.createByLoc(loc,400,function hFilter.get)
+			call hf.destroy()
+			if(hgroup.count(g)>0)then
+				loop
+				exitwhen(IsUnitGroupEmptyBJ(g) == true)
+					set u = FirstOfGroup(g)
+					call GroupRemoveUnit( g , u )
+					if(skillid == 'A08X')then // [特攻]号令·圣锤封印
+						call hability.swim(u,12)
+					elseif(skillid == 'A04F')then // [特攻]号令·圣盾封印
+						call hattr.subDefend(u,20,30)
+						call heffect.toUnit("Abilities\\Spells\\Undead\\DeathandDecay\\DeathandDecayTarget.mdl",u,"origin",30)
+					elseif(skillid == 'A09N')then // [特攻]号令·圣斧封印
+						call hability.silent(u,30)
+					elseif(skillid == 'A09O')then // [特攻]号令·圣剑封印
+						call hability.swim(u,30)
+					endif
+					set u = null
+				endloop
+			endif
+			call GroupClear(g)
+			call DestroyGroup(g)
+			set g = null
+			set loc = null
         elseif(skillid == 'A04J')then // 升级连锁
             set p = GetOwningPlayer(triggerUnit)
             set triggerUID = GetUnitTypeId(triggerUnit)
