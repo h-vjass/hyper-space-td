@@ -184,7 +184,7 @@ library Main initializer init needs hJass
 		local integer bi = LoadInteger(hash_player,GetHandleId(b),7)
 		set g_diff = bi
 		set g_boss_ready_time = 65 - 5 * g_diff
-		set g_game_mon_loop = g_game_mon_loop - 0.20 * (g_diff-1)
+		set g_game_mon_loop = g_game_mon_loop - 0.15 * (g_diff-1)
 		call hmsg.echo("选择了难度（"+g_diff_label[g_diff]+"）")
 		call FlushChildHashtable(hash_player, GetHandleId(b))
 		call DialogClear( d )

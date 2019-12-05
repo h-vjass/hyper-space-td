@@ -341,7 +341,7 @@ struct hSet
 					set u = FirstOfGroup(g)
 					call GroupRemoveUnit( g , u )
 					call hattrNatural.subLight(u,50,10)
-					if(i < 5)then
+					if(i < 6)then
 						set bean.toUnit = u
 						call hattrHunt.huntUnit(bean)
 					endif
@@ -504,7 +504,7 @@ struct hSet
 			set i = 0
 			if(hgroup.count(g)>0)then
 				loop
-				exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 4)
+				exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 5)
 					set u = FirstOfGroup(g)
 					call GroupRemoveUnit( g , u )
 					set bean.toUnit = u
@@ -535,7 +535,7 @@ struct hSet
 			set i = 0
 			if(hgroup.count(g)>0)then
 				loop
-				exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 4)
+				exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 8)
 					set u = FirstOfGroup(g)
 					call GroupRemoveUnit( g , u )
 					set bean.toUnit = u
@@ -573,7 +573,7 @@ struct hSet
 			set i = 0
 			if(hgroup.count(g)>0)then
 				loop
-				exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 4)
+				exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 6)
 					set u = FirstOfGroup(g)
 					call GroupRemoveUnit( g , u )
 					set bean.toUnit = u
@@ -1024,7 +1024,7 @@ struct hSet
 		call SetUnitTimeScalePercent( u_timering, 0.00 )
 		call EnumDestructablesInRectAll(rectBattle, function thistype.removeEnumDestructable )
 		call henv.clearUnits()
-		call SetTerrainType( GetRectCenterX(rectBattle) , GetRectCenterY(rectBattle), 'Agrd', -1, 18, 0 )
+		call SetTerrainType( GetRectCenterX(rectBattle) , GetRectCenterY(rectBattle), 'Agrd', -1, 28, 0 )
 		if (rectWeathereffect != null) then
 			call hweather.del(rectWeathereffect)
 		endif
@@ -1050,7 +1050,6 @@ struct hSet
 		local unit u = GetTriggerUnit()
 		local unit killer = hevent.getLastDamageUnit(u)
 		local integer exp = 0
-		local integer expk = 0
 		local integer gold = 0
         local real x = GetUnitX(u)
         local real y = GetUnitY(u)
@@ -1062,11 +1061,10 @@ struct hSet
 		if(g_gp_attack != null and IsUnitInGroup(u, g_gp_attack) == true)then
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
-		set exp = R2I(I2R(g_wave) * (16+g_diff*2) * g_game_speed) + 10 * player_current_qty
-		set expk = R2I(I2R(g_wave) * (30+g_diff) * g_game_speed)
-		set gold = R2I(I2R(g_wave) * 2.8 * g_game_speed) * player_current_qty + g_diff * 2
+		set exp = R2I(I2R(g_wave) * (20+g_diff*15) * g_game_speed) + 10 * player_current_qty
+		set gold = R2I(I2R(g_wave) * 2.8 * g_game_speed) * player_current_qty + g_diff * 3
 		if(killer != null)then
-			call haward.forUnit(killer,expk,gold,0)
+			call haward.forUnit(killer,0,gold,0)
 			call haward.forGroup(killer,exp,0,0)
 		endif
 		call hunit.del(u,2.00)
@@ -1087,6 +1085,7 @@ struct hSet
 		local integer i = htime.getInteger(t,1)
 		local integer j = 0
 		local integer ri = 0
+		local integer ri_total = 0
 		local location loc = null
 		local unit u = null
 		local real life = 0
@@ -1096,10 +1095,10 @@ struct hSet
 			call htime.delTimer(t)
 			set t = null
 			if(g_mon_isrunning)then
-				if(hlogic.imod(g_wave+1,g_boss_mod) == 0 or g_wave+1 >= g_max_wave)then
-					call thistype.nextWave(g_boss_ready_time)
+				if(g_wave >= g_max_wave)then
+					call thistype.checkWin()
 				else
-					call thistype.nextWave(10)
+					call thistype.nextWave()
 				endif
 			endif
 			return
@@ -1107,7 +1106,6 @@ struct hSet
 		if(hgroup.count(g_gp_mon) >= g_temp_mon_limit)then
 			return
 		endif
-		call htime.setInteger(t,1,1+i)
 		if(g_wave < 30)then
 			set life = g_wave * (150 + g_diff * 50)
 		elseif(g_wave < 60)then
@@ -1115,7 +1113,7 @@ struct hSet
 		elseif(g_wave < 90)then
 			set life = g_wave * (350 + g_diff * 150)
 		else
-			set life = g_wave * (450 + g_diff * 200)
+			set life = g_wave * (450 + g_diff * 225)
 		endif
 		set move = 100 + g_wave * 3 + g_diff * 15
 		set attack = g_wave * (4 + g_diff)
@@ -1123,6 +1121,7 @@ struct hSet
 		loop
 			exitwhen j>spaceDegQty
 				set ri = GetRandomInt(1,g_diff+1) // 随机1到(diff+1))个兵，加速并赋予趣味
+				set ri_total = ri_total + ri
 				loop
 					exitwhen ri < 1
 						set u = henemy.createUnitXY(g_mon[monRand],spaceDegX[j],spaceDegY[j])
@@ -1137,6 +1136,8 @@ struct hSet
 				endloop
 				set j = j+1
 		endloop
+		set ri_total = ri_total / spaceDegQty
+		call htime.setInteger(t,1,i+ri_total)
 		set t = null
 		set u = null
 		set loc = null
@@ -1157,8 +1158,8 @@ struct hSet
 		if(g_gp_attack != null and IsUnitInGroup(u, g_gp_attack) == true)then
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
-		set exp = g_wave * 3000 + 500 * g_diff
-		set gold = g_wave * (30+g_diff) * player_current_qty
+		set exp = g_wave * 2500 + g_diff * 1500
+		set gold = g_wave * (27+g_diff*3) * player_current_qty
 		if(killer!=null)then
 			call haward.forUnit(killer,exp,0,0)
 		endif
@@ -1189,6 +1190,8 @@ struct hSet
         local location loc = null
 		local integer bossIndex = bossRand
 		local integer rand = GetRandomInt(1,spaceDegQty)
+		local integer randIndex = 0
+		local integer i = 0
 		local real life = 0
 		call htime.delTimer(t)
 		if(g_wave < 25)then
@@ -1202,40 +1205,49 @@ struct hSet
 		else
 			set life = g_wave * (30000 + 20000 * g_diff)
 		endif
-		set loc = Location(spaceDegX[rand],spaceDegY[rand])
 		set last_boss_uid = g_boss[bossIndex]
-		set u = henemy.createUnit(last_boss_uid,loc)
-		call GroupAddUnit(g_gp_mon,u)
-		call TriggerRegisterUnitEvent( bossDeadTg, u, EVENT_UNIT_DEATH )
-        call hattr.setLife(u, life ,0)
-		call hattr.setLifeBack(u, g_wave * 5 + g_diff * 20 ,0)
-		call hattr.addMana(u,1000*g_diff,0)
-        call hattr.addManaBack(u,30*g_diff,0)
-        call hattr.setDefend(u, (g_wave+g_diff)*4 ,0)
-		call hattr.addResistance(u,g_wave*0.4,0)
-		call hattr.setMove(u, 150 + g_wave*5 + g_diff*8 ,0)
-        call hattr.setAttackPhysical(u, 40 + g_wave*(11 + g_diff*2)  ,0)
-		call hattr.setAttackMagic(u, 60 + g_wave*(12 + g_diff*2)  ,0)
-        call hattr.setAttackSpeed(u, g_wave * 3 + g_diff * 4 ,0)
-        call hattr.setAim(u,g_wave*0.6,0)
-        call hattr.setAvoid(u,g_wave*0.4,0)
-		call hattr.setInvincible(u,g_wave*0.1,0)
-        call hattr.setSwimOppose(u,g_wave*0.4,0)
-        call hattr.setSilentOppose(u,g_wave*0.3,0)
-        call hattr.setUnarmOppose(u,g_wave*0.3,0)
-        call hattr.setFetterOppose(u,g_wave*0.15,0)
-        call hattr.setBombOppose(u,g_wave*0.35,0)
-        call hattr.setCrackFlyOppose(u,g_wave*0.5,0)
-        call hattr.setKnockingOppose(u, g_wave * 20 + g_diff * 350,0)
-        call hattr.setViolenceOppose(u, g_wave * 30 + g_diff * 380,0)
-		call hattrEffect.addCrackFlyOdds(u,10+g_wave*0.5+g_diff*3,0)
-		call hattrEffect.addCrackFlyVal(u,g_wave*(30 + g_diff),0)
-		call hattrEffect.addCrackFlyHigh(u,100+g_wave*(4 + g_diff),0)
-		call hattrEffect.addCrackFlyDistance(u,0,0)
-		call hGlobals.bossBuilt(u)
-		//警告
-		call PingMinimapLocForForceEx( GetPlayersAll(),loc,3, bj_MINIMAPPINGSTYLE_FLASHY, 100, 0, 0 )
-		call RemoveLocation(loc)
+		//
+		set i = 0
+		loop
+			exitwhen i >= g_diff
+				set randIndex = rand + i
+				if(randIndex > 4)then
+					set randIndex = randIndex - 4
+				endif
+				set loc = Location(spaceDegX[randIndex],spaceDegY[randIndex])
+				set u = henemy.createUnit(last_boss_uid,loc)
+				call GroupAddUnit(g_gp_mon,u)
+				call TriggerRegisterUnitEvent( bossDeadTg, u, EVENT_UNIT_DEATH )
+				call hattr.setLife(u, life ,0)
+				call hattr.setLifeBack(u, g_wave * 5 + g_diff * 20 ,0)
+				call hattr.addMana(u,1000*g_diff,0)
+				call hattr.addManaBack(u,30*g_diff,0)
+				call hattr.setDefend(u, (g_wave+g_diff)*4 ,0)
+				call hattr.addResistance(u,g_wave*0.4,0)
+				call hattr.setMove(u, 150 + g_wave*5 + g_diff*8 ,0)
+				call hattr.setAttackPhysical(u, 40 + g_wave*(11 + g_diff*2)  ,0)
+				call hattr.setAttackMagic(u, 60 + g_wave*(12 + g_diff*2)  ,0)
+				call hattr.setAttackSpeed(u, g_wave * 3 + g_diff * 4 ,0)
+				call hattr.setAim(u,g_wave*0.6,0)
+				call hattr.setAvoid(u,g_wave*0.4,0)
+				call hattr.setInvincible(u,g_wave*0.1,0)
+				call hattr.setSwimOppose(u,g_wave*0.4,0)
+				call hattr.setSilentOppose(u,g_wave*0.3,0)
+				call hattr.setUnarmOppose(u,g_wave*0.3,0)
+				call hattr.setFetterOppose(u,g_wave*0.15,0)
+				call hattr.setBombOppose(u,g_wave*0.35,0)
+				call hattr.setCrackFlyOppose(u,g_wave*0.5,0)
+				call hattr.setKnockingOppose(u, g_wave * 20 + g_diff * 350,0)
+				call hattr.setViolenceOppose(u, g_wave * 30 + g_diff * 380,0)
+				call hattrEffect.addCrackFlyOdds(u,10+g_wave*0.5+g_diff*3,0)
+				call hattrEffect.addCrackFlyVal(u,g_wave*(30 + g_diff),0)
+				call hattrEffect.addCrackFlyHigh(u,100+g_wave*(4 + g_diff),0)
+				call hattrEffect.addCrackFlyDistance(u,0,0)
+				call hGlobals.bossBuilt(u)
+				call PingMinimapLocForForceEx( GetPlayersAll(),loc,3, bj_MINIMAPPINGSTYLE_FLASHY, 100, 0, 0 ) // 警告
+				call RemoveLocation(loc)
+			set i = i + 1
+		endloop
 		if(g_wave >= 100)then
 			call hmedia.bgm(gg_snd_boss_last)
 		else
@@ -1356,23 +1368,36 @@ struct hSet
 		set t=null
 	endmethod
 	
-	public static method nextWave takes real holdon returns nothing
+	public static method nextWave takes nothing returns nothing
 		local integer i = 0
+		local real holdon = 10
 		if(g_mon_isrunning == false)then
 			return
 		endif
+
 		set g_wave = g_wave+1
-		if(g_wave > g_max_wave)then
-			set g_wave = 100
-			call SetUnitInvulnerable(u_timering, true )
-			call thistype.winEnv()
-			return
+		if(hlogic.imod(g_wave,g_boss_mod) == 0)then
+			set holdon = g_boss_ready_time
 		endif
+
 		// 测试胜利
 		//call thistype.winEnv()
 		//return
 		
 		call thistype.readyWave(holdon)
+	endmethod
+
+	public static method checkWinCall takes nothing returns nothing
+		if(hgroup.count(g_gp_mon) < 1)then
+			call htime.delTimer(GetExpiredTimer())
+			call SetUnitInvulnerable(u_timering, true )
+			call thistype.winEnv()
+		endif
+	endmethod
+
+	public static method checkWin takes nothing returns nothing
+		set g_wave = g_max_wave
+		call htime.setInterval(2.00,function thistype.checkWinCall)
 	endmethod
 
     // 注册瞬逝型物品
