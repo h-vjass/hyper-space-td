@@ -1,5 +1,6 @@
 globals
 	trigger sommonDeadTg = null
+	trigger sommonPointTg = null
 	trigger sommonLevelupTg = null
 endglobals
 struct hSet
@@ -207,6 +208,7 @@ struct hSet
 		if(skillid == 'A05I')then // 暗影猎手 - 恩典
 			set hf = hFilter.create()
 			call hf.isAlive(true)
+			call hf.isBuilding(false)
 			call hf.isAlly(true,triggerUnit)
 			call hf.isOwnerPlayer(false,players[12])
 			set g = hgroup.createByUnit(triggerUnit,600,function hFilter.get)
@@ -689,6 +691,7 @@ struct hSet
 		elseif(skillid == 'A0AN')then // 兽王 - 怒吼
 			set hf = hFilter.create()
 			call hf.isAlive(true)
+			call hf.isBuilding(false)
 			call hf.isAlly(true,triggerUnit)
 			call hf.isOwnerPlayer(false,players[12])
 			set g = hgroup.createByUnit(triggerUnit,600,function hFilter.get)
@@ -1460,6 +1463,13 @@ struct hSet
 	private static method onSommonDead takes nothing returns nothing
 		call hGlobals.deadSummon(GetTriggerUnit())
 	endmethod
+
+	private static method onSommonPoint takes nothing returns nothing
+		if(GetIssuedOrderId() == String2OrderIdBJ("move"))then
+			call IssuePointOrderById( GetTriggerUnit(), 851983, GetUnitX(GetTriggerUnit()), GetUnitY(GetTriggerUnit()) )
+		endif
+	endmethod
+
 	private static method onConstructFinish takes nothing returns nothing
 		call hGlobals.initSummon(GetTriggerUnit())
 		call hGlobals.initSummonAbility(GetTriggerUnit(),null,null)
@@ -1470,6 +1480,7 @@ struct hSet
         local integer qty = 0
         set heroDeadTg = CreateTrigger()
         set sommonDeadTg = CreateTrigger()
+		set sommonPointTg = CreateTrigger()
         set enemyDeadTg = CreateTrigger()
         set bossDeadTg = CreateTrigger()
         set sommonLevelupTg = CreateTrigger()
@@ -1477,6 +1488,7 @@ struct hSet
         call TriggerAddAction(bossDeadTg,function thistype.onBossDead)
         call TriggerAddAction(heroDeadTg,function thistype.onHeroDead)
         call TriggerAddAction(sommonDeadTg,function thistype.onSommonDead)
+		call TriggerAddAction(sommonPointTg,function thistype.onSommonPoint)
 
         call hevent.onPickHero(function thistype.onHeroPick)
 
