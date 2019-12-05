@@ -17,7 +17,7 @@ real REBORN_SUMMON = 90
 integer g_diff = 1
 string array g_diff_label
 timer g_timer_wave = null
-integer g_temp_mon_limit = 320
+integer g_temp_mon_limit = 250
 integer g_max_wave = 100
 integer g_wave = 0
 integer g_first_wave = 0
@@ -505,7 +505,7 @@ struct hGlobals
             call hattrEffect.addTwineDuring(u,4,0)
         elseif(abid == 'A04I')then // A 苍风古树 - 烈风
             call hattr.addAttackHuntType(u,"wind",0)
-            call hattrEffect.addWindVal(u,15,0)
+            call hattrEffect.addWindVal(u,3,0)
             call hattrEffect.addWindDuring(u,30.0,0)
         elseif(abid == 'A07Y')then // A 智慧古树 - 通明
             // 攻击事件实现
@@ -580,9 +580,9 @@ struct hGlobals
         endif
         if(abid == 'A04B')then // SS 悟空 - 过激顽石
             call hattrEffect.addAttackSpeedVal(u,15,0)
-            call hattrEffect.addAttackSpeedDuring(u,30,0)
-            call hattrEffect.addKnockingVal(u,350,0)
-            call hattrEffect.addKnockingDuring(u,30,0)
+            call hattrEffect.addAttackSpeedDuring(u,10,0)
+            call hattrEffect.addKnockingVal(u,300,0)
+            call hattrEffect.addKnockingDuring(u,10,0)
         elseif(abid == 'A08T')then // SS 牛头人武士 - 狂野
             call hattr.addHemophagia(u,20,0)
             call hattr.addKnocking(u,5000,0)
@@ -959,7 +959,7 @@ struct hGlobals
 				endif
 			endif
 		endif
-        if(hunit.getMana(triggerUnit) < 50)then
+        if(hunit.getMana(triggerUnit) < 100)then
             return
         endif
         // 1/10几率
@@ -1143,7 +1143,7 @@ struct hGlobals
                 set g = null
             // SS 恶魔猎手 - 旋环切割
             elseif(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A09U') >= 1)then
-                call hunit.subMana(triggerUnit,50)
+                call hunit.subMana(triggerUnit,75)
                 call heffect.toUnit("war3mapImported\\eff_DustWindCirclefaster.mdl",triggerUnit,"origin",1.50)
                 call heffect.toUnit("war3mapImported\\eff_light_speed_cutting.mdl",triggerUnit,"origin",1.50)
                 set filter = hFilter.create()
@@ -1172,7 +1172,7 @@ struct hGlobals
                 set g = null
             // SSS 画笔仙女 - 笔墨一道
             elseif(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A09Y') >= 1)then
-                call hunit.subMana(triggerUnit,50)
+                call hunit.subMana(triggerUnit,75)
                 set u = hunit.createUnitXYFacing(GetOwningPlayer(triggerUnit),'n05T',GetUnitX(triggerUnit),GetUnitY(triggerUnit),hlogic.getDegBetweenUnit(triggerUnit,targetUnit))
                 call SetUnitAnimation( u, "spell" )
                 call hunit.del(u,1.16)
@@ -1189,7 +1189,7 @@ struct hGlobals
                 call bean.destroy()
             // SSS 圣人·阿德莱 - 天启
             elseif(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A0A0') >= 1)then
-                call hunit.subMana(triggerUnit,50)
+                call hunit.subMana(triggerUnit,100)
                 call heffect.toUnit("war3mapImported\\eff_light_spin.mdl",triggerUnit,"origin",1.00)
                 set filter = hFilter.create()
                 call filter.isAlive(true)
@@ -1257,7 +1257,7 @@ struct hGlobals
                 set u = null
             // SS 山丘之王 - 雷霆之怒
             elseif(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A09W') >= 1)then
-                call hunit.subMana(triggerUnit,50)
+                call hunit.subMana(triggerUnit,75)
                 call heffect.toUnit("Abilities\\Spells\\Human\\Thunderclap\\ThunderClapCaster.mdl",triggerUnit,"origin",1.50)
                 set filter = hFilter.create()
                 call filter.isAlive(true)
@@ -1288,7 +1288,7 @@ struct hGlobals
                 set g = null
             // SSS 潮汐巨人 - 重踏
             elseif(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A09X') >= 1)then
-                call hunit.subMana(triggerUnit,50)
+                call hunit.subMana(triggerUnit,100)
                 call heffect.toUnit("war3mapImported\\eff_lava_burst2.mdl",triggerUnit,"origin",1.50)
                 set filter = hFilter.create()
                 call filter.isAlive(true)
@@ -1994,9 +1994,9 @@ struct hGlobals
         set hitembean.bluntVal = 125
         set hitembean.muggleVal = 125
         set hitembean.tortuaVal = 145
-        set hitembean.silentOdds = 20
-        set hitembean.unarmOdds = 20
-        set hitembean.fetterOdds = 35
+        set hitembean.silentOdds = 5
+        set hitembean.unarmOdds = 5
+        set hitembean.fetterOdds = 5
         set hitembean.bluntDuring = 3
         set hitembean.muggleDuring = 3
         set hitembean.tortuaDuring = 3
@@ -2417,8 +2417,6 @@ struct hGlobals
             call hattrNatural.addFireOppose(mon,80.0,0)
             call hattrEffect.addBurnVal(mon,6+g_wave,0)
             call hattrEffect.addBurnDuring(mon,10.0,0)
-            call hattrEffect.addToxicVal(mon,5,0)
-            call hattrEffect.addToxicDuring(mon,10.0,0)
         endif
         if(uid == 'n04E')then // 毁灭炎尊
             call hattr.addAttackHuntType(mon,"firemetal",0)
@@ -2426,8 +2424,6 @@ struct hGlobals
             call hattrNatural.addFireOppose(mon,90.0,0)
             call hattrEffect.addBurnVal(mon,7+g_wave,0)
             call hattrEffect.addBurnDuring(mon,10.0,0)
-            call hattrEffect.addToxicVal(mon,4.0,0)
-            call hattrEffect.addToxicDuring(mon,10.0,0)
         elseif(uid == 'n04H')then // 赐死鹿
             call hattr.addAttackHuntType(mon,"dark",0)
             call hattrNatural.addDarkOppose(mon,30.0,0)

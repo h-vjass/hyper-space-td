@@ -791,6 +791,8 @@ struct hSet
 		local integer lv = GetHeroLevel(u)
 		local real diffLv = I2R(lv - hhero.getHeroPrevLevel(u))
 		call hattr.addLife(u,diffLv*20,0)
+		call hattr.addAttackPhysical(u,diffLv*5,0)
+		call hattr.addAttackMagic(u,diffLv*5,0)
 		call hattr.addPunish(u,diffLv*50,0)
 		if(uid == 'H00I')then //赤血
             call hattr.addHemophagia(u,diffLv*0.5,0)
@@ -1108,27 +1110,27 @@ struct hSet
 			return
 		endif
 		if(g_wave <= 5)then
-			set life = g_wave * (125 + g_diff * 75)
+			set life = g_wave * (120 + g_diff * 75)
 		elseif(g_wave < 10)then
 			set life = g_wave * (225 + g_diff * 150)
 		elseif(g_wave < 20)then
-			set life = g_wave * (300 + g_diff * 210)
+			set life = g_wave * (280 + g_diff * 200)
 		elseif(g_wave < 30)then
-			set life = g_wave * (450 + g_diff * 300)
+			set life = g_wave * (360 + g_diff * 250)
 		elseif(g_wave < 40)then
-			set life = g_wave * (600 + g_diff * 400)
+			set life = g_wave * (480 + g_diff * 300)
 		elseif(g_wave < 50)then
-			set life = g_wave * (750 + g_diff * 520)
+			set life = g_wave * (600 + g_diff * 350)
 		elseif(g_wave < 60)then
-			set life = g_wave * (800 + g_diff * 600)
+			set life = g_wave * (720 + g_diff * 400)
 		elseif(g_wave < 70)then
-			set life = g_wave * (1050 + g_diff * 750)
+			set life = g_wave * (840 + g_diff * 450)
 		elseif(g_wave < 80)then
-			set life = g_wave * (1200 + g_diff * 900)
+			set life = g_wave * (960 + g_diff * 500)
 		elseif(g_wave < 90)then
-			set life = g_wave * (1400 + g_diff * 1000)
+			set life = g_wave * (1080 + g_diff * 550)
 		else
-			set life = g_wave * (1800 + g_diff * 1500)
+			set life = g_wave * (1200 + g_diff * 650)
 		endif
 		set move = 100 + g_wave * 3 + g_diff * 15
 		set attack = g_wave * (4 + g_diff)
@@ -1465,7 +1467,7 @@ struct hSet
 	endmethod
 
 	private static method onSommonPoint takes nothing returns nothing
-		if(GetIssuedOrderId() == String2OrderIdBJ("move"))then
+		if(GetIssuedOrderId() == 851971 or GetIssuedOrderId() == 851986)then
 			call IssuePointOrderById( GetTriggerUnit(), 851983, GetUnitX(GetTriggerUnit()), GetUnitY(GetTriggerUnit()) )
 		endif
 	endmethod
