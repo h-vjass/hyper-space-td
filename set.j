@@ -1104,20 +1104,28 @@ struct hSet
 		if(hgroup.count(g_gp_mon) >= g_temp_mon_limit)then
 			return
 		endif
-		if(g_wave < 10)then
-			set life = g_wave * (150 + g_diff * 50)
+		if(g_wave <= 5)then
+			set life = g_wave * (125 + g_diff * 75)
+		elseif(g_wave < 10)then
+			set life = g_wave * (225 + g_diff * 150)
 		elseif(g_wave < 20)then
-			set life = g_wave * (180 + g_diff * 100)
+			set life = g_wave * (300 + g_diff * 210)
 		elseif(g_wave < 30)then
-			set life = g_wave * (220 + g_diff * 150)
-		elseif(g_wave < 50)then
-			set life = g_wave * (270 + g_diff * 200)
-		elseif(g_wave < 70)then
-			set life = g_wave * (350 + g_diff * 250)
-		elseif(g_wave < 90)then
 			set life = g_wave * (450 + g_diff * 300)
+		elseif(g_wave < 40)then
+			set life = g_wave * (600 + g_diff * 400)
+		elseif(g_wave < 50)then
+			set life = g_wave * (750 + g_diff * 520)
+		elseif(g_wave < 60)then
+			set life = g_wave * (800 + g_diff * 600)
+		elseif(g_wave < 70)then
+			set life = g_wave * (1050 + g_diff * 750)
+		elseif(g_wave < 80)then
+			set life = g_wave * (1200 + g_diff * 900)
+		elseif(g_wave < 90)then
+			set life = g_wave * (1400 + g_diff * 1000)
 		else
-			set life = g_wave * (600 + g_diff * 350)
+			set life = g_wave * (1800 + g_diff * 1500)
 		endif
 		set move = 100 + g_wave * 3 + g_diff * 15
 		set attack = g_wave * (4 + g_diff)
@@ -1231,12 +1239,12 @@ struct hSet
 				call GroupAddUnit(g_gp_boss,u)
 				call TriggerRegisterUnitEvent( bossDeadTg, u, EVENT_UNIT_DEATH )
 				call hattr.setLife(u, life ,0)
-				call hattr.setLifeBack(u, g_wave * 5 + g_diff * 20 ,0)
+				call hattr.setLifeBack(u, g_wave * 6 + g_diff * 35 ,0)
 				call hattr.addMana(u,1000*g_diff,0)
 				call hattr.addManaBack(u,30*g_diff,0)
 				call hattr.setDefend(u, (g_wave+g_diff)*4 ,0)
 				call hattr.addResistance(u,g_wave*0.4,0)
-				call hattr.setMove(u, 150 + g_wave*5 + g_diff*8 ,0)
+				call hattr.setMove(u, 210 + g_wave*3 + g_diff*10 ,0)
 				call hattr.setAttackPhysical(u, 40 + g_wave*(11 + g_diff*2)  ,0)
 				call hattr.setAttackMagic(u, 60 + g_wave*(12 + g_diff*2)  ,0)
 				call hattr.setAttackSpeed(u, g_wave * 3 + g_diff * 4 ,0)

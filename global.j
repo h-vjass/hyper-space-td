@@ -1376,6 +1376,7 @@ struct hGlobals
         local integer triggerUID = GetUnitTypeId(u)
 		local integer i = 0
 		set i = 1
+        call hattr.setMove(u,0,0)
 		loop
 			exitwhen i > g_summon_count
 				if(triggerUID == g_summon[i])then
@@ -2220,11 +2221,11 @@ struct hGlobals
             call GroupRemoveUnit(g_crazy_boss,triggerUnit)
             call UnitAddAbility(triggerUnit,'A05Q')
             call hmsg.style(hmsg.ttg2Unit(triggerUnit,"BOSS开始发狂！",8,"e04240",0,1.70,40.00),"scale",0,0.15)
-            call hattr.addLifeBack(triggerUnit,I2R(g_wave) * 0.006 * hattr.getLife(triggerUnit),9)
-            call hattr.addAttackPhysical(triggerUnit,I2R(g_wave) * 6,20)
-            call hattr.addAttackMagic(triggerUnit,I2R(g_wave) * 6,20)
-            call hattr.addAttackSpeed(triggerUnit,50 + I2R(g_wave) * 2,20)
-            call hattr.addMove(triggerUnit,125,0)
+            call hattr.addLifeBack(triggerUnit,I2R(g_wave) * 0.004 * hattr.getLife(triggerUnit),9)
+            call hattr.addAttackPhysical(triggerUnit,I2R(g_wave) * 5,20)
+            call hattr.addAttackMagic(triggerUnit,I2R(g_wave) * 5,20)
+            call hattr.addAttackSpeed(triggerUnit,100,0)
+            call hattr.addMove(triggerUnit,150,0)
             call hattr.addToughness(triggerUnit,I2R(g_wave) * 6,30)
         endif
         if(rand < 7)then
@@ -2298,7 +2299,8 @@ struct hGlobals
         call GroupAddUnit(g_crazy_boss,mon)
         if(uid == 'n046')then // 巨龙海龟
             call hattrNatural.addWaterOppose(mon,40.0,0)
-            call hattr.addHuntRebound(mon,30.0,0)
+            call hattr.addHuntRebound(mon,15.0,0)
+            call hattr.addDefend(mon,10,0)
         elseif(uid == 'n047')then // 岩石龙虾
             call hattrNatural.addWaterOppose(mon,50.0,0)
         elseif(uid == 'n05R')then // 剧毒龙虾
@@ -2310,13 +2312,14 @@ struct hGlobals
             call heffect.toUnit("war3mapImported\\eff_DarkSwirl.mdl",mon,"origin",0.60)
         elseif(uid == 'n049')then // 食人魔统领
             call hattr.addSplit(mon,15.0,0)
+            call hattr.addDefend(mon,15,0)
         elseif(uid == 'n04A')then // 冰魔法师
             call hattr.addAttackHuntType(mon,"ice",0)
             call hattrNatural.addIceOppose(mon,50.0,0)
             call hattrNatural.addThunderOppose(mon,25.0,0)
-            call hattrEffect.addLightningChainOdds(mon,30.0,0)
-            call hattrEffect.addLightningChainVal(mon,g_wave*50,0)
-            call hattrEffect.addLightningChainQty(mon,4,0)
+            call hattrEffect.addLightningChainOdds(mon,50.0,0)
+            call hattrEffect.addLightningChainVal(mon,g_wave*65,0)
+            call hattrEffect.addLightningChainQty(mon,3,0)
             call hattrEffect.addFreezeVal(mon,3.0,0)
             call hattrEffect.addFreezeDuring(mon,8.0,0)
             call hattrEffect.addSilentOdds(mon,15.0,0)
@@ -2348,10 +2351,11 @@ struct hGlobals
             call hattrEffect.addUnarmOdds(mon,16.0,0)
             call hattrEffect.addUnarmDuring(mon,3.0,0)
         elseif(uid == 'n04O')then // 人马可汗
+            call hattr.addLifeBack(mon,100,0)
             call hattr.addToughness(mon,200.0,0)
         elseif(uid == 'n04L')then // 疾风隐刺
             call hattr.addAttackHuntType(mon,"dark",0)
-            call hattrNatural.addDarkOppose(mon,30.0,0)
+            call hattrNatural.addDarkOppose(mon,50.0,0)
             call hattrEffect.addAttackSpeedVal(mon,10.0,0)
             call hattrEffect.addAttackSpeedDuring(mon,6.0,0)
             call hattrEffect.addKnockingVal(mon,2000.0,0)
@@ -2360,19 +2364,20 @@ struct hGlobals
             call hattrEffect.addViolenceDuring(mon,10.0,0)
         elseif(uid == 'n04P')then // 潮汐巨人
             call hattr.addAttackHuntType(mon,"water",0)
-            call hattrNatural.addWaterOppose(mon,50.0,0)
+            call hattrNatural.addWaterOppose(mon,70.0,0)
             call hattrEffect.addSwimOdds(mon,25.0,0)
             call hattrEffect.addSwimDuring(mon,1,0)
             call hattrEffect.addCrackFlyOdds(mon,5.0,0)
         elseif(uid == 'n04N')then // 灭却龙
             call hattr.addAttackHuntType(mon,"poison",0)
             call hattrNatural.addPoison(mon,25.0,0)
-            call hattrNatural.addPoisonOppose(mon,80.0,0)
+            call hattrNatural.addPoisonOppose(mon,60.0,0)
             call hattrEffect.addToxicVal(mon,25.0,0)
             call hattrEffect.addToxicDuring(mon,5.0,0)
             call hattrEffect.addCorrosionVal(mon,3.0,0)
             call hattrEffect.addCorrosionDuring(mon,10.0,0)
         elseif(uid == 'n04Q')then // 猎足蜘蛛
+            call hattr.addAttackHuntType(mon,"poison",0)
             call hattrNatural.addPoisonOppose(mon,30.0,0)
             call hattrNatural.subFireOppose(mon,10.0,0)
         elseif(uid == 'n04M')then // 白毛猛犸王
@@ -2385,20 +2390,22 @@ struct hGlobals
             call hattrEffect.addToxicVal(mon,35.0,0)
             call hattrEffect.addToxicDuring(mon,6.0,0)
         elseif(uid == 'n04D')then // 龙卵领主
+            call hattr.addAttackHuntType(mon,"thunderwater",0)
             call hattrNatural.addThunderOppose(mon,35.0,0)
             call hattr.addAttackPhysical(mon,200.0,0)
             call hattr.addAttackMagic(mon,200.0,0)
             call hattr.addKnocking(mon,10000.0,0)
-            call hattrEffect.addLightningChainOdds(mon,15.0,0)
-            call hattrEffect.addLightningChainVal(mon,g_wave*30.0,0)
-            call hattrEffect.addLightningChainQty(mon,6,0)
+            call hattrEffect.addLightningChainOdds(mon,45.0,0)
+            call hattrEffect.addLightningChainVal(mon,g_wave*55.0,0)
+            call hattrEffect.addLightningChainQty(mon,3,0)
         elseif(uid == 'n04I')then // 旋风女皇
+            call hattr.addAttackHuntType(mon,"wind",0)
             call hattrNatural.addWindOppose(mon,90.0,0)
             call hattr.addAttackSpeed(mon,100.0,0)
             call hattrEffect.addSwimOdds(mon,22.0,0)
             call hattrEffect.addSwimDuring(mon,0.5,0)
         elseif(uid == 'n04F')then // 斧帝
-            call hattr.addHuntRebound(mon,30.0,0)
+            call hattr.addHuntRebound(mon,25.0,0)
         elseif(uid == 'n04G')then // 深渊地狱火
             call hattr.addAttackHuntType(mon,"fire",0)
             call hattrNatural.addFireOppose(mon,80.0,0)
@@ -2440,7 +2447,7 @@ struct hGlobals
             call hattrEffect.addSwimOdds(mon,25.0,0)
             call hattrEffect.addSwimDuring(mon,0.5,0)
         elseif(uid == 'n05B')then // 钻石巨人
-            call hattr.addHuntRebound(mon,34.0,0)
+            call hattr.addHuntRebound(mon,20.0,0)
             call hattr.addAttackHuntType(mon,"soilmetal",0)
             call hattrNatural.addFireOppose(mon,70.0,0)
             call hattrNatural.addSoilOppose(mon,70.0,0)

@@ -237,7 +237,7 @@ library Main initializer init needs hJass
 				exitwhen(i>player_max_qty)
 					if(player_isvip[i] == true)then
 						call hplayer.addGold(players[i],R2I(I2R(dalaoWave)*10.8))
-						call hmsg.echoTo(players[i],"队伍里有大佬关卡能力达到了 "+I2S(R2I(I2R(dalaoWave)*10.8))+" ！,奖励体验包玩家的您 |cffffff80"+I2S(dalaoWave*10)+"|r 金币",0)
+						call hmsg.echoTo(players[i],"队伍里有大佬关卡能力达到了 "+I2S(dalaoWave)+" ！,奖励体验包玩家的您 |cffffff80"+I2S(R2I(I2R(dalaoWave)*10.8))+"|r 金币",0)
 					else
 						call hplayer.addGold(players[i],dalaoWave*10)
 						call hmsg.echoTo(players[i],"队伍里有大佬关卡能力达到了 "+I2S(dalaoWave)+" ！,奖励你 |cffffff80"+I2S(dalaoWave*10)+"|r 金币（体验包玩家+8%）",0)
