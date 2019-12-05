@@ -367,9 +367,9 @@ struct hSet
 					call GroupRemoveUnit( g , u )
 					if(hgroup.isIn(u,sk_group_fusuzhiguang) == false)then
 						call hgroup.in(u,sk_group_fusuzhiguang)
-						call hattr.addAttackHuntType(u,"light",15.0)
-						call heffect.toUnit("war3mapImported\\eff_HolyAurora.mdx",u,"origin",13.50)
-						set t = htime.setTimeout(15.00,function thistype.fusuzhiguang)
+						call hattr.addAttackHuntType(u,"light",45.0)
+						call heffect.toUnit("war3mapImported\\eff_HolyAurora.mdx",u,"origin",43.50)
+						set t = htime.setTimeout(45.00,function thistype.fusuzhiguang)
 						call htime.setUnit(t,1,u)
 					endif
 					set u = null
@@ -483,8 +483,7 @@ struct hSet
 			call hattr.addAttackSpeed(hevent.getTargetUnit(),hplayer.getTotalGoldCost(p) * 0.0001,10)
 		elseif(skillid == 'A07F')then // 炼金 - 看透生德
 			call hplayer.subGoldRatio(GetOwningPlayer(triggerUnit),15.0,50.00)
-			call hplayer.addExpRatio(GetOwningPlayer(triggerUnit),30.0,50.00)
-			call hplayer.addSellRatio(GetOwningPlayer(triggerUnit),20.0,50.00)
+			call hplayer.addExpRatio(GetOwningPlayer(triggerUnit),100.0,50.00)
 		endif
 		if(skillid == 'A0AE')then // 火焰巨魔 - 炎炮
 			set loc = GetSpellTargetLoc()
@@ -975,7 +974,7 @@ struct hSet
 		endif
 		if(uid == 'H00R')then //炼金
 			call hattr.addAttackHuntType(u,"metal",0)
-			call hplayer.addGoldRatio(GetOwningPlayer(u),25,0)
+			call hplayer.addGoldRatio(GetOwningPlayer(u),35,0)
 		endif
 		set u = null
 		set t = null
@@ -1054,7 +1053,6 @@ struct hSet
         local real x = GetUnitX(u)
         local real y = GetUnitY(u)
         local integer uid = GetUnitTypeId(u)
-		call hGlobals.enemyDeadDrop(u)
 		if(g_gp_mon != null)then
 			call GroupRemoveUnit(g_gp_mon,u)
 		endif
@@ -1109,17 +1107,17 @@ struct hSet
 		if(g_wave < 10)then
 			set life = g_wave * (150 + g_diff * 50)
 		elseif(g_wave < 20)then
-			set life = g_wave * (165 + g_diff * 65)
+			set life = g_wave * (180 + g_diff * 100)
 		elseif(g_wave < 30)then
-			set life = g_wave * (180 + g_diff * 80)
+			set life = g_wave * (220 + g_diff * 150)
 		elseif(g_wave < 50)then
-			set life = g_wave * (250 + g_diff * 100)
+			set life = g_wave * (270 + g_diff * 200)
 		elseif(g_wave < 70)then
-			set life = g_wave * (300 + g_diff * 130)
+			set life = g_wave * (350 + g_diff * 250)
 		elseif(g_wave < 90)then
-			set life = g_wave * (350 + g_diff * 160)
+			set life = g_wave * (450 + g_diff * 300)
 		else
-			set life = g_wave * (475 + g_diff * 250)
+			set life = g_wave * (600 + g_diff * 350)
 		endif
 		set move = 100 + g_wave * 3 + g_diff * 15
 		set attack = g_wave * (4 + g_diff)
@@ -1203,12 +1201,14 @@ struct hSet
 		local integer i = 0
 		local real life = 0
 		call htime.delTimer(t)
-		if(g_wave < 20)then
+		if(g_wave < 15)then
 			set life = g_wave * (7500 + 2500 * g_diff)
-		elseif(g_wave < 40)then
-			set life = g_wave * (9000 + 5000 * g_diff)
+		elseif(g_wave < 30)then
+			set life = g_wave * (8000 + 5000 * g_diff)
+		elseif(g_wave < 45)then
+			set life = g_wave * (10000 + 6500 * g_diff)
 		elseif(g_wave < 60)then
-			set life = g_wave * (13000 + 7500 * g_diff)
+			set life = g_wave * (13000 + 8000 * g_diff)
 		elseif(g_wave < 80)then
 			set life = g_wave * (17000 + 11000 * g_diff)
 		elseif(g_wave < g_max_wave)then

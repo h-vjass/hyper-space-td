@@ -232,14 +232,15 @@ library Main initializer init needs hJass
 			set i=i+1
 		endloop
 		if(dalaoWave > 0)then
-			call hmsg.echo("队伍里有大佬关卡能力达到了 "+I2S(dalaoWave)+" ！,奖励全员 |cffffff80"+I2S(dalaoWave*10)+"|r 金币（体验包玩家+8%）")
 			set i = 1
 			loop
 				exitwhen(i>player_max_qty)
 					if(player_isvip[i] == true)then
 						call hplayer.addGold(players[i],R2I(I2R(dalaoWave)*10.8))
+						call hmsg.echoTo(players[i],"队伍里有大佬关卡能力达到了 "+I2S(R2I(I2R(dalaoWave)*10.8))+" ！,奖励体验包玩家的您 |cffffff80"+I2S(dalaoWave*10)+"|r 金币",0)
 					else
 						call hplayer.addGold(players[i],dalaoWave*10)
+						call hmsg.echoTo(players[i],"队伍里有大佬关卡能力达到了 "+I2S(dalaoWave)+" ！,奖励你 |cffffff80"+I2S(dalaoWave*10)+"|r 金币（体验包玩家+8%）",0)
 					endif
 				set i=i+1
 			endloop
@@ -543,6 +544,8 @@ library Main initializer init needs hJass
 			exitwhen i<=0
 				if(player_isvip[i] == true and hplayer.getStatus(players[i])==hplayer.default_status_gaming)then // vip才有
 					set u = hunit.createUnitXY(players[i],'n04Z',GetLocationX(Loc_JiuGuanBorn),GetLocationY(Loc_JiuGuanBorn))
+					call UnitAddItemByIdSwapped( vipItempools[GetRandomInt(1,vipItempools_count)], u )
+					call UnitAddItemByIdSwapped( vipItempools[GetRandomInt(1,vipItempools_count)], u )
 					set tg = CreateTrigger()
 					call TriggerRegisterUnitEvent( tg, u, EVENT_UNIT_SPELL_EFFECT )
 					call TriggerAddAction(tg, function onBridSkillHappen)

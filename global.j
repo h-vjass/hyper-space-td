@@ -159,6 +159,10 @@ group sk_group_fusuzhiguang = null
 // 排行榜
 leaderboard g_leaderboard = null
 
+// VIP
+integer vipItempools_count = 0
+integer array vipItempools
+
 endglobals
 
 struct hGlobals
@@ -2139,10 +2143,6 @@ struct hGlobals
 		call hitembean.destroy()
     endmethod
 
-    public static method enemyDeadDrop takes unit mon returns nothing
-        local integer uid = GetUnitTypeId(mon)
-    endmethod
-
     public static method onBossSkillHappen takes nothing returns nothing
 		local unit triggerUnit = hevent.getTriggerUnit()
 		local integer skillid = hevent.getTriggerSkill()
@@ -2495,7 +2495,7 @@ struct hGlobals
             return
         endif
         set i = GetUnitUserData(u) + 1
-        if(i >= (6-g_diff))then
+        if(i >= 5)then
             call SetUnitUserData(u,0)
             if(lv == 4)then
                 call IssuePointOrder( u, "attack", GetLocationX(Loc_Ring), GetLocationY(Loc_Ring) )
@@ -2941,7 +2941,19 @@ struct hGlobals
         call thistype.registerSummonAbility('o02G','A09Z') // SSS 电气 - 哔哩哔哩
         call thistype.registerSummonAbility('o02J','A057') // SSS 娜迦女王 - 腐蚀之液
         call thistype.registerSummonAbility('o02O','A0A0') // SSS 圣人·阿德莱 - 天启
-        
+
+        // vip 物品
+        set vipItempools_count = 10
+        set vipItempools[1] = 'I00Z'
+        set vipItempools[2] = 'I02B'
+        set vipItempools[3] = 'I015'
+        set vipItempools[4] = 'I01J'
+        set vipItempools[5] = 'I01M'
+        set vipItempools[6] = 'I02D'
+        set vipItempools[7] = 'I028'
+        set vipItempools[8] = 'I01R'
+        set vipItempools[9] = 'I019'
+        set vipItempools[10] = 'I01L'
 
         // 瞬时物品
         set momentItems_count = 6
