@@ -1062,7 +1062,7 @@ struct hSet
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
 		set exp = R2I(I2R(g_wave) * (20+g_diff*15) * g_game_speed) + 10 * player_current_qty
-		set gold = R2I(I2R(g_wave) * 2.8 * g_game_speed) * player_current_qty + g_diff * 3
+		set gold = R2I(I2R(g_wave) * 2.8 * g_game_speed) * player_current_qty + g_diff * 2
 		if(killer != null)then
 			call haward.forUnit(killer,0,gold,0)
 			call haward.forGroup(killer,exp,0,0)
@@ -1106,14 +1106,20 @@ struct hSet
 		if(hgroup.count(g_gp_mon) >= g_temp_mon_limit)then
 			return
 		endif
-		if(g_wave < 30)then
+		if(g_wave < 10)then
 			set life = g_wave * (150 + g_diff * 50)
-		elseif(g_wave < 60)then
+		elseif(g_wave < 20)then
+			set life = g_wave * (165 + g_diff * 65)
+		elseif(g_wave < 30)then
+			set life = g_wave * (180 + g_diff * 80)
+		elseif(g_wave < 50)then
 			set life = g_wave * (250 + g_diff * 100)
+		elseif(g_wave < 70)then
+			set life = g_wave * (300 + g_diff * 130)
 		elseif(g_wave < 90)then
-			set life = g_wave * (350 + g_diff * 150)
+			set life = g_wave * (350 + g_diff * 160)
 		else
-			set life = g_wave * (450 + g_diff * 225)
+			set life = g_wave * (475 + g_diff * 250)
 		endif
 		set move = 100 + g_wave * 3 + g_diff * 15
 		set attack = g_wave * (4 + g_diff)
@@ -1155,6 +1161,9 @@ struct hSet
 		if(g_gp_mon != null)then
 			call GroupRemoveUnit(g_gp_mon,u)
 		endif
+		if(g_gp_boss != null)then
+			call GroupRemoveUnit(g_gp_boss,u)
+		endif
 		if(g_gp_attack != null and IsUnitInGroup(u, g_gp_attack) == true)then
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
@@ -1177,7 +1186,7 @@ struct hSet
 			set i = i+1
 		endloop
 		call hunit.del(u,5)
-		if(g_wave < g_max_wave)then
+		if(g_wave < g_max_wave and hgroup.count(g_gp_boss) < 1)then
 			call hmedia.bgm(musicBattle)
 		endif
 		set u = null
@@ -1194,16 +1203,18 @@ struct hSet
 		local integer i = 0
 		local real life = 0
 		call htime.delTimer(t)
-		if(g_wave < 25)then
+		if(g_wave < 20)then
 			set life = g_wave * (7500 + 2500 * g_diff)
-		elseif(g_wave < 50)then
-			set life = g_wave * (10000 + 5000 * g_diff)
-		elseif(g_wave < 75)then
-			set life = g_wave * (15000 + 7500 * g_diff)
+		elseif(g_wave < 40)then
+			set life = g_wave * (9000 + 5000 * g_diff)
+		elseif(g_wave < 60)then
+			set life = g_wave * (13000 + 7500 * g_diff)
+		elseif(g_wave < 80)then
+			set life = g_wave * (17000 + 11000 * g_diff)
 		elseif(g_wave < g_max_wave)then
-			set life = g_wave * (20000 + 15000 * g_diff)
+			set life = g_wave * (22000 + 16000 * g_diff)
 		else
-			set life = g_wave * (30000 + 20000 * g_diff)
+			set life = g_wave * (33000 + 21000 * g_diff)
 		endif
 		set last_boss_uid = g_boss[bossIndex]
 		//
@@ -1217,6 +1228,7 @@ struct hSet
 				set loc = Location(spaceDegX[randIndex],spaceDegY[randIndex])
 				set u = henemy.createUnit(last_boss_uid,loc)
 				call GroupAddUnit(g_gp_mon,u)
+				call GroupAddUnit(g_gp_boss,u)
 				call TriggerRegisterUnitEvent( bossDeadTg, u, EVENT_UNIT_DEATH )
 				call hattr.setLife(u, life ,0)
 				call hattr.setLifeBack(u, g_wave * 5 + g_diff * 20 ,0)

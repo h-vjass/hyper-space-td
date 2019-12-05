@@ -88,6 +88,7 @@ integer array g_summon_sss
 
 integer g_gp_max = 30
 group g_gp_mon = CreateGroup()
+group g_gp_boss = CreateGroup()
 group g_gp_attack = CreateGroup()
 group g_gp_summon = CreateGroup()
 real g_ring_break_up = 0
@@ -2063,7 +2064,7 @@ struct hGlobals
 		call hitembean.destroy()
         // 合成
         call hitemMix.newFormula('I01G',1) // SS 恶魔的灵魂
-		call hitemMix.addFlag('I01G','I00Z',1) // D 无用的水晶球
+		call hitemMix.addFlag('I01G','I01I',1) // D 无用的水晶球
         call hitemMix.addFlag('I01G','I00Y',1) // S 恶魔的紫色血浆
     endmethod
 
