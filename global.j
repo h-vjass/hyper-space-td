@@ -17,7 +17,7 @@ real REBORN_SUMMON = 90
 integer g_diff = 1
 string array g_diff_label
 timer g_timer_wave = null
-integer g_temp_mon_limit = 250
+integer g_temp_mon_limit = 200
 integer g_max_wave = 100
 integer g_wave = 0
 integer g_first_wave = 0
@@ -533,7 +533,7 @@ struct hGlobals
             call hattrEffect.addBombRange(u,300,0)
             call hattrEffect.setBombModel(u,"war3mapImported\\eff_NewGroundEX.mdl")
         elseif(abid == 'A07U')then // S 邪恶科多骑手 - 邪殇
-            call hattrNatural.addGhost(u,300.0,0)
+            call hattrNatural.addGhost(u,500.0,0)
         elseif(abid == 'A058')then // S 奇美拉 - 龙息
             call hattr.addAttackHuntType(u,"fire",0)
             call hattr.addAttackHuntType(u,"ice",0)
@@ -605,7 +605,7 @@ struct hGlobals
             // 攻击事件实现
         elseif(abid == 'A09V')then // SS 逸风 - 致命一击
             call hattr.addAttackHuntType(u,"wind",0)
-            call hattr.addHuntAmplitude(u,100,0)
+            call hattr.addHuntAmplitude(u,50,0)
         elseif(abid == 'A09W')then // SS 山丘之王 - 雷霆之怒
             // 攻击事件实现
         endif
@@ -829,7 +829,7 @@ struct hGlobals
                     call RemoveUnit(triggerUnit)
                     call RemoveUnit(targetUnit)
                 else
-                    set ttg = hmsg.ttg2Unit(u,"无法升级",7,"",0,1.70,60.00)
+                    set ttg = hmsg.ttg2Unit(triggerUnit,"无法升级",7,"",0,1.70,60.00)
                     call hmsg.style(ttg,"scale",0,0.1)
                     set ttg = null
                 endif
@@ -914,7 +914,7 @@ struct hGlobals
 				call UnitAddAbility(triggerUnit,'A08S')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A08S' )
 			elseif(GetUnitAbilityLevel(triggerUnit,'A08S') > 0 and GetRandomInt(1,20) == 1)then // LV8
-				set percent = 15.00
+				set percent = 16.00
 				call UnitRemoveAbility(triggerUnit,'A08S')
 				call UnitAddAbility(triggerUnit,'A090')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A090' )
@@ -922,40 +922,40 @@ struct hGlobals
 			endif
 			if(percent > 0.00)then
 				if(GetUnitAbilityLevel(triggerUnit,'A03U') > 0)then //E
-					call hattr.addLife(triggerUnit,2*percent,0)
+					call hattr.addLife(triggerUnit,3*percent,0)
 					call hattr.addAttackPhysical(triggerUnit,0.8*percent,0)
 				elseif(GetUnitAbilityLevel(triggerUnit,'A064') > 0)then //D
-					call hattr.addLife(triggerUnit,4*percent,0)
+					call hattr.addLife(triggerUnit,5*percent,0)
 					call hattr.addAttackPhysical(triggerUnit,1.4*percent,0)
 				elseif(GetUnitAbilityLevel(triggerUnit,'A066') > 0)then //C
-					call hattr.addLife(triggerUnit,7*percent,0)
+					call hattr.addLife(triggerUnit,8*percent,0)
 					call hattr.addAttackSpeed(triggerUnit,0.33*percent,0)
 					call hattr.addAttackPhysical(triggerUnit,1.6*percent,0)
 				elseif(GetUnitAbilityLevel(triggerUnit,'A067') > 0)then //B
-					call hattr.addLife(triggerUnit,11*percent,0)
+					call hattr.addLife(triggerUnit,13*percent,0)
 					call hattr.addAttackSpeed(triggerUnit,0.67*percent,0)
 					call hattr.addAttackPhysical(triggerUnit,1.8*percent,0)
 					call hattr.addAttackMagic(triggerUnit,1.8*percent,0)
 				elseif(GetUnitAbilityLevel(triggerUnit,'A069') > 0)then //A
-					call hattr.addLife(triggerUnit,16*percent,0)
+					call hattr.addLife(triggerUnit,18*percent,0)
 					call hattr.addAttackSpeed(triggerUnit,1.00*percent,0)
 					call hattr.addAttackPhysical(triggerUnit,3.4*percent,0)
 					call hattr.addAttackMagic(triggerUnit,3.4*percent,0)
 				elseif(GetUnitAbilityLevel(triggerUnit,'A068') > 0)then //S
-					call hattr.addLife(triggerUnit,22*percent,0)
+					call hattr.addLife(triggerUnit,25*percent,0)
 					call hattr.addAttackSpeed(triggerUnit,1.33*percent,0)
 					call hattr.addAttackPhysical(triggerUnit,6.4*percent,0)
 					call hattr.addAttackMagic(triggerUnit,6.4*percent,0)
 				elseif(GetUnitAbilityLevel(triggerUnit,'A06A') > 0)then //SS
-					call hattr.addLife(triggerUnit,30*percent,0)
+					call hattr.addLife(triggerUnit,36*percent,0)
 					call hattr.addAttackSpeed(triggerUnit,1.67*percent,0)
 					call hattr.addAttackPhysical(triggerUnit,12.2*percent,0)
 					call hattr.addAttackMagic(triggerUnit,12.2*percent,0)
 				elseif(GetUnitAbilityLevel(triggerUnit,'A06B') > 0)then //SSS
-					call hattr.addLife(triggerUnit,40*percent,0)
+					call hattr.addLife(triggerUnit,48*percent,0)
 					call hattr.addAttackSpeed(triggerUnit,2.00*percent,0)
-					call hattr.addAttackPhysical(triggerUnit,24.0*percent,0)
-					call hattr.addAttackMagic(triggerUnit,24.0*percent,0)
+					call hattr.addAttackPhysical(triggerUnit,25.0*percent,0)
+					call hattr.addAttackMagic(triggerUnit,25.0*percent,0)
 				endif
 			endif
 		endif
@@ -971,9 +971,9 @@ struct hGlobals
             // S 飞行机器 - 机关枪
             elseif(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A09D') >= 1)then
                 call hunit.subMana(triggerUnit,50)
-                call hattr.addAttackSpeed(triggerUnit,200,6)
-                call hattr.addKnocking(triggerUnit,2000,6)
-                call heffect.toUnit("Abilities\\Spells\\Other\\BreathOfFire\\BreathOfFireDamage.mdl",triggerUnit,"weapon",6.00)
+                call hattr.addAttackSpeed(triggerUnit,75,4)
+                call hattr.addKnocking(triggerUnit,1000,4)
+                call heffect.toUnit("Abilities\\Spells\\Other\\BreathOfFire\\BreathOfFireDamage.mdl",triggerUnit,"weapon",4.00)
             endif
         endif
         // 1/9几率
@@ -1202,8 +1202,8 @@ struct hGlobals
                     exitwhen(IsUnitGroupEmptyBJ(g) == true)
                         set u = FirstOfGroup(g)
                         call GroupRemoveUnit(g,u)
-                        call hattr.addAttackSpeed(u,30,10)
-                        call hattr.addLifeBack(u,65,10)
+                        call hattr.addAttackSpeed(u,35,5)
+                        call hattr.addLifeBack(u,75,5)
                         call heffect.toUnit("war3mapImported\\eff_different_landing.mdl",u,"origin",1.00)
                         set u = null
                 endloop
@@ -1473,12 +1473,14 @@ struct hGlobals
         local unit tempu = htime.getUnit(t,7)
         local unit u = null
         call htime.delTimer(t)
-        set u = hunit.createUnitXY(p,uid,x,y)
-        call initSummon(u)
-        call thistype.initSummonAbility(u,tempu,null)
-        call heffect.toUnit("Abilities\\Spells\\Other\\Awaken\\Awaken.mdl",u,"origin",0.80)
-        call hitem.copy(tempu,u)
-        call hunit.del(tempu,0)
+        if(g_mon_isrunning == true)then
+            set u = hunit.createUnitXY(p,uid,x,y)
+            call initSummon(u)
+            call thistype.initSummonAbility(u,tempu,null)
+            call heffect.toUnit("Abilities\\Spells\\Other\\Awaken\\Awaken.mdl",u,"origin",0.80)
+            call hitem.copy(tempu,u)
+            call hunit.del(tempu,0)
+        endif
         set t = null
         set p = null
         set tempu = null
@@ -1497,75 +1499,77 @@ struct hGlobals
         local timer t = null
         local unit tempu = null
         local unit deathShadow = null
-        // 死亡时间计算
-        set rebornTime = 10.00
-        if(GetUnitAbilityLevel(u,'A09A') > 0)then // LV0
-            set rebornTime = rebornTime + 1
-        elseif(GetUnitAbilityLevel(u,'A03W') > 0)then // LV1
-            set rebornTime = rebornTime + 2
-        elseif(GetUnitAbilityLevel(u,'A044') > 0)then // LV2
-            set rebornTime = rebornTime + 3
-        elseif(GetUnitAbilityLevel(u,'A07Z') > 0)then // LV3
-            set rebornTime = rebornTime + 4
-        elseif(GetUnitAbilityLevel(u,'A088') > 0)then // LV4
-            set rebornTime = rebornTime + 5
-        elseif(GetUnitAbilityLevel(u,'A08B') > 0)then // LV5
-            set rebornTime = rebornTime + 6
-        elseif(GetUnitAbilityLevel(u,'A08C') > 0)then // LV6
-            set rebornTime = rebornTime + 7
-        elseif(GetUnitAbilityLevel(u,'A08L') > 0)then // LV7
-            set rebornTime = rebornTime + 8
-        elseif(GetUnitAbilityLevel(u,'A08S') > 0)then // LV8
-            set rebornTime = rebornTime + 9
-        elseif(GetUnitAbilityLevel(u,'A090') > 0)then // LV9
-            set rebornTime = rebornTime + 10
+        if(g_mon_isrunning == true)then
+            // 死亡时间计算
+            set rebornTime = 10.00
+            if(GetUnitAbilityLevel(u,'A09A') > 0)then // LV0
+                set rebornTime = rebornTime + 1
+            elseif(GetUnitAbilityLevel(u,'A03W') > 0)then // LV1
+                set rebornTime = rebornTime + 2
+            elseif(GetUnitAbilityLevel(u,'A044') > 0)then // LV2
+                set rebornTime = rebornTime + 3
+            elseif(GetUnitAbilityLevel(u,'A07Z') > 0)then // LV3
+                set rebornTime = rebornTime + 4
+            elseif(GetUnitAbilityLevel(u,'A088') > 0)then // LV4
+                set rebornTime = rebornTime + 5
+            elseif(GetUnitAbilityLevel(u,'A08B') > 0)then // LV5
+                set rebornTime = rebornTime + 6
+            elseif(GetUnitAbilityLevel(u,'A08C') > 0)then // LV6
+                set rebornTime = rebornTime + 7
+            elseif(GetUnitAbilityLevel(u,'A08L') > 0)then // LV7
+                set rebornTime = rebornTime + 8
+            elseif(GetUnitAbilityLevel(u,'A08S') > 0)then // LV8
+                set rebornTime = rebornTime + 9
+            elseif(GetUnitAbilityLevel(u,'A090') > 0)then // LV9
+                set rebornTime = rebornTime + 10
+            endif
+            if("SSS" == LoadStr(hash_unit,uid,0))then
+                set rebornTime = rebornTime + 40
+            elseif("SS" == LoadStr(hash_unit,uid,0))then
+                set rebornTime = rebornTime + 30
+            elseif("S" == LoadStr(hash_unit,uid,0))then
+                set rebornTime = rebornTime + 20
+            elseif("A" == LoadStr(hash_unit,uid,0))then
+                set rebornTime = rebornTime + 10
+            elseif("N" == LoadStr(hash_unit,uid,0))then
+                set rebornTime = rebornTime + 25
+            endif
+            // 假死亡
+            if(hgroup.isIn(u,sk_group_fusuzhiguang) == true)then
+                set rebornTime = 0
+                set isDrop = false
+                call hunit.rebornAtXY(u,x,y,0,0.00)
+                set killer = null
+                set p = null
+                set name = null
+                return
+            endif
+            // 正常死亡
+            if(GetUnitAbilityLevel(u,'A08O') >= 1)then // 火凤凰 - 涅磐
+                set rebornTime = rebornTime * 0.5
+            endif
+            if(his.ownItem(u,'I00H'))then // 拥有 SSS 时空之轮精粹
+                set rebornTime = rebornTime * 0.25
+            endif
+            set tempu = hunit.createUnitXYFacing(p,u_dead_timering[GetUnitFoodUsed(u)],x,y,270)
+            call SetUnitVertexColor(tempu, 255, 255, 255, 200)
+            call hunit.shadow(uid,x+15,y+15,270,50,0,75,120,rebornTime)
+            if(rebornTime>0)then
+                call SetUnitTimeScalePercent(tempu, 1000.0 / rebornTime)
+            endif
+            call hitem.copy(u,tempu)
+            call thistype.initSummonAbility(tempu,u,null)
+            call GroupRemoveUnit(g_gp_summon, u)
+            call hunit.del(u,0)
+            set t = htime.setTimeout(rebornTime,function thistype.deadSummonCall)
+            call htime.setInteger(t,1,uid)
+            call htime.setInteger(t,2,lv)
+            call htime.setReal(t,3,x)
+            call htime.setReal(t,4,y)
+            call htime.setBoolean(t,5,isDrop)
+            call htime.setPlayer(t,6,p)
+            call htime.setUnit(t,7,tempu)
         endif
-        if("SSS" == LoadStr(hash_unit,uid,0))then
-            set rebornTime = rebornTime + 40
-        elseif("SS" == LoadStr(hash_unit,uid,0))then
-            set rebornTime = rebornTime + 30
-        elseif("S" == LoadStr(hash_unit,uid,0))then
-            set rebornTime = rebornTime + 20
-        elseif("A" == LoadStr(hash_unit,uid,0))then
-            set rebornTime = rebornTime + 10
-        elseif("N" == LoadStr(hash_unit,uid,0))then
-            set rebornTime = rebornTime + 25
-        endif
-        // 假死亡
-		if(hgroup.isIn(u,sk_group_fusuzhiguang) == true)then
-			set rebornTime = 0
-            set isDrop = false
-            call hunit.rebornAtXY(u,x,y,0,0.00)
-            set killer = null
-            set p = null
-            set name = null
-            return
-        endif
-        // 正常死亡
-        if(GetUnitAbilityLevel(u,'A08O') >= 1)then // 火凤凰 - 涅磐
-            set rebornTime = rebornTime * 0.5
-        endif
-        if(his.ownItem(u,'I00H'))then // 拥有 SSS 时空之轮精粹
-            set rebornTime = rebornTime * 0.5
-        endif
-        set tempu = hunit.createUnitXYFacing(p,u_dead_timering[GetUnitFoodUsed(u)],x,y,270)
-        call SetUnitVertexColor(tempu, 255, 255, 255, 200)
-        call hunit.shadow(uid,x+15,y+15,270,50,0,75,120,rebornTime)
-        if(rebornTime>0)then
-            call SetUnitTimeScalePercent(tempu, 1000.0 / rebornTime)
-        endif
-        call hitem.copy(u,tempu)
-        call thistype.initSummonAbility(tempu,u,null)
-        call GroupRemoveUnit(g_gp_summon, u)
-        call hunit.del(u,0)
-        set t = htime.setTimeout(rebornTime,function thistype.deadSummonCall)
-        call htime.setInteger(t,1,uid)
-        call htime.setInteger(t,2,lv)
-        call htime.setReal(t,3,x)
-        call htime.setReal(t,4,y)
-        call htime.setBoolean(t,5,isDrop)
-        call htime.setPlayer(t,6,p)
-        call htime.setUnit(t,7,tempu)
         set killer = null
         set p = null
         set name = null
@@ -1598,7 +1602,7 @@ struct hGlobals
         set hitembean = hItemBean.create() // N 时空之轮碎片
 		set hitembean.item_id = 'I001'
 		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 99
+		set hitembean.item_overlay = 9
 		call hitem.format(hitembean)
 		call hitembean.destroy()
         //--------------------
@@ -1610,7 +1614,7 @@ struct hGlobals
 		call hitembean.destroy()
         // mix
         call hitemMix.newFormula('I00H',1) // 时空之轮精粹
-		call hitemMix.addFlag('I00H','I001',99) // 时空之轮碎片
+		call hitemMix.addFlag('I00H','I001',9) // 时空之轮碎片
     endmethod
 
     //[商店]杂货
@@ -1747,8 +1751,8 @@ struct hGlobals
         set hitembean = hItemBean.create() // C 生命护身符
 		set hitembean.item_id = 'I016'
 		set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 1
-		set hitembean.life = 1200
+		set hitembean.item_overlay = 3
+		set hitembean.life = 1000
 		call hitem.format(hitembean)
 		call hitembean.destroy()
         //--------------------
@@ -2021,7 +2025,7 @@ struct hGlobals
         set hitembean.attackHuntType = "ghost"
 		set hitembean.ghost = 70
         set hitembean.dark = 50
-        set hitembean.corrosionVal = 10
+        set hitembean.corrosionVal = 20
         set hitembean.corrosionDuring = 3
 		call hitem.format(hitembean)
 		call hitembean.destroy()
@@ -2059,10 +2063,10 @@ struct hGlobals
 		set hitembean.item_id = 'I01B'
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-		set hitembean.thunder = 115
+		set hitembean.thunder = 120
         set hitembean.lightningChainOdds = 50
         set hitembean.lightningChainQty = 3
-        set hitembean.lightningChainVal = 2000
+        set hitembean.lightningChainVal = 7500
 		call hitem.format(hitembean)
 		call hitembean.destroy()
         // --------------------------------------
@@ -2087,7 +2091,7 @@ struct hGlobals
 		set hitembean.item_id = 'I01O'
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-		set hitembean.huntRebound = 150
+		set hitembean.huntRebound = 200
         set hitembean.huntAmplitude = 20
 		call hitem.format(hitembean)
 		call hitembean.destroy()
@@ -2097,7 +2101,6 @@ struct hGlobals
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
 		set hitembean.wind = 200
-		set hitembean.attackPhysical = 2000
 		set hitembean.avoid = 30
 		call hitem.format(hitembean)
 		call hitembean.destroy()
@@ -2115,8 +2118,8 @@ struct hGlobals
 		set hitembean = hItemBean.create() // SSS 生命宝珠
 		set hitembean.item_id = 'I01W'
         set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 1
-		set hitembean.life = 20000
+		set hitembean.item_overlay = 9
+		set hitembean.life = 10000
         call hitem.format(hitembean)
 		call hitembean.destroy()
         // --------------------------------------
@@ -2143,9 +2146,9 @@ struct hGlobals
         set hitembean = hItemBean.create() // SSS 光辉刀锋
 		set hitembean.item_id = 'I02E'
         set hitembean.item_type = HITEM_TYPE_FOREVER
-		set hitembean.item_overlay = 1
-        set hitembean.attackPhysical = 5500
-		set hitembean.attackMagic = 5500
+		set hitembean.item_overlay = 9
+        set hitembean.attackPhysical = 5000
+		set hitembean.attackMagic = 5000
         call hitem.format(hitembean)
 		call hitembean.destroy()
     endmethod
@@ -2775,7 +2778,7 @@ struct hGlobals
         
         call thistype.registerSummon('o009',false,"N",1500,1000,    100,10,20,     0,0,0.00) // 帐篷
         call thistype.registerSummon('o00A',true,"N",3000,4000,     100,10,30,     0,0,0.00) // 农场
-        call thistype.registerSummon('o00M',true,"N",3000,3000,     100,10,30,     250,0,0.80) // 地穴
+        call thistype.registerSummon('o00M',true,"N",3000,3000,     100,10,30,     750,0,0.80) // 地穴
         call thistype.registerSummon('o01S',true,"N",3000,3000,     100,10,30,     0,0,0.00) // 月亮井
 
         call thistype.registerSummon('o00J',false,"D",500,260,      200,3,0,      20,20,1.95) // 小精灵

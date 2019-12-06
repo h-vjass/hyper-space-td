@@ -384,6 +384,7 @@ library Main initializer init needs hJass
 		local real stopX = 1540.00
 		local real stopY = 1400.00
 		local trigger tg = null
+		local boolean hasVip = false
 		// bgm stop
 		call hmedia.bgmStop()
 		// 死亡轮
@@ -401,12 +402,15 @@ library Main initializer init needs hJass
 				if(DzAPI_Map_HasMallItem(players[i], "FGA") == true)then
 					set player_isvip[i] = true
 					set giftTxt = "永久"
+					set hasVip = true
 				elseif(DzAPI_Map_HasMallItem(players[i], "FG7") == true)then
 					set player_isvip[i] = true
 					set giftTxt = "7天"
+					set hasVip = true
 				elseif(DzAPI_Map_HasMallItem(players[i], "FG3") == true)then
 					set player_isvip[i] = true
 					set giftTxt = "3天"
+					set hasVip = true
 				else
 					set player_isvip[i] = false
 				endif
@@ -418,7 +422,7 @@ library Main initializer init needs hJass
 					endif
 				endif
 				call hplayer.setLumberRatio(players[i],50.0+50.0*player_current_qty,0)
-				call hplayer.setExpRatio(players[i],75.0+25.0*player_current_qty,0)
+				call hplayer.setExpRatio(players[i],50.0+50.0*player_current_qty,0)
 				if(player_isvip[i] == true)then
 					call hplayer.setGold(players[i],2500)
 					call hplayer.setLumber(players[i],0)
@@ -553,6 +557,18 @@ library Main initializer init needs hJass
 				endif
 			set i=i-1
 		endloop
+		// 时空碎片
+		if(hasVip)then
+			set i = 9
+			loop
+				exitwhen i<=0
+					set hxy.x = GetLocationX(Loc_Ring)
+					set hxy.y = GetLocationY(Loc_Ring)
+					set hxy = hlogic.polarProjection(hxy,GetRandomReal(2800,5000),GetRandomReal(145,395))
+					call CreateItem( 'I001', hxy.x, hxy.y )
+				set i=i-1
+			endloop
+		endif
 		// clear
 		set u = null
 		set t = null
