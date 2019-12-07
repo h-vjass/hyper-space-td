@@ -1165,6 +1165,7 @@ struct hSet
 	private static method onBossDead takes nothing returns nothing
 		local unit u = GetTriggerUnit()
 		local unit killer = hevent.getLastDamageUnit(u)
+		local integer uid = GetUnitTypeId(u)
 		local integer exp = 0
 		local integer gold = 0
 		local integer i = 0
@@ -1202,6 +1203,12 @@ struct hSet
 		if(g_wave < g_max_wave and hgroup.count(g_gp_boss) < 1)then
 			call hmedia.bgm(musicBattle)
 		endif
+		// boss 技能
+		if(uid == 'n062')then
+			if(killer!=null)then
+				call KillUnit(killer)
+			endif
+		endif
 		set u = null
 		set killer = null
 	endmethod
@@ -1219,17 +1226,17 @@ struct hSet
 		if(g_wave < 15)then
 			set life = g_wave * (8000 + 3000 * g_diff)
 		elseif(g_wave < 30)then
-			set life = g_wave * (9500 + 4500 * g_diff)
+			set life = g_wave * (10000 + 4500 * g_diff)
 		elseif(g_wave < 45)then
-			set life = g_wave * (10500 + 7000 * g_diff)
+			set life = g_wave * (11000 + 7250 * g_diff)
 		elseif(g_wave < 60)then
-			set life = g_wave * (13000 + 9000 * g_diff)
+			set life = g_wave * (13500 + 9000 * g_diff)
 		elseif(g_wave < 80)then
-			set life = g_wave * (16000 + 11000 * g_diff)
+			set life = g_wave * (17000 + 11500 * g_diff)
 		elseif(g_wave < g_max_wave)then
-			set life = g_wave * (20000 + 14500 * g_diff)
+			set life = g_wave * (21000 + 15500 * g_diff)
 		else
-			set life = g_wave * (30000 + 22000 * g_diff)
+			set life = g_wave * (30000 + 24500 * g_diff)
 		endif
 		set last_boss_uid = g_boss[bossIndex]
 		//
@@ -1250,7 +1257,7 @@ struct hSet
 				call hattr.addMana(u,1000*g_diff,0)
 				call hattr.addManaBack(u,30*g_diff,0)
 				call hattr.setDefend(u, (g_wave+g_diff*25)*4 ,0)
-				call hattr.addResistance(u,g_wave*0.7,0)
+				call hattr.addResistance(u,g_wave*0.5,0)
 				call hattr.setMove(u, 210 + g_wave*3 + g_diff*10 ,0)
 				call hattr.setAttackPhysical(u, 40 + g_wave*(11 + g_diff*2)  ,0)
 				call hattr.setAttackMagic(u, 60 + g_wave*(12 + g_diff*2)  ,0)

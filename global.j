@@ -1995,9 +1995,9 @@ struct hGlobals
 		set hitembean.item_id = 'I01G'
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-        set hitembean.bluntVal = 125
-        set hitembean.muggleVal = 125
-        set hitembean.tortuaVal = 145
+        set hitembean.bluntVal = 75
+        set hitembean.muggleVal = 75
+        set hitembean.tortuaVal = 65
         set hitembean.silentOdds = 5
         set hitembean.unarmOdds = 5
         set hitembean.fetterOdds = 5
@@ -2166,7 +2166,7 @@ struct hGlobals
 		if(skillid == 'A05R')then // BOSS 飞天石像鬼 穿梭
 			call SetUnitVertexColorBJ( triggerUnit, 100, 100, 100, 75.00 )
 			set bean = hAttrHuntBean.create()
-            set bean.damage = g_wave * 30
+            set bean.damage = g_wave * 15
             set bean.fromUnit = triggerUnit
             set bean.huntEff = "Abilities\\Spells\\Undead\\Sleep\\SleepSpecialArt.mdl"
             set bean.huntKind = "attack"
@@ -2179,7 +2179,7 @@ struct hGlobals
             set hxy = hlogic.polarProjection(hxy,500,hlogic.getDegBetweenUnit(triggerUnit,hevent.getTargetUnit()))
             set loc = Location(hxy.x,hxy.y)
 			set bean = hAttrHuntBean.create()
-            set bean.damage = g_wave * 40
+            set bean.damage = g_wave * 20
             set bean.fromUnit = triggerUnit
             set bean.huntEff = "war3mapImported\\eff_DarkSwirl.mdl"
             set bean.huntKind = "attack"
@@ -2189,17 +2189,17 @@ struct hGlobals
 		elseif(skillid == 'A060')then // BOSS 旋风女皇 穿梭
 			call SetUnitVertexColorBJ( triggerUnit, 100, 100, 100, 75.00 )
 			set bean = hAttrHuntBean.create()
-            set bean.damage = g_wave * 35
+            set bean.damage = g_wave * 15
             set bean.fromUnit = triggerUnit
             set bean.huntEff = "Abilities\\Spells\\Other\\Tornado\\TornadoElementalSmall.mdl"
             set bean.huntKind = "attack"
             set bean.huntType = "physicalwind"
             call hskill.shuttleToUnit(triggerUnit,hevent.getTargetUnit(),500,13,30,5,50,null,"attack",'A06M',bean)
             call bean.destroy()
-		elseif(skillid == 'A061')then // BOSS 死神 穿梭
+		elseif(skillid == 'A061')then // BOSS 赐死鹿 穿梭
 			call SetUnitVertexColorBJ( triggerUnit, 100, 100, 100, 75.00 )
 			set bean = hAttrHuntBean.create()
-            set bean.damage = g_wave * 40
+            set bean.damage = g_wave * 14
             set bean.fromUnit = triggerUnit
             set bean.huntEff = "war3mapImported\\eff_DarkSwirl.mdl"
             set bean.huntKind = "skill"
@@ -2238,17 +2238,14 @@ struct hGlobals
             call hattr.addToughness(triggerUnit,I2R(g_wave) * 6,30)
         endif
         if(rand < 7)then
-            if(uid == 'n046')then // BOSS 巨龙海龟
-            elseif(uid == 'n047')then // BOSS 岩石龙虾
-            elseif(uid == 'n048')then // BOSS 飞天石像鬼
+            if(uid == 'n048')then // BOSS 飞天石像鬼
                 call IssueTargetOrder( triggerUnit, "thunderbolt", targetUnit )
             elseif(uid == 'n049')then // BOSS 食人魔统领
                 call IssueImmediateOrder( triggerUnit, "stomp" )
             elseif(uid == 'n05R')then // BOSS 剧毒龙虾
                 call IssueTargetOrder( triggerUnit, "shadowstrike", targetUnit )
             endif
-            if(uid == 'n04A')then // BOSS 冰魔法师
-            elseif(uid == 'n04B')then // BOSS Panda
+            if(uid == 'n04B')then // BOSS Panda
                 call IssueImmediateOrder( triggerUnit, "stomp" )
             elseif(uid == 'n04C')then // BOSS 沙蝎之王
                 call IssueTargetOrder( triggerUnit, "impale", targetUnit )
@@ -2258,8 +2255,6 @@ struct hGlobals
                 call IssueImmediateOrder( triggerUnit, "stomp" )
             elseif(uid == 'n04L')then // BOSS 疾风隐刺
                 call hattrNatural.addDark(triggerUnit,2.0,10.0)
-            elseif(uid == 'n04P')then // BOSS 潮汐巨人
-            elseif(uid == 'n04N')then // BOSS 灭却龙
             elseif(uid == 'n04Q')then // BOSS 猎足之蛛
                 if(GetRandomInt(1,10) < 5)then
                     call IssueImmediateOrder( triggerUnit, "mirrorimage" )
@@ -2278,8 +2273,6 @@ struct hGlobals
                 call IssueTargetOrder( triggerUnit, "forkedlightning", targetUnit )
             elseif(uid == 'n04I')then // BOSS 旋风女皇
                 call IssueTargetOrder( triggerUnit, "thunderbolt", targetUnit )
-            elseif(uid == 'n04F')then // BOSS 斧帝
-            elseif(uid == 'n04G')then // BOSS 深渊地狱火
             endif
             if(uid == 'n04E')then // BOSS 毁灭炎尊
                 call IssuePointOrder( triggerUnit, "rainoffire", GetUnitX(targetUnit), GetUnitY(targetUnit) )
@@ -2303,6 +2296,62 @@ struct hGlobals
         set loc = null
 	endmethod
 
+    public static method onBossBeAttack takes nothing returns nothing
+        local unit triggerUnit = hevent.getTriggerUnit()
+		local unit attacker = hevent.getAttacker()
+        local integer uid = GetUnitTypeId(triggerUnit)
+        local integer i = 0
+        local hAttrHuntBean bean
+        local hFilter filter
+        local group g = null
+        local unit u = null
+        if(uid == 'n046')then // 巨龙海龟
+            call hattr.addDefend(triggerUnit,g_wave*0.1,5)
+        elseif(uid == 'n047')then // BOSS 岩石龙虾
+            call hattr.addDefend(triggerUnit,g_wave*0.1,5)
+        elseif(uid == 'n04A')then // BOSS 冰电魔法师
+            call hattr.subAttackSpeed(attacker,25,3)
+            call heffect.toUnit("Abilities\\Spells\\Orc\\Purge\\PurgeBuffTarget.mdl",attacker,"origin",1.00)
+        elseif(uid == 'n04N')then // BOSS 灭却龙
+            call hattr.subLife(attacker,10,3)
+            call heffect.toUnit("Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl",attacker,"origin",3.00)
+        elseif(uid == 'n063')then // BOSS 镰刀破灭
+            call heffect.toUnit("war3mapImported\\eff_DustWindCirclefaster.mdl",triggerUnit,"origin",1.50)
+            call heffect.toUnit("war3mapImported\\eff_round_dance2.mdll",triggerUnit,"origin",1.50)
+            set filter = hFilter.create()
+            call filter.isAlive(true)
+            call filter.isEnemy(true,triggerUnit)
+            set g = hgroup.createByUnit(triggerUnit,500.0,function hFilter.get )
+            call filter.destroy()
+            set bean = hAttrHuntBean.create()
+            set bean.damage = 65
+            set bean.fromUnit = triggerUnit
+            set bean.huntEff = "Objects\\Spawnmodels\\Human\\HumanBlood\\BloodElfSpellThiefBlood.mdl"
+            set bean.huntKind = "attack"
+            set bean.huntType = "physical"
+            set i = 0
+            loop
+                exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 6)
+                    set u = FirstOfGroup(g)
+                    call GroupRemoveUnit(g,u)
+                    set bean.toUnit = u
+                    call hattrHunt.huntUnit(bean)
+                    set u = null
+                    set i = i+1
+            endloop
+            call GroupClear(g)
+            call DestroyGroup(g)
+            set g = null
+        elseif(uid == 'n064')then // BOSS 冰晶凌妖
+            call hattr.subAttackSpeed(attacker,13,3)
+            call heffect.toUnit("Abilities\\Spells\\Other\\FrostDamage\\FrostDamage.mdl",attacker,"origin",3.00)
+        elseif(uid == 'n065')then // BOSS 歌之海妖
+            call hattr.subAttackPhysical(attacker,75,3)
+        endif
+        set triggerUnit = null
+        set attacker = null
+    endmethod
+
     public static method bossBuilt takes unit mon returns nothing
         local integer uid = GetUnitTypeId(mon)
         call GroupAddUnit(g_crazy_boss,mon)
@@ -2322,8 +2371,8 @@ struct hGlobals
         elseif(uid == 'n049')then // 食人魔统领
             call hattr.addSplit(mon,15.0,0)
             call hattr.addDefend(mon,15,0)
-        elseif(uid == 'n04A')then // 冰魔法师
-            call hattr.addAttackHuntType(mon,"ice",0)
+        elseif(uid == 'n04A')then // 冰电魔法师
+            call hattr.addAttackHuntType(mon,"icethunder",0)
             call hattrNatural.addIceOppose(mon,50.0,0)
             call hattrNatural.addThunderOppose(mon,25.0,0)
             call hattrEffect.addLightningChainOdds(mon,50.0,0)
@@ -2409,7 +2458,7 @@ struct hGlobals
             call hattrEffect.addLightningChainQty(mon,3,0)
         elseif(uid == 'n04I')then // 旋风女皇
             call hattr.addAttackHuntType(mon,"wind",0)
-            call hattrNatural.addWindOppose(mon,90.0,0)
+            call hattrNatural.addWindOppose(mon,80.0,0)
             call hattr.addAttackSpeed(mon,100.0,0)
             call hattrEffect.addSwimOdds(mon,22.0,0)
             call hattrEffect.addSwimDuring(mon,0.5,0)
@@ -2423,14 +2472,14 @@ struct hGlobals
         endif
         if(uid == 'n04E')then // 毁灭炎尊
             call hattr.addAttackHuntType(mon,"firemetal",0)
-            call hattrNatural.addPoisonOppose(mon,90.0,0)
-            call hattrNatural.addFireOppose(mon,90.0,0)
+            call hattrNatural.addPoisonOppose(mon,80.0,0)
+            call hattrNatural.addFireOppose(mon,80.0,0)
             call hattrEffect.addBurnVal(mon,7+g_wave,0)
             call hattrEffect.addBurnDuring(mon,10.0,0)
         elseif(uid == 'n04H')then // 赐死鹿
             call hattr.addAttackHuntType(mon,"dark",0)
             call hattrNatural.addDarkOppose(mon,30.0,0)
-            call hattrNatural.addPoisonOppose(mon,100.0,0)
+            call hattrNatural.addPoisonOppose(mon,90.0,0)
             call hattrNatural.addFireOppose(mon,30.0,0)
             call hattrEffect.addCorrosionVal(mon,4.0,0)
             call hattrEffect.addCorrosionDuring(mon,10.0,0)
@@ -2446,7 +2495,7 @@ struct hGlobals
             call hattrEffect.setBombModel(mon,"war3mapImported\\eff_Arcane_Nova.mdl")
         elseif(uid == 'n052')then // 机车人
             call hattr.addAttackHuntType(mon,"metal",0)
-            call hattrNatural.addMetalOppose(mon,88.0,0)
+            call hattrNatural.addMetalOppose(mon,80.0,0)
             call hattrEffect.addAttackSpeedVal(mon,5,0)
             call hattrEffect.addAttackSpeedDuring(mon,10,0)
             call hattrEffect.addSwimOdds(mon,25.0,0)
@@ -2461,15 +2510,29 @@ struct hGlobals
             call hattrEffect.addSwimDuring(mon,1.5,0)
         elseif(uid == 'n05H')then // 寒春龙神
             call hattr.addAttackHuntType(mon,"icedragon",0)
-            call hattrNatural.addIceOppose(mon,100.0,0)
-            call hattrNatural.addDragonOppose(mon,100.0,0)
+            call hattrNatural.addIceOppose(mon,50.0,0)
+            call hattrNatural.addDragonOppose(mon,75.0,0)
             call hattrEffect.addAttackSpeedVal(mon,10,0)
             call hattrEffect.addAttackSpeedDuring(mon,5,0)
             call hattrEffect.addSwimOdds(mon,14.0,0)
             call hattrEffect.addSwimDuring(mon,2.0,0)
         endif
+        if(uid == 'n062')then // BOSS 死神
+            call hattr.addAttackHuntType(mon,"ghost",0)
+            call hattr.addAvoid(mon,10,0)
+        elseif(uid == 'n063')then // BOSS 镰刀破灭神
+            call hattr.addAttackHuntType(mon,"real",0)
+            call hattr.addResistance(mon,100,0)
+        elseif(uid == 'n064')then // BOSS 冰晶凌妖
+            call hattr.addAttackHuntType(mon,"ice",0)
+            call hattrNatural.addIceOppose(mon,100.0,0)
+        elseif(uid == 'n064')then // BOSS 歌之海妖
+            call hattr.addAttackHuntType(mon,"water",0)
+            call hattr.addUnarmOppose(mon,50,0)
+        endif
         call hevent.onSkillHappen(mon,function thistype.onBossSkillHappen)
         call hevent.onAttack(mon,function thistype.onBossAttack)
+        call hevent.onBeAttack(mon,function thistype.onBossBeAttack)
     endmethod
     public static method bossDeadDrop takes unit mon returns nothing
         local integer total = 20
@@ -2594,11 +2657,11 @@ struct hGlobals
 
         // hero 英雄
         call thistype.registerHero('H00M',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNHeroArchMage.blp",2.00) // t01 大魔法师
-        call thistype.registerHero('H00K',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNShadowHunter.blp",2.00) // t01 暗影猎手
-        call thistype.registerHero('H001',HERO_TYPE_AGI,"ReplaceableTextures\\CommandButtons\\BTNHeroBlademaster.blp",2.00) // t01 逸风
+        call thistype.registerHero('H00K',HERO_TYPE_INT,"war3mapImported\\BTNHeroVoljin.blp",2.00) // t01 盗影猎手
+        call thistype.registerHero('H001',HERO_TYPE_AGI,"war3mapImported\\HIcon_08.blp",2.00) // t01 斩破
         call thistype.registerHero('H003',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNHeroFarseer.blp",2.00) // t01 先知
         call thistype.registerHero('H004',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNHeroDeathKnight.blp",2.00) // t01 死骑
-        call thistype.registerHero('H004',HERO_TYPE_AGI,"ReplaceableTextures\\CommandButtons\\BTNHeroDreadLord.blp",2.00) // t01 蝠王
+        call thistype.registerHero('H005',HERO_TYPE_AGI,"ReplaceableTextures\\CommandButtons\\BTNHeroDreadLord.blp",2.00) // t01 蝠王
         call thistype.registerHero('H007',HERO_TYPE_AGI,"ReplaceableTextures\\CommandButtons\\BTNHeroCryptLord.blp",2.00) // t01 地穴领主
         call thistype.registerHero('H008',HERO_TYPE_AGI,"ReplaceableTextures\\CommandButtons\\BTNHeroTinker.blp",2.00) // t01 机械师
         call thistype.registerHero('H00A',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNBeastMaster.blp",2.00) // t01 兽王
@@ -2610,7 +2673,8 @@ struct hGlobals
         call thistype.registerHero('H00Q',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNLichVersion2.blp",2.00) // t05 巫妖
         call thistype.registerHero('H00X',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNHeroBloodElfPrince.blp",2.00) // t06 操火师
         call thistype.registerHero('H009',HERO_TYPE_INT,"ReplaceableTextures\\CommandButtons\\BTNNagaSeaWitch.blp",2.00) // t07 美杜莎
-        call thistype.registerHero('H00S',HERO_TYPE_AGI,"ReplaceableTextures\\CommandButtons\\BTNBansheeRanger.blp",2.00) // t10 黑游
+        call thistype.registerHero('H00D',HERO_TYPE_AGI,"war3mapImported\\BTNArcaneHuntress.blp",2.00) // t08 影刺客
+        call thistype.registerHero('H00S',HERO_TYPE_AGI,"war3mapImported\\HIcon_03.blp",2.00) // t10 深渊游侠
         call thistype.registerHero('H00R',HERO_TYPE_STR,"ReplaceableTextures\\CommandButtons\\BTNHeroAlchemist.blp",2.00) // t20 炼金
 
         call htime.setTimeout(0.65,function thistype.registerItem0)
@@ -2625,7 +2689,7 @@ struct hGlobals
         call thistype.registerBuilding()
         call thistype.registerGift()
 
-        set g_boss_count = 25
+        set g_boss_count = 29
         set g_boss[1]  = 'n046'
         set g_boss[2]  = 'n047'
         set g_boss[3]  = 'n048'
@@ -2651,8 +2715,12 @@ struct hGlobals
         set g_boss[23] = 'n05B'
         set g_boss[24] = 'n05H'
         set g_boss[25] = 'n05R'
+        set g_boss[26] = 'n062'
+        set g_boss[27] = 'n063'
+        set g_boss[28] = 'n064'
+        set g_boss[29] = 'n065'
 
-        set g_mon_count = 105
+        set g_mon_count = 120
         set g_mon[1] = 'n011'
         set g_mon[2] = 'n013'
         set g_mon[3] = 'n014'
