@@ -161,7 +161,7 @@ struct hSet
 					if(skillid == 'A08X')then // [特攻]号令·圣锤封印
 						call hability.swim(u,12)
 					elseif(skillid == 'A04F')then // [特攻]号令·圣盾封印
-						call hattr.subDefend(u,20,30)
+						call hattr.subDefend(u,40,30)
 						call heffect.toUnit("Abilities\\Spells\\Undead\\DeathandDecay\\DeathandDecayTarget.mdl",u,"origin",30)
 					elseif(skillid == 'A09N')then // [特攻]号令·圣斧封印
 						call hability.silent(u,30)
@@ -823,6 +823,9 @@ struct hSet
 		if(uid == 'H00P')then //森林老鹿
 			call hattrEffect.addBombVal(u,diffLv*30,0)
 		endif
+		if(uid == 'H004')then //死骑
+			call hattrEffect.addAttackPhysicalVal(u,3,0)
+		endif
 		set u = null
 	endmethod
     private static method onHeroDead takes nothing returns nothing
@@ -936,10 +939,10 @@ struct hSet
 		endif
 		if(uid == 'H004')then //死骑
 			call hattr.addAttackHuntType(u,"ghost",0)
-			call hattrEffect.addAttackPhysicalVal(u,10,0)
-			call hattrEffect.addAttackPhysicalDuring(u,20,0)
-			call hattrEffect.addColdVal(u,20,0)
-			call hattrEffect.addColdDuring(u,20,0)
+			call hattrEffect.addAttackPhysicalVal(u,3,0)
+			call hattrEffect.addAttackPhysicalDuring(u,15,0)
+			call hattrEffect.addColdVal(u,40,0)
+			call hattrEffect.addColdDuring(u,15,0)
 		endif
 		if(uid == 'H003')then //先知
 			call hattr.addAttackHuntType(u,"thunder",0)
@@ -1089,7 +1092,7 @@ struct hSet
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
 		set exp = R2I(I2R(g_wave) * (20+g_diff*15) * g_game_speed)
-		set gold = R2I(I2R(g_wave) * 2.8 * g_game_speed) + g_diff * 2
+		set gold = R2I(I2R(g_wave) * 2.6 * g_game_speed) + g_diff * 3
 		if(killer != null)then
 			call haward.forUnit(killer,0,gold,0)
 			call haward.forGroup(killer,exp,0,0)
@@ -1133,31 +1136,27 @@ struct hSet
 		if(hgroup.count(g_gp_mon) >= g_temp_mon_limit)then
 			return
 		endif
-		if(g_wave <= 5)then
-			set life = g_wave * (125 + g_diff * 50)
-		elseif(g_wave < 10)then
-			set life = g_wave * (225 + g_diff * 150)
-		elseif(g_wave < 20)then
-			set life = g_wave * (280 + g_diff * 200)
+		if(g_wave <= 6)then
+			set life = g_wave * (125 + g_diff * 60)
+		elseif(g_wave < 12)then
+			set life = g_wave * (225 + g_diff * 175)
+		elseif(g_wave < 18)then
+			set life = g_wave * (280 + g_diff * 235)
+		elseif(g_wave < 24)then
+			set life = g_wave * (360 + g_diff * 300)
 		elseif(g_wave < 30)then
-			set life = g_wave * (360 + g_diff * 250)
-		elseif(g_wave < 40)then
-			set life = g_wave * (480 + g_diff * 300)
-		elseif(g_wave < 50)then
-			set life = g_wave * (600 + g_diff * 350)
-		elseif(g_wave < 60)then
-			set life = g_wave * (720 + g_diff * 400)
-		elseif(g_wave < 70)then
-			set life = g_wave * (840 + g_diff * 450)
-		elseif(g_wave < 80)then
-			set life = g_wave * (960 + g_diff * 500)
-		elseif(g_wave < 90)then
-			set life = g_wave * (1080 + g_diff * 550)
+			set life = g_wave * (480 + g_diff * 380)
+		elseif(g_wave < 36)then
+			set life = g_wave * (600 + g_diff * 430)
+		elseif(g_wave < 42)then
+			set life = g_wave * (720 + g_diff * 550)
+		elseif(g_wave < 48)then
+			set life = g_wave * (840 + g_diff * 700)
 		else
-			set life = g_wave * (1200 + g_diff * 650)
+			set life = g_wave * (1100 + g_diff * 950)
 		endif
-		set move = 100 + g_wave * 3 + g_diff * 15
-		set attack = g_wave * (4 + g_diff)
+		set move = 110 + g_wave * 4 + g_diff * 13
+		set attack = g_wave * (7 + g_diff)
 		set j = 1
 		loop
 			exitwhen j>spaceDegQty
@@ -1203,8 +1202,8 @@ struct hSet
 		if(g_gp_attack != null and IsUnitInGroup(u, g_gp_attack) == true)then
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
-		set exp = g_wave * 2500 + g_diff * 1500
-		set gold = g_wave * (27+g_diff*3)
+		set exp = g_wave * 2400 + g_diff * 1750
+		set gold = g_wave * (26+g_diff*3)
 		if(killer!=null)then
 			call haward.forUnit(killer,exp,0,0)
 		endif
@@ -1245,18 +1244,24 @@ struct hSet
 		local integer i = 0
 		local real life = 0
 		call htime.delTimer(t)
-		if(g_wave < 15)then
+		if(g_wave < 6)then
 			set life = g_wave * (10000 + 5000 * g_diff)
+		elseif(g_wave < 12)then
+			set life = g_wave * (15000 + 8000 * g_diff)
+		elseif(g_wave < 18)then
+			set life = g_wave * (18000 + 11000 * g_diff)
+		elseif(g_wave < 24)then
+			set life = g_wave * (22000 + 16500 * g_diff)
 		elseif(g_wave < 30)then
-			set life = g_wave * (15000 + 7500 * g_diff)
-		elseif(g_wave < 45)then
-			set life = g_wave * (20000 + 10000 * g_diff)
-		elseif(g_wave < 60)then
-			set life = g_wave * (25000 + 15000 * g_diff)
-		elseif(g_wave < 80)then
-			set life = g_wave * (35000 + 25000 * g_diff)
-		elseif(g_wave < g_max_wave)then
-			set life = g_wave * (45000 + 35000 * g_diff)
+			set life = g_wave * (27500 + 21000 * g_diff)
+		elseif(g_wave < 30)then
+			set life = g_wave * (31000 + 26000 * g_diff)
+		elseif(g_wave < 36)then
+			set life = g_wave * (35000 + 29500 * g_diff)
+		elseif(g_wave < 42)then
+			set life = g_wave * (40000 + 33000 * g_diff)
+		elseif(g_wave < 48)then
+			set life = g_wave * (48000 + 39000 * g_diff)
 		else
 			set life = g_wave * (60000 + 45000 * g_diff)
 		endif
@@ -1275,29 +1280,27 @@ struct hSet
 				call GroupAddUnit(g_gp_boss,u)
 				call TriggerRegisterUnitEvent( bossDeadTg, u, EVENT_UNIT_DEATH )
 				call hattr.setLife(u, life ,0)
-				call hattr.setLifeBack(u, g_wave * 6 + g_diff * 35 ,0)
+				call hattr.setLifeBack(u, g_wave * 8 + g_diff * 40 ,0)
 				call hattr.addMana(u,1000*g_diff,0)
 				call hattr.addManaBack(u,30*g_diff,0)
-				call hattr.setDefend(u, (g_wave+g_diff*25)*4 ,0)
-				call hattr.addResistance(u,g_wave*0.5,0)
-				call hattr.setMove(u, 210 + g_wave*3 + g_diff*10 ,0)
-				call hattr.setAttackPhysical(u, 40 + g_wave*(11 + g_diff*2)  ,0)
-				call hattr.setAttackMagic(u, 60 + g_wave*(12 + g_diff*2)  ,0)
+				call hattr.setDefend(u, (g_wave+g_diff*30)*4 ,0)
+				call hattr.addResistance(u,g_wave*0.75,0)
+				call hattr.setMove(u, 200 + g_wave*6 + g_diff*8 ,0)
+				call hattr.setAttackPhysical(u, g_wave*((45+player_current_qty*21) + g_diff*30)  ,0)
+				call hattr.setAttackMagic(u, g_wave*((45+player_current_qty*21) + g_diff*30)  ,0)
 				call hattr.setAttackSpeed(u, g_wave * 3 + g_diff * 4 ,0)
-				call hattr.setAim(u,g_wave*0.6,0)
-				call hattr.setAvoid(u,g_wave*0.4,0)
-				call hattr.setInvincible(u,g_wave*0.1,0)
-				call hattr.setSwimOppose(u,g_wave*0.3,0)
-				call hattr.setSilentOppose(u,g_wave*0.6,0)
-				call hattr.setUnarmOppose(u,g_wave*0.6,0)
-				call hattr.setFetterOppose(u,g_wave*0.7,0)
-				call hattr.setBombOppose(u,g_wave*0.3,0)
-				call hattr.setCrackFlyOppose(u,g_wave*0.3,0)
-				call hattr.setKnockingOppose(u, g_wave * 25 + g_diff * 300,0)
-				call hattr.setViolenceOppose(u, g_wave * 25 + g_diff * 300,0)
-				call hattrEffect.setCrackFlyOdds(u,g_wave*0.15+g_diff*3,0)
-				call hattrEffect.setCrackFlyVal(u,g_wave*(30 + g_diff),0)
-				call hattrEffect.setCrackFlyHigh(u,100+g_wave*(4 + g_diff),0)
+				call hattr.setAim(u,g_wave*0.8,0)
+				call hattr.setAvoid(u,g_wave*0.8,0)
+				call hattr.setSwimOppose(u,g_wave*0.6,0)
+				call hattr.setSilentOppose(u,g_wave*0.9,0)
+				call hattr.setUnarmOppose(u,g_wave*1.2,0)
+				call hattr.setFetterOppose(u,g_wave*1.3,0)
+				call hattr.setBombOppose(u,g_wave*0.6,0)
+				call hattr.setKnockingOppose(u, g_wave * 40 + g_diff * 600,0)
+				call hattr.setViolenceOppose(u, g_wave * 40 + g_diff * 600,0)
+				call hattrEffect.setCrackFlyOdds(u,g_wave*0.25+g_diff*5,0)
+				call hattrEffect.setCrackFlyVal(u,g_wave*(70 + g_diff),0)
+				call hattrEffect.setCrackFlyHigh(u,150+g_wave*(4 + g_diff),0)
 				call hattrEffect.setCrackFlyDistance(u,0,0)
 				call hGlobals.bossBuilt(u)
 				call PingMinimapLocForForceEx( GetPlayersAll(),loc,3, bj_MINIMAPPINGSTYLE_FLASHY, 100, 0, 0 ) // 警告
@@ -1353,8 +1356,8 @@ struct hSet
 			exitwhen i<=0
 				if(GetPlayerServerValueSuccess(players[i]) == true)then
 					if(DzAPI_Map_GetStoredInteger(players[i], "wavelevel") < waveBoss)then
-						call DzAPI_Map_StoreInteger(players[i], "wavelevel", g_diff*waveBoss )
-						call DzAPI_Map_Stat_SetStat(players[i], "wavelevel", I2S(g_diff*waveBoss) )
+						call DzAPI_Map_StoreInteger(players[i], "wavelevel", g_diff*2*waveBoss )
+						call DzAPI_Map_Stat_SetStat(players[i], "wavelevel", I2S(g_diff*2*waveBoss) )
 					endif
 				endif
 			set i = i-1
@@ -1395,8 +1398,8 @@ struct hSet
 				exitwhen i<=0
 					if(GetPlayerServerValueSuccess(players[i]) == true)then
 						if(DzAPI_Map_GetStoredInteger(players[i], "wavelevel") < g_wave)then
-							call DzAPI_Map_StoreInteger(players[i], "wavelevel", g_diff*g_wave )
-							call DzAPI_Map_Stat_SetStat(players[i], "wavelevel", I2S(g_diff*g_wave) )
+							call DzAPI_Map_StoreInteger(players[i], "wavelevel", g_diff*2*g_wave )
+							call DzAPI_Map_Stat_SetStat(players[i], "wavelevel", I2S(g_diff*2*g_wave) )
 						endif
 					endif
 				set i = i-1
@@ -1426,7 +1429,7 @@ struct hSet
 	
 	public static method nextWave takes nothing returns nothing
 		local integer i = 0
-		local real holdon = 10
+		local real holdon = 5
 		if(g_mon_isrunning == false)then
 			return
 		endif

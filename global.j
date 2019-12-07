@@ -17,18 +17,19 @@ real REBORN_SUMMON = 90
 integer g_diff = 1
 string array g_diff_label
 timer g_timer_wave = null
-integer g_temp_mon_limit = 200
-integer g_max_wave = 100
+integer g_temp_mon_limit = 220
+integer g_max_wave = 51
 integer g_wave = 0
 integer g_first_wave = 0
-integer g_boss_mod = 5
-real g_boss_ready_time = 60
+integer g_boss_mod = 3
+real g_boss_ready_time = 55
 real g_first_ready_time = 30.00
 boolean g_waving = false
 group g_crazy_boss = CreateGroup()
+group g_crazy_be_boss = CreateGroup()
 
 real g_game_speed = 1.00 //
-real g_game_mon_loop = 3.00 // 每只怪出兵间隔
+real g_game_mon_loop = 2.70 // 每只怪出兵间隔
 integer g_token_count = 0
 integer g_building_count = 0
 integer g_hero_count = 0
@@ -86,7 +87,7 @@ integer array g_summon_s
 integer array g_summon_ss
 integer array g_summon_sss
 
-integer g_gp_max = 30
+integer g_gp_max = 36
 group g_gp_mon = CreateGroup()
 group g_gp_boss = CreateGroup()
 group g_gp_attack = CreateGroup()
@@ -865,6 +866,7 @@ struct hGlobals
         local unit u = null
         local hAttrHuntBean bean
         local real percent = 0.00
+        local boolean isHuntHappen = false
         if(triggerUnit == null or targetUnit == null)then
             set triggerUnit = null
             set targetUnit = null
@@ -878,46 +880,55 @@ struct hGlobals
 				call UnitRemoveAbility(triggerUnit,'A09A')
 				call UnitAddAbility(triggerUnit,'A03W')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A03W' )
+                call heffect.toUnit("war3mapImported\\eff_HolyHit.mdl",triggerUnit,"origin",1.00)
 			elseif(GetUnitAbilityLevel(triggerUnit,'A03W') > 0 and GetRandomInt(1,4) == 1)then // LV1
 				set percent = 2.00
 				call UnitRemoveAbility(triggerUnit,'A03W')
 				call UnitAddAbility(triggerUnit,'A044')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A044' )
+                call heffect.toUnit("war3mapImported\\eff_HolyHit.mdl",triggerUnit,"origin",1.00)
 			elseif(GetUnitAbilityLevel(triggerUnit,'A044') > 0 and GetRandomInt(1,5) == 1)then // LV2
 				set percent = 2.50
 				call UnitRemoveAbility(triggerUnit,'A044')
 				call UnitAddAbility(triggerUnit,'A07Z')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A07Z' )
+                call heffect.toUnit("war3mapImported\\eff_HolyHit.mdl",triggerUnit,"origin",1.00)
 			elseif(GetUnitAbilityLevel(triggerUnit,'A07Z') > 0 and GetRandomInt(1,8) == 1)then // LV3
 				set percent = 5.00
 				call UnitRemoveAbility(triggerUnit,'A07Z')
 				call UnitAddAbility(triggerUnit,'A088')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A088' )
+                call heffect.toUnit("war3mapImported\\eff_HolyHit.mdl",triggerUnit,"origin",1.00)
 			elseif(GetUnitAbilityLevel(triggerUnit,'A088') > 0 and GetRandomInt(1,10) == 1)then // LV4
 				set percent = 6.50
 				call UnitRemoveAbility(triggerUnit,'A088')
 				call UnitAddAbility(triggerUnit,'A08B')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A08B' )
+                call heffect.toUnit("war3mapImported\\eff_HolyHit.mdl",triggerUnit,"origin",1.00)
 			elseif(GetUnitAbilityLevel(triggerUnit,'A08B') > 0 and GetRandomInt(1,12) == 1)then // LV5
 				set percent = 8.00
 				call UnitRemoveAbility(triggerUnit,'A08B')
 				call UnitAddAbility(triggerUnit,'A08C')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A08C' )
+                call heffect.toUnit("war3mapImported\\eff_HolyHit.mdl",triggerUnit,"origin",1.00)
 			elseif(GetUnitAbilityLevel(triggerUnit,'A08C') > 0 and GetRandomInt(1,14) == 1)then // LV6
 				set percent = 10.00
 				call UnitRemoveAbility(triggerUnit,'A08C')
 				call UnitAddAbility(triggerUnit,'A08L')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A08L' )
+                call heffect.toUnit("war3mapImported\\eff_HolyHit.mdl",triggerUnit,"origin",1.00)
 			elseif(GetUnitAbilityLevel(triggerUnit,'A08L') > 0 and GetRandomInt(1,16) == 1)then // LV7
 				set percent = 12.00
 				call UnitRemoveAbility(triggerUnit,'A08L')
 				call UnitAddAbility(triggerUnit,'A08S')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A08S' )
+                call heffect.toUnit("war3mapImported\\eff_HolyHit.mdl",triggerUnit,"origin",1.00)
 			elseif(GetUnitAbilityLevel(triggerUnit,'A08S') > 0 and GetRandomInt(1,20) == 1)then // LV8
 				set percent = 16.00
 				call UnitRemoveAbility(triggerUnit,'A08S')
 				call UnitAddAbility(triggerUnit,'A090')
 				call UnitMakeAbilityPermanent( triggerUnit, true, 'A090' )
+                call heffect.toUnit("war3mapImported\\eff_HolyHit.mdl",triggerUnit,"origin",1.00)
 			//elseif(GetUnitAbilityLevel(triggerUnit,'A090') > 0 and GetRandomInt(1,20) == 1)then // LV9
 			endif
 			if(percent > 0.00)then
@@ -959,7 +970,7 @@ struct hGlobals
 				endif
 			endif
 		endif
-        if(hunit.getMana(triggerUnit) < 100)then
+        if(hunit.getMana(triggerUnit) < 50)then
             return
         endif
         // 1/10几率
@@ -979,7 +990,8 @@ struct hGlobals
         // 1/9几率
         if(rand<=3)then
             // A 魔导师 - 感应
-            if(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A09J') >= 1)then
+            if(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A09J') >= 1 and isHuntHappen == false)then
+                set isHuntHappen = true
                 call hunit.subMana(triggerUnit,50)
                 call heffect.toUnit("war3mapImported\\eff_StaticRemnant.mdl",targetUnit,"origin",1.00)
                 set filter = hFilter.create()
@@ -995,7 +1007,7 @@ struct hGlobals
                 set bean.huntType = "thunder"
                 set i = 0
                 loop
-                    exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 4)
+                    exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 5)
                         set u = FirstOfGroup(g)
                         call GroupRemoveUnit(g,u)
                         set bean.toUnit = u
@@ -1142,7 +1154,8 @@ struct hGlobals
                 call DestroyGroup(g)
                 set g = null
             // SS 恶魔猎手 - 旋环切割
-            elseif(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A09U') >= 1)then
+            elseif(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A09U') >= 1 and isHuntHappen == false)then
+                set isHuntHappen = true
                 call hunit.subMana(triggerUnit,75)
                 call heffect.toUnit("war3mapImported\\eff_DustWindCirclefaster.mdl",triggerUnit,"origin",1.50)
                 call heffect.toUnit("war3mapImported\\eff_light_speed_cutting.mdl",triggerUnit,"origin",1.50)
@@ -1221,7 +1234,8 @@ struct hGlobals
                 call hattr.subMove(targetUnit,50,5)
                 call heffect.toUnit("Abilities\\Spells\\Orc\\Devour\\DevourEffectArt.mdl",targetUnit,"origin",1.00)
             // A 伐木机 - 齿轮割裂
-            elseif(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A04E') >= 1)then
+            elseif(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A04E') >= 1 and isHuntHappen == false)then
+                set isHuntHappen = true
                 call hunit.subMana(triggerUnit,50)
                 call heffect.toUnit("war3mapImported\\eff_round_dance4.mdl",targetUnit,"origin",1.00)
                 set filter = hFilter.create()
@@ -1256,7 +1270,8 @@ struct hGlobals
                 call hattr.setAttackPhysical(u,0.5*hattr.getAttackMagic(triggerUnit),0)
                 set u = null
             // SS 山丘之王 - 雷霆之怒
-            elseif(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A09W') >= 1)then
+            elseif(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A09W') >= 1 and isHuntHappen == false)then
+                set isHuntHappen = true
                 call hunit.subMana(triggerUnit,75)
                 call heffect.toUnit("Abilities\\Spells\\Human\\Thunderclap\\ThunderClapCaster.mdl",triggerUnit,"origin",1.50)
                 set filter = hFilter.create()
@@ -1287,7 +1302,8 @@ struct hGlobals
                 call DestroyGroup(g)
                 set g = null
             // SSS 潮汐巨人 - 重踏
-            elseif(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A09X') >= 1)then
+            elseif(GetRandomInt(1,2) == 1 and GetUnitAbilityLevel(triggerUnit,'A09X') >= 1 and isHuntHappen == false)then
+                set isHuntHappen = true
                 call hunit.subMana(triggerUnit,100)
                 call heffect.toUnit("war3mapImported\\eff_lava_burst2.mdl",triggerUnit,"origin",1.50)
                 set filter = hFilter.create()
@@ -1672,7 +1688,7 @@ struct hGlobals
 		set hitembean.item_id = 'I00G'
 		set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-		set hitembean.hemophagia = 5
+		set hitembean.hemophagia = 3
 		call hitem.format(hitembean)
 		call hitembean.destroy()
         //--------------------
@@ -1734,7 +1750,7 @@ struct hGlobals
 		set hitembean.item_id = 'I00X'
 		set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-		set hitembean.defend = 4
+		set hitembean.defend = 6
         set hitembean.toughness = 30
         set hitembean.corrosionVal = 2
         set hitembean.corrosionDuring = 10
@@ -1827,7 +1843,7 @@ struct hGlobals
 		set hitembean.item_id = 'I00Z'
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-		set hitembean.attackPhysical = 450
+		set hitembean.attackPhysical = 650
 		call hitem.format(hitembean)
 		call hitembean.destroy()
         // --------------------------------------
@@ -1835,9 +1851,9 @@ struct hGlobals
 		set hitembean.item_id = 'I015'
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-        set hitembean.defend = 5
+        set hitembean.defend = 9
         set hitembean.life = 500
-		set hitembean.knockingOppose = 20
+		set hitembean.knockingOppose = 10
 		call hitem.format(hitembean)
 		call hitembean.destroy()
         // --------------------------------------
@@ -1854,7 +1870,7 @@ struct hGlobals
 		set hitembean.item_id = 'I010'
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-        set hitembean.attackSpeed = 35
+        set hitembean.attackSpeed = 25
 		call hitem.format(hitembean)
 		call hitembean.destroy()
         // --------------------------------------
@@ -1862,7 +1878,7 @@ struct hGlobals
 		set hitembean.item_id = 'I00W'
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-        set hitembean.hemophagia = 50
+        set hitembean.hemophagia = 10
 		call hitem.format(hitembean)
 		call hitembean.destroy()
         // --------------------------------------
@@ -1870,7 +1886,7 @@ struct hGlobals
 		set hitembean.item_id = 'I029'
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-        set hitembean.avoid = 30
+        set hitembean.avoid = 13
 		call hitem.format(hitembean)
 		call hitembean.destroy()
         // --------------------------------------
@@ -1878,7 +1894,7 @@ struct hGlobals
 		set hitembean.item_id = 'I02A'
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-        set hitembean.aim = 40
+        set hitembean.aim = 30
 		call hitem.format(hitembean)
 		call hitembean.destroy()
         // --------------------------------------
@@ -1886,8 +1902,8 @@ struct hGlobals
 		set hitembean.item_id = 'I02B'
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-        set hitembean.hemophagia = 20
-        set hitembean.hemophagiaSkill = 20
+        set hitembean.hemophagia = 5
+        set hitembean.hemophagiaSkill = 5
 		call hitem.format(hitembean)
 		call hitembean.destroy()
     endmethod
@@ -1918,7 +1934,7 @@ struct hGlobals
 		set hitembean.item_id = 'I011'
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-		set hitembean.attackPhysical = 725
+		set hitembean.attackPhysical = 900
         set hitembean.corrosionVal = 7
         set hitembean.corrosionDuring = 5
 		call hitem.format(hitembean)
@@ -1929,7 +1945,7 @@ struct hGlobals
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
 		set hitembean.lifeBack = 150
-        set hitembean.hemophagia = 25
+        set hitembean.hemophagia = 15
 		call hitem.format(hitembean)
 		call hitembean.destroy()
         // --------------------------------------
@@ -1957,8 +1973,8 @@ struct hGlobals
 		set hitembean.item_id = 'I028'
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-		set hitembean.attackPhysical = 300
-        set hitembean.attackSpeed = 55
+		set hitembean.attackPhysical = 1100
+        set hitembean.attackSpeed = 45
         set hitembean.knocking = 400
 		call hitem.format(hitembean)
 		call hitembean.destroy()
@@ -1967,7 +1983,7 @@ struct hGlobals
 		set hitembean.item_id = 'I02C'
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-		set hitembean.split = 35
+		set hitembean.split = 25
 		call hitem.format(hitembean)
 		call hitembean.destroy()
         // --------------------------------------
@@ -1975,7 +1991,7 @@ struct hGlobals
 		set hitembean.item_id = 'I02D'
         set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-		set hitembean.knocking = 1400
+		set hitembean.knocking = 1500
 		call hitem.format(hitembean)
 		call hitembean.destroy()
     endmethod
@@ -2228,7 +2244,11 @@ struct hGlobals
         // BOSS开始发狂！
         if(hgroup.isIn(triggerUnit,g_crazy_boss) == true and hunit.getLifePercent(triggerUnit) < 40.0)then
             call GroupRemoveUnit(g_crazy_boss,triggerUnit)
-            call UnitAddAbility(triggerUnit,'A05Q')
+            call heffect.toUnit("Abilities\\Weapons\\PhoenixMissile\\Phoenix_Missile.mdl",triggerUnit,"origin",9)
+            call heffect.toUnit("Abilities\\Weapons\\PhoenixMissile\\Phoenix_Missile.mdl",triggerUnit,"head",9)
+            call heffect.toUnit("Abilities\\Weapons\\PhoenixMissile\\Phoenix_Missile.mdl",triggerUnit,"lefthand",9)
+            call heffect.toUnit("Abilities\\Weapons\\PhoenixMissile\\Phoenix_Missile.mdl",triggerUnit,"righthand",9)
+            call heffect.toUnit("Abilities\\Weapons\\PhoenixMissile\\Phoenix_Missile.mdl",triggerUnit,"weapon",9)
             call hmsg.style(hmsg.ttg2Unit(triggerUnit,"BOSS开始发狂！",8,"e04240",0,1.70,40.00),"scale",0,0.15)
             call hattr.addLifeBack(triggerUnit,I2R(g_wave) * 0.004 * hattr.getLife(triggerUnit),9)
             call hattr.addAttackPhysical(triggerUnit,I2R(g_wave) * 5,20)
@@ -2305,6 +2325,18 @@ struct hGlobals
         local hFilter filter
         local group g = null
         local unit u = null
+        // BOSS开始发狂！
+        if(hgroup.isIn(triggerUnit,g_crazy_be_boss) == true and hunit.getLifePercent(triggerUnit) < 40.0)then
+            call GroupRemoveUnit(g_crazy_be_boss,triggerUnit)
+            call heffect.toUnit("Abilities\\Weapons\\AvengerMissile\\AvengerMissile.mdl",triggerUnit,"origin",9)
+            call heffect.toUnit("Abilities\\Weapons\\AvengerMissile\\AvengerMissile.mdl",triggerUnit,"head",9)
+            call heffect.toUnit("Abilities\\Weapons\\AvengerMissile\\AvengerMissile.mdl",triggerUnit,"lefthand",9)
+            call heffect.toUnit("Abilities\\Weapons\\AvengerMissile\\AvengerMissile.mdl",triggerUnit,"righthand",9)
+            call heffect.toUnit("Abilities\\Weapons\\AvengerMissile\\AvengerMissile.mdl",triggerUnit,"weapon",9)
+            call hmsg.style(hmsg.ttg2Unit(triggerUnit,"BOSS开始发狂！",8,"e04240",0,1.70,40.00),"scale",0,0.15)
+            call hattr.addLifeBack(triggerUnit,I2R(g_wave) * 0.002 * hattr.getLife(triggerUnit),9)
+            call hattr.addMove(triggerUnit,150,9)
+        endif
         if(his.silent(triggerUnit) == false and GetRandomInt(1,10) < 3)then
             if(uid == 'n046')then // 巨龙海龟
                 call hattr.addDefend(triggerUnit,g_wave*0.1,5)
@@ -2318,7 +2350,7 @@ struct hGlobals
                 call heffect.toUnit("Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl",attacker,"origin",3.00)
             elseif(uid == 'n063')then // BOSS 镰刀破灭
                 call heffect.toUnit("war3mapImported\\eff_DustWindCirclefaster.mdl",triggerUnit,"origin",1.50)
-                call heffect.toUnit("war3mapImported\\eff_round_dance2.mdll",triggerUnit,"origin",1.50)
+                call heffect.toUnit("war3mapImported\\eff_round_dance2.mdl",triggerUnit,"origin",1.50)
                 set filter = hFilter.create()
                 call filter.isAlive(true)
                 call filter.isEnemy(true,triggerUnit)
@@ -2328,7 +2360,7 @@ struct hGlobals
                 set bean.damage = 60+g_wave
                 set bean.fromUnit = triggerUnit
                 set bean.huntEff = "Objects\\Spawnmodels\\Human\\HumanBlood\\BloodElfSpellThiefBlood.mdl"
-                set bean.huntKind = "attack"
+                set bean.huntKind = "skill"
                 set bean.huntType = "physical"
                 set i = 0
                 loop
@@ -2357,6 +2389,7 @@ struct hGlobals
     public static method bossBuilt takes unit mon returns nothing
         local integer uid = GetUnitTypeId(mon)
         call GroupAddUnit(g_crazy_boss,mon)
+        call GroupAddUnit(g_crazy_be_boss,mon)
         if(uid == 'n046')then // 巨龙海龟
             call hattrNatural.addWaterOppose(mon,40.0,0)
             call hattr.addHuntRebound(mon,15.0,0)
@@ -2537,28 +2570,72 @@ struct hGlobals
         call hevent.onBeAttack(mon,function thistype.onBossBeAttack)
     endmethod
     public static method bossDeadDrop takes unit mon returns nothing
-        local integer total = 20
+        local integer total = 0
         local integer array itempools
-        set itempools[1] = 'I00C'
-        set itempools[2] = 'I01K'
-        set itempools[3] = 'I01I'
-        set itempools[4] = 'I00X'
-        set itempools[5] = 'I000'
-        set itempools[6] = 'I012'
-        set itempools[7] = 'I00F'
-        set itempools[8] = 'I00L'
-        set itempools[9] = 'I016'
-        set itempools[10] = 'I01J'
-        set itempools[11] = 'I014'
-        set itempools[12] = 'I017'
-        set itempools[13] = 'I013'
-        set itempools[14] = 'I00D'
-        set itempools[15] = 'I00E'
-        set itempools[16] = 'I018'
-        set itempools[17] = 'I00I'
-        set itempools[18] = 'I00G'
-        set itempools[19] = 'I002'
-        set itempools[20] = 'I00K'
+        if(g_wave <=6)then
+            set total = 7
+            set itempools[1] = 'I00D'
+            set itempools[2] = 'I00E'
+            set itempools[3] = 'I018'
+            set itempools[4] = 'I00I'
+            set itempools[5] = 'I00G'
+            set itempools[6] = 'I002'
+            set itempools[7] = 'I00K'
+        elseif(g_wave <=15)then
+            set total = 9
+            set itempools[1] = 'I00D'
+            set itempools[2] = 'I00K'
+            set itempools[3] = 'I00C'
+            set itempools[4] = 'I00F'
+            set itempools[5] = 'I012'
+            set itempools[6] = 'I000'
+            set itempools[7] = 'I00X'
+            set itempools[8] = 'I01K'
+            set itempools[9] = 'I00C'
+        elseif(g_wave <=24)then
+            set total = 7
+            set itempools[1] = 'I01K'
+            set itempools[2] = 'I013'
+            set itempools[3] = 'I017'
+            set itempools[4] = 'I014'
+            set itempools[5] = 'I01J'
+            set itempools[6] = 'I016'
+            set itempools[7] = 'I00L'
+        elseif(g_wave <=39)then
+            set total = 11
+            set itempools[1] = 'I00L'
+            set itempools[2] = 'I01J'
+            set itempools[3] = 'I010'
+            set itempools[4] = 'I029'
+            set itempools[5] = 'I019'
+            set itempools[6] = 'I00J'
+            set itempools[7] = 'I00Z'
+            set itempools[8] = 'I02B'
+            set itempools[9] = 'I00W'
+            set itempools[10] = 'I015'
+            set itempools[11] = 'I02A'
+        else
+            set total = 19
+            set itempools[1] = 'I02A'
+            set itempools[2] = 'I01J'
+            set itempools[3] = 'I010'
+            set itempools[4] = 'I029'
+            set itempools[5] = 'I019'
+            set itempools[6] = 'I00J'
+            set itempools[7] = 'I00Z'
+            set itempools[8] = 'I02B'
+            set itempools[9] = 'I00W'
+            set itempools[10] = 'I015'
+            set itempools[11] = 'I01R'
+            set itempools[12] = 'I011'
+            set itempools[13] = 'I02C'
+            set itempools[14] = 'I02D'
+            set itempools[15] = 'I00B'
+            set itempools[16] = 'I01A'
+            set itempools[17] = 'I01M'
+            set itempools[18] = 'I01L'
+            set itempools[19] = 'I028'
+        endif
         call hitem.toXY(itempools[GetRandomInt(1,total)],1,GetUnitX(mon),GetUnitY(mon),120.0)
         call hitem.toXY(itempools[GetRandomInt(1,total)],1,GetUnitX(mon),GetUnitY(mon),120.0)
     endmethod
@@ -3025,17 +3102,22 @@ struct hGlobals
         call thistype.registerSummonAbility('o02O','A0A0') // SSS 圣人·阿德莱 - 天启
 
         // vip 物品
-        set vipItempools_count = 10
-        set vipItempools[1] = 'I00Z'
-        set vipItempools[2] = 'I02B'
-        set vipItempools[3] = 'I015'
+        set vipItempools_count = 15
+        set vipItempools[1] = 'I013'
+        set vipItempools[2] = 'I017'
+        set vipItempools[3] = 'I02A'
         set vipItempools[4] = 'I01J'
-        set vipItempools[5] = 'I01M'
-        set vipItempools[6] = 'I02D'
-        set vipItempools[7] = 'I028'
-        set vipItempools[8] = 'I01R'
-        set vipItempools[9] = 'I019'
-        set vipItempools[10] = 'I01L'
+        set vipItempools[5] = 'I016'
+        set vipItempools[6] = 'I00L'
+        set vipItempools[7] = 'I00F'
+        set vipItempools[8] = 'I012'
+        set vipItempools[9] = 'I000'
+        set vipItempools[10] = 'I00X'
+        set vipItempools[11] = 'I00D'
+        set vipItempools[12] = 'I01K'
+        set vipItempools[13] = 'I010'
+        set vipItempools[14] = 'I00B'
+        set vipItempools[15] = 'I01M'
 
         // 瞬时物品
         set momentItems_count = 6

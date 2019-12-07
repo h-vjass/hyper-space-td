@@ -155,7 +155,7 @@ library Main initializer init needs hJass
 			call LeaderboardDisplay(g_leaderboard, true)
 		endif
 		if(g_leaderboard != null)then
-			call LeaderboardSetLabel(g_leaderboard, g_diff_label[g_diff]+"("+I2S(g_wave)+"波)")
+			call LeaderboardSetLabel(g_leaderboard, g_diff_label[g_diff]+"("+I2S(g_wave)+"/"+I2S(g_max_wave)+"波)")
 			set i = 1
 			loop
 				exitwhen i>player_max_qty
@@ -183,7 +183,7 @@ library Main initializer init needs hJass
 		local button b = GetClickedButton()
 		local integer bi = LoadInteger(hash_player,GetHandleId(b),7)
 		set g_diff = bi
-		set g_boss_ready_time = 65 - 5 * g_diff
+		set g_boss_ready_time = g_boss_ready_time - 5 * g_diff
 		set g_game_mon_loop = g_game_mon_loop - 0.15 * (g_diff-1)
 		call hmsg.echo("选择了难度（"+g_diff_label[g_diff]+"）")
 		call FlushChildHashtable(hash_player, GetHandleId(b))
