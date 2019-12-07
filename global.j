@@ -2305,48 +2305,50 @@ struct hGlobals
         local hFilter filter
         local group g = null
         local unit u = null
-        if(uid == 'n046')then // 巨龙海龟
-            call hattr.addDefend(triggerUnit,g_wave*0.1,5)
-        elseif(uid == 'n047')then // BOSS 岩石龙虾
-            call hattr.addDefend(triggerUnit,g_wave*0.1,5)
-        elseif(uid == 'n04A')then // BOSS 冰电魔法师
-            call hattr.subAttackSpeed(attacker,25,3)
-            call heffect.toUnit("Abilities\\Spells\\Orc\\Purge\\PurgeBuffTarget.mdl",attacker,"origin",1.00)
-        elseif(uid == 'n04N')then // BOSS 灭却龙
-            call hattr.subLife(attacker,10,3)
-            call heffect.toUnit("Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl",attacker,"origin",3.00)
-        elseif(uid == 'n063')then // BOSS 镰刀破灭
-            call heffect.toUnit("war3mapImported\\eff_DustWindCirclefaster.mdl",triggerUnit,"origin",1.50)
-            call heffect.toUnit("war3mapImported\\eff_round_dance2.mdll",triggerUnit,"origin",1.50)
-            set filter = hFilter.create()
-            call filter.isAlive(true)
-            call filter.isEnemy(true,triggerUnit)
-            set g = hgroup.createByUnit(triggerUnit,500.0,function hFilter.get )
-            call filter.destroy()
-            set bean = hAttrHuntBean.create()
-            set bean.damage = 65
-            set bean.fromUnit = triggerUnit
-            set bean.huntEff = "Objects\\Spawnmodels\\Human\\HumanBlood\\BloodElfSpellThiefBlood.mdl"
-            set bean.huntKind = "attack"
-            set bean.huntType = "physical"
-            set i = 0
-            loop
-                exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 6)
-                    set u = FirstOfGroup(g)
-                    call GroupRemoveUnit(g,u)
-                    set bean.toUnit = u
-                    call hattrHunt.huntUnit(bean)
-                    set u = null
-                    set i = i+1
-            endloop
-            call GroupClear(g)
-            call DestroyGroup(g)
-            set g = null
-        elseif(uid == 'n064')then // BOSS 冰晶凌妖
-            call hattr.subAttackSpeed(attacker,13,3)
-            call heffect.toUnit("Abilities\\Spells\\Other\\FrostDamage\\FrostDamage.mdl",attacker,"origin",3.00)
-        elseif(uid == 'n065')then // BOSS 歌之海妖
-            call hattr.subAttackPhysical(attacker,75,3)
+        if(his.silent(triggerUnit) == false and GetRandomInt(1,10) < 3)then
+            if(uid == 'n046')then // 巨龙海龟
+                call hattr.addDefend(triggerUnit,g_wave*0.1,5)
+            elseif(uid == 'n047')then // BOSS 岩石龙虾
+                call hattr.addDefend(triggerUnit,g_wave*0.1,5)
+            elseif(uid == 'n04A')then // BOSS 冰电魔法师
+                call hattr.subAttackSpeed(attacker,25,3)
+                call heffect.toUnit("Abilities\\Spells\\Orc\\Purge\\PurgeBuffTarget.mdl",attacker,"origin",1.00)
+            elseif(uid == 'n04N')then // BOSS 灭却龙
+                call hattr.subLife(attacker,g_wave * 5,3)
+                call heffect.toUnit("Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl",attacker,"origin",3.00)
+            elseif(uid == 'n063')then // BOSS 镰刀破灭
+                call heffect.toUnit("war3mapImported\\eff_DustWindCirclefaster.mdl",triggerUnit,"origin",1.50)
+                call heffect.toUnit("war3mapImported\\eff_round_dance2.mdll",triggerUnit,"origin",1.50)
+                set filter = hFilter.create()
+                call filter.isAlive(true)
+                call filter.isEnemy(true,triggerUnit)
+                set g = hgroup.createByUnit(triggerUnit,500.0,function hFilter.get )
+                call filter.destroy()
+                set bean = hAttrHuntBean.create()
+                set bean.damage = 60+g_wave
+                set bean.fromUnit = triggerUnit
+                set bean.huntEff = "Objects\\Spawnmodels\\Human\\HumanBlood\\BloodElfSpellThiefBlood.mdl"
+                set bean.huntKind = "attack"
+                set bean.huntType = "physical"
+                set i = 0
+                loop
+                    exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 6)
+                        set u = FirstOfGroup(g)
+                        call GroupRemoveUnit(g,u)
+                        set bean.toUnit = u
+                        call hattrHunt.huntUnit(bean)
+                        set u = null
+                        set i = i+1
+                endloop
+                call GroupClear(g)
+                call DestroyGroup(g)
+                set g = null
+            elseif(uid == 'n064')then // BOSS 冰晶凌妖
+                call hattr.subAttackSpeed(attacker,13,3)
+                call heffect.toUnit("Abilities\\Spells\\Other\\FrostDamage\\FrostDamage.mdl",attacker,"origin",3.00)
+            elseif(uid == 'n065')then // BOSS 歌之海妖
+                call hattr.subAttackPhysical(attacker,75,3)
+            endif
         endif
         set triggerUnit = null
         set attacker = null

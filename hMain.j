@@ -424,7 +424,7 @@ library Main initializer init needs hJass
 				call hplayer.setLumberRatio(players[i],50.0+50.0*player_current_qty,0)
 				call hplayer.setExpRatio(players[i],50.0+50.0*player_current_qty,0)
 				if(player_isvip[i] == true)then
-					call hplayer.setGold(players[i],2500)
+					call hplayer.setGold(players[i],3000)
 					call hplayer.setLumber(players[i],0)
 					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,6)
 					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,20)
@@ -440,7 +440,7 @@ library Main initializer init needs hJass
 						set j=j+1
 					endloop
 				else
-					call hplayer.setGold(players[i],1500)
+					call hplayer.setGold(players[i],2500)
 					call SetPlayerStateBJ(players[i], PLAYER_STATE_RESOURCE_FOOD_CAP,4)
 					call SetPlayerStateBJ(players[i], PLAYER_STATE_FOOD_CAP_CEILING,10)
 					call hhero.setPlayerAllowQty(players[i],1)

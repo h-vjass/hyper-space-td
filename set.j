@@ -298,7 +298,7 @@ struct hSet
 			set i = 0
 			if(hgroup.count(g)>0)then
 				loop
-				exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 5)
+				exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 6)
 					set u = FirstOfGroup(g)
 					call GroupRemoveUnit( g , u )
 					set bean.toUnit = u
@@ -777,6 +777,20 @@ struct hSet
 			call htime.setInteger(t,2,1)
 			set t = null
 		endif
+		if(skillid == 'A0AU')then // 影刺客 - 瞬杀
+			call heffect.toUnit("war3mapImported\\eff_in_a_flash2.mdl",triggerUnit,"origin",1)
+			if(his.enemy(triggerUnit,hevent.getTargetUnit()))then
+				call hattr.addAttackSpeed(triggerUnit,150,3)
+				call hattr.addAttackPhysical(triggerUnit,I2R(GetUnitLevel(triggerUnit))*15,3)
+				call hability.swim(hevent.getTargetUnit(),2.5)
+				if(his.night())then // 影刺客 - 影子戏法
+					call hattr.addKnocking(triggerUnit,2000,3)
+				else
+					call hattr.addMove(triggerUnit,200,6)
+				endif
+			endif
+			call SetUnitPosition(triggerUnit, GetUnitX(hevent.getTargetUnit()), GetUnitY(hevent.getTargetUnit()) ) 
+		endif
 		set triggerUnit = null
 		set loc = null
 		set loc2 = null
@@ -976,6 +990,14 @@ struct hSet
 			call hattrEffect.setBombRange(u,50,0)
 			call hattrEffect.setBombModel(u,"Abilities\\Spells\\NightElf\\EntanglingRoots\\EntanglingRootsTarget.mdl")
 		endif
+		if(uid == 'H00D')then //影刺客
+			call hattr.addAim(u,40,0)
+			call hattr.addAvoid(u,40,0)
+			call hattrEffect.addAttackSpeedVal(u,15.0,0)
+			call hattrEffect.addAttackSpeedDuring(u,5,0)
+			call hattrEffect.addKnockingVal(u,250.0,0)
+			call hattrEffect.addKnockingDuring(u,5,0)
+		endif
 		if(uid == 'H00S')then //黑游
 			call hattr.addAttackHuntType(u,"dark",0)
 		endif
@@ -1112,7 +1134,7 @@ struct hSet
 			return
 		endif
 		if(g_wave <= 5)then
-			set life = g_wave * (120 + g_diff * 75)
+			set life = g_wave * (125 + g_diff * 50)
 		elseif(g_wave < 10)then
 			set life = g_wave * (225 + g_diff * 150)
 		elseif(g_wave < 20)then
@@ -1224,19 +1246,19 @@ struct hSet
 		local real life = 0
 		call htime.delTimer(t)
 		if(g_wave < 15)then
-			set life = g_wave * (8000 + 3000 * g_diff)
+			set life = g_wave * (10000 + 5000 * g_diff)
 		elseif(g_wave < 30)then
-			set life = g_wave * (10000 + 4500 * g_diff)
+			set life = g_wave * (15000 + 7500 * g_diff)
 		elseif(g_wave < 45)then
-			set life = g_wave * (11000 + 7250 * g_diff)
+			set life = g_wave * (20000 + 10000 * g_diff)
 		elseif(g_wave < 60)then
-			set life = g_wave * (13500 + 9000 * g_diff)
+			set life = g_wave * (25000 + 15000 * g_diff)
 		elseif(g_wave < 80)then
-			set life = g_wave * (17000 + 11500 * g_diff)
+			set life = g_wave * (35000 + 25000 * g_diff)
 		elseif(g_wave < g_max_wave)then
-			set life = g_wave * (21000 + 15500 * g_diff)
+			set life = g_wave * (45000 + 35000 * g_diff)
 		else
-			set life = g_wave * (30000 + 24500 * g_diff)
+			set life = g_wave * (60000 + 45000 * g_diff)
 		endif
 		set last_boss_uid = g_boss[bossIndex]
 		//
@@ -1273,7 +1295,7 @@ struct hSet
 				call hattr.setCrackFlyOppose(u,g_wave*0.3,0)
 				call hattr.setKnockingOppose(u, g_wave * 25 + g_diff * 300,0)
 				call hattr.setViolenceOppose(u, g_wave * 25 + g_diff * 300,0)
-				call hattrEffect.setCrackFlyOdds(u,g_wave*0.3+g_diff*3,0)
+				call hattrEffect.setCrackFlyOdds(u,g_wave*0.15+g_diff*3,0)
 				call hattrEffect.setCrackFlyVal(u,g_wave*(30 + g_diff),0)
 				call hattrEffect.setCrackFlyHigh(u,100+g_wave*(4 + g_diff),0)
 				call hattrEffect.setCrackFlyDistance(u,0,0)
