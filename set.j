@@ -34,7 +34,7 @@ struct hSet
 		local group g = null
 		local unit u = null
 		local hFilter hf
-		if(i > 30)then
+		if(i > 60)then
 			call htime.delTimer(t)
 			set t = null
 			set triggerUnit = null
@@ -812,7 +812,7 @@ struct hSet
             call hattr.addHemophagia(u,diffLv*0.5,0)
         endif
 		if(uid == 'H00K')then // 暗影猎手
-			call hattrEffect.addToxicVal(u,diffLv*0.3,0)
+			call hattrEffect.addToxicVal(u,diffLv*0.4,0)
 		endif
 		if(uid == 'H00M')then // 大魔法师
 			call hattrNatural.addWater(u,diffLv*0.01,0)
@@ -914,7 +914,7 @@ struct hSet
             call hattrEffect.addAttackSpeedDuring(u,15,0)
         endif
         if(uid == 'H00K')then //盗影猎手
-            call hattrEffect.addToxicVal(u,0.3,0)
+            call hattrEffect.addToxicVal(u,0.4,0)
             call hattrEffect.addToxicDuring(u,3,0)
         endif
         if(uid == 'H00M')then //大魔法师
@@ -1091,7 +1091,7 @@ struct hSet
 		if(g_gp_attack != null and IsUnitInGroup(u, g_gp_attack) == true)then
 			call GroupRemoveUnit(g_gp_attack,u)
 		endif
-		set exp = R2I(I2R(g_wave) * (20+g_diff*15) * g_game_speed)
+		set exp = R2I(I2R(g_wave) * (16+g_diff*20) * g_game_speed)
 		set gold = R2I(I2R(g_wave) * 2.6 * g_game_speed) + g_diff * 3
 		if(killer != null)then
 			call haward.forUnit(killer,0,gold,0)
@@ -1280,14 +1280,14 @@ struct hSet
 				call GroupAddUnit(g_gp_boss,u)
 				call TriggerRegisterUnitEvent( bossDeadTg, u, EVENT_UNIT_DEATH )
 				call hattr.setLife(u, life ,0)
-				call hattr.setLifeBack(u, g_wave * 8 + g_diff * 40 ,0)
-				call hattr.addMana(u,1000*g_diff,0)
-				call hattr.addManaBack(u,30*g_diff,0)
+				call hattr.setLifeBack(u, g_wave * 6 + g_diff * 30 ,0)
+				call hattr.addMana(u,1000,0)
+				call hattr.addManaBack(u,50,0)
 				call hattr.setDefend(u, (g_wave+g_diff*30)*4 ,0)
 				call hattr.addResistance(u,g_wave*0.75,0)
-				call hattr.setMove(u, 200 + g_wave*6 + g_diff*8 ,0)
-				call hattr.setAttackPhysical(u, g_wave*((45+player_current_qty*21) + g_diff*30)  ,0)
-				call hattr.setAttackMagic(u, g_wave*((45+player_current_qty*21) + g_diff*30)  ,0)
+				call hattr.setMove(u, 200 + g_wave*5 + g_diff*8 ,0)
+				call hattr.setAttackPhysical(u, g_wave*((40+player_current_qty*18) + g_diff*27)  ,0)
+				call hattr.setAttackMagic(u, g_wave*((40+player_current_qty*18) + g_diff*27)  ,0)
 				call hattr.setAttackSpeed(u, g_wave * 3 + g_diff * 4 ,0)
 				call hattr.setAim(u,g_wave*0.8,0)
 				call hattr.setAvoid(u,g_wave*0.8,0)

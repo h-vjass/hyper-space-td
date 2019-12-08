@@ -17,12 +17,12 @@ real REBORN_SUMMON = 90
 integer g_diff = 1
 string array g_diff_label
 timer g_timer_wave = null
-integer g_temp_mon_limit = 220
+integer g_temp_mon_limit = 200
 integer g_max_wave = 51
 integer g_wave = 0
 integer g_first_wave = 0
 integer g_boss_mod = 3
-real g_boss_ready_time = 55
+real g_boss_ready_time = 60
 real g_first_ready_time = 30.00
 boolean g_waving = false
 group g_crazy_boss = CreateGroup()
@@ -1738,11 +1738,11 @@ struct hGlobals
 		call hitem.format(hitembean)
 		call hitembean.destroy()
         //--------------------
-        set hitembean = hItemBean.create() // D 平凡之靴
+        set hitembean = hItemBean.create() // D 蛊惑之鼓
 		set hitembean.item_id = 'I012'
 		set hitembean.item_type = HITEM_TYPE_FOREVER
 		set hitembean.item_overlay = 1
-		set hitembean.avoid = 7
+		set hitembean.avoid = 5
 		call hitem.format(hitembean)
 		call hitembean.destroy()
         //--------------------
@@ -1904,6 +1904,15 @@ struct hGlobals
 		set hitembean.item_overlay = 1
         set hitembean.hemophagia = 5
         set hitembean.hemophagiaSkill = 5
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+        //--------------------
+        set hitembean = hItemBean.create() // C 速度之靴
+		set hitembean.item_id = 'I02J'
+		set hitembean.item_type = HITEM_TYPE_FOREVER
+		set hitembean.item_overlay = 1
+		set hitembean.avoid = 7
+        set hitembean.move = 200
 		call hitem.format(hitembean)
 		call hitembean.destroy()
     endmethod
@@ -2250,7 +2259,7 @@ struct hGlobals
             call heffect.toUnit("Abilities\\Weapons\\PhoenixMissile\\Phoenix_Missile.mdl",triggerUnit,"righthand",9)
             call heffect.toUnit("Abilities\\Weapons\\PhoenixMissile\\Phoenix_Missile.mdl",triggerUnit,"weapon",9)
             call hmsg.style(hmsg.ttg2Unit(triggerUnit,"BOSS开始发狂！",8,"e04240",0,1.70,40.00),"scale",0,0.15)
-            call hattr.addLifeBack(triggerUnit,I2R(g_wave) * 0.004 * hattr.getLife(triggerUnit),9)
+            call hattr.addLifeBack(triggerUnit,I2R(g_wave) * 0.011 * hattr.getLife(triggerUnit),9)
             call hattr.addAttackPhysical(triggerUnit,I2R(g_wave) * 5,20)
             call hattr.addAttackMagic(triggerUnit,I2R(g_wave) * 5,20)
             call hattr.addAttackSpeed(triggerUnit,100,0)
@@ -2334,8 +2343,9 @@ struct hGlobals
             call heffect.toUnit("Abilities\\Weapons\\AvengerMissile\\AvengerMissile.mdl",triggerUnit,"righthand",9)
             call heffect.toUnit("Abilities\\Weapons\\AvengerMissile\\AvengerMissile.mdl",triggerUnit,"weapon",9)
             call hmsg.style(hmsg.ttg2Unit(triggerUnit,"BOSS开始发狂！",8,"e04240",0,1.70,40.00),"scale",0,0.15)
-            call hattr.addLifeBack(triggerUnit,I2R(g_wave) * 0.002 * hattr.getLife(triggerUnit),9)
+            call hattr.addLifeBack(triggerUnit,I2R(g_wave) * 0.007 * hattr.getLife(triggerUnit),9)
             call hattr.addMove(triggerUnit,150,9)
+            call hattr.addAvoid(triggerUnit,10,9)
         endif
         if(his.silent(triggerUnit) == false and GetRandomInt(1,10) < 3)then
             if(uid == 'n046')then // 巨龙海龟
@@ -2602,7 +2612,7 @@ struct hGlobals
             set itempools[6] = 'I016'
             set itempools[7] = 'I00L'
         elseif(g_wave <=39)then
-            set total = 11
+            set total = 12
             set itempools[1] = 'I00L'
             set itempools[2] = 'I01J'
             set itempools[3] = 'I010'
@@ -2614,8 +2624,9 @@ struct hGlobals
             set itempools[9] = 'I00W'
             set itempools[10] = 'I015'
             set itempools[11] = 'I02A'
+            set itempools[12] = 'I02J'
         else
-            set total = 19
+            set total = 20
             set itempools[1] = 'I02A'
             set itempools[2] = 'I01J'
             set itempools[3] = 'I010'
@@ -2626,7 +2637,7 @@ struct hGlobals
             set itempools[8] = 'I02B'
             set itempools[9] = 'I00W'
             set itempools[10] = 'I015'
-            set itempools[11] = 'I01R'
+            set itempools[11] = 'I02J'
             set itempools[12] = 'I011'
             set itempools[13] = 'I02C'
             set itempools[14] = 'I02D'
@@ -2635,6 +2646,7 @@ struct hGlobals
             set itempools[17] = 'I01M'
             set itempools[18] = 'I01L'
             set itempools[19] = 'I028'
+            set itempools[20] = 'I01R'
         endif
         call hitem.toXY(itempools[GetRandomInt(1,total)],1,GetUnitX(mon),GetUnitY(mon),120.0)
         call hitem.toXY(itempools[GetRandomInt(1,total)],1,GetUnitX(mon),GetUnitY(mon),120.0)
@@ -2644,6 +2656,7 @@ struct hGlobals
 
     private static method gotoRectSpaceDeg takes unit u,integer lv, real x,real y, real x2,real y2 returns nothing
         local integer i = 0
+        local location loc = null
         if(IsUnitAlly(u, Player(10)) != true or IsUnitInGroup(u, g_gp_attack) == true)then
             set u = null
             return
@@ -2654,6 +2667,10 @@ struct hGlobals
             if(lv == 4)then
                 call IssuePointOrder( u, "attack", GetLocationX(Loc_Ring), GetLocationY(Loc_Ring) )
                 call GroupAddUnit(g_gp_attack,u)
+                set loc = GetUnitLoc(u)
+                call PingMinimapLocForForceEx( playerForce,loc,1, bj_MINIMAPPINGSTYLE_FLASHY, 100, 0, 0 )
+                call RemoveLocation(loc)
+                set loc = null
             else
                 call SetUnitPosition(u, x2, y2)
             endif    
