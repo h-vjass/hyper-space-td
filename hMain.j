@@ -20,67 +20,12 @@ library Main initializer init needs hJass
 	private function preread takes nothing returns nothing
 	    local integer i = 0
 	    local integer total = 0
-	    local unit array prereadUnits
+	    local unit prereadToken
 		//
-	    set i = g_token_count
-	    loop
-	        exitwhen i<=0
-				set total = total+1
-	            set prereadUnits[total] = CreateUnitAtLoc(player_passive, g_token[i], Loc_C, bj_UNIT_FACING)
-	            call hattr.regAllAttrSkill(prereadUnits[total])
-	        set i = i-1
-	    endloop
-	    set i = g_hero_count
-	    loop
-	        exitwhen i<=0
-				set total = total+1
-	            set prereadUnits[total] = CreateUnitAtLoc(player_passive, g_hero[i], Loc_C, bj_UNIT_FACING)
-				set g_mon_label[i] = GetUnitName(prereadUnits[total])
-	            call hattr.regAllAttrSkill(prereadUnits[total])
-	        set i = i-1
-	    endloop
-	    set i = g_boss_count
-	    loop
-	        exitwhen i<=0
-				set total = total+1
-	            set prereadUnits[total] = CreateUnitAtLoc(player_passive, g_boss[i], Loc_C, bj_UNIT_FACING)
-				set g_boss_label[i] = GetUnitName(prereadUnits[total])
-	            call hattr.regAllAttrSkill(prereadUnits[total])
-	        set i = i-1
-	    endloop
-	    set i = g_mon_count
-	    loop
-	        exitwhen i<=0
-				set total = total+1
-	            set prereadUnits[total] = CreateUnitAtLoc(player_passive, g_mon[i], Loc_C, bj_UNIT_FACING)
-	            call hattr.regAllAttrSkill(prereadUnits[total])
-	        set i = i-1
-	    endloop
-	    set i = g_summon_count
-	    loop
-	        exitwhen i<=0
-				set total = total+1
-	            set prereadUnits[total] = CreateUnitAtLoc(player_passive, g_summon[i], Loc_C, bj_UNIT_FACING)
-	            call hattr.regAllAttrSkill(prereadUnits[total])
-	        set i = i-1
-	    endloop
-	    set i = momentItems_count
-	    loop
-	        exitwhen i<=0
-				set total = total+1
-	            set prereadUnits[total] = CreateUnitAtLoc(player_passive, momentItems[i], Loc_C, bj_UNIT_FACING)
-	            call hattr.regAllAttrSkill(prereadUnits[total])
-	        set i = i-1
-	    endloop
+		set prereadToken = CreateUnitAtLoc(player_passive, 'h00J', Loc_C, bj_UNIT_FACING)
+		call hattr.regAllAttrSkill(prereadToken)
 		//todo * key code 
 	    call PolledWait(0.01)
-	    set i = total
-	    loop
-	        exitwhen i<=0
-	            call hunit.del(prereadUnits[i],0)
-				set prereadUnits[i] = null
-	        set i = i-1
-	    endloop
 	endfunction
 
 	private function fail takes nothing returns nothing
